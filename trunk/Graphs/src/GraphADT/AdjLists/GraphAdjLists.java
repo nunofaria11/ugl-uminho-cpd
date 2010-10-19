@@ -97,7 +97,14 @@ public class GraphAdjLists extends GraphADT implements Serializable {
 
     @Override
     public boolean isArc(int i, int j) {
-        return ((ArrayList) _adj.get(i)).contains(new Integer(j));
+        ArrayList<Edge> edges = (ArrayList<Edge>) _adj.get(i);
+        for (Edge e : edges) {
+            if (e.getDest() == j) {
+                return true;
+            }
+        }
+        return false;
+//        return ((ArrayList<Edge>) _adj.get(i)).contains(new Edge(i,j,getWeight(i, j)));
     }
 
     @Override
@@ -141,7 +148,7 @@ public class GraphAdjLists extends GraphADT implements Serializable {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < order(); i++) {
-            s.append("\n" + i + " ::: ");
+            s.append("\n").append(i).append(" ::: ");
             for (Edge e : (ArrayList<Edge>) _adj.get(i)) {
                 s.append(e.toString());
             }
@@ -187,7 +194,14 @@ public class GraphAdjLists extends GraphADT implements Serializable {
 
     @Override
     public int getWeight(int i, int j) {
-        return ((Edge) ((ArrayList<Edge>) _adj.get(i)).get(j)).getWeight();
+        ArrayList<Edge> edges = (ArrayList<Edge>) _adj.get(i);
+        for (Edge e : edges) {
+            if (e.getDest() == j) {
+                return e.getWeight();
+            }
+        }
+        return -1;
+//        return ((Edge) ((ArrayList<Edge>) _adj.get(i)).get(j)).getWeight();
     }
 
     @Override
@@ -210,6 +224,11 @@ public class GraphAdjLists extends GraphADT implements Serializable {
     }
 
     @Override
+    public void clean() {
+        _allocate(0);
+    }
+
+    @Override
     public boolean saveToFile(String fileName) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -219,10 +238,7 @@ public class GraphAdjLists extends GraphADT implements Serializable {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void addEdge(Edge e) {
-        addEdge(e.getFrom(), e.getDest(), e.getWeight());
-    }
-
+    @Override
     public ArrayList<Edge> getAllEdges() {
         ArrayList<Edge> all = new ArrayList<Edge>(size());
         for (int i = 0; i < order(); i++) {

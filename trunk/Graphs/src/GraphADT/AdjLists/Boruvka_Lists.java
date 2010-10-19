@@ -17,27 +17,27 @@ import java.util.ArrayList;
  *
  * @author nuno
  */
-public class BoruvkaGraph_Lists extends GraphAdjLists {
+public class Boruvka_Lists extends GraphAdjLists {
 
     private ArrayList<Edge> wannabes;
     private ArrayList<Edge> nbors;
     private UnionFind uf;
 
-    public BoruvkaGraph_Lists(GraphAdjLists g, ArrayList<Edge> wannabes, ArrayList<Edge> nbors, UnionFind uf) {
+    public Boruvka_Lists(GraphAdjLists g, ArrayList<Edge> wannabes, ArrayList<Edge> nbors, UnionFind uf) {
         super(g);
         this.wannabes = wannabes;
         this.nbors = nbors;
         this.uf = uf;
     }
 
-    public BoruvkaGraph_Lists(ArrayList<Edge> wannabes, ArrayList<Edge> nbors, UnionFind uf) {
+    public Boruvka_Lists(ArrayList<Edge> wannabes, ArrayList<Edge> nbors, UnionFind uf) {
         super();
         this.wannabes = wannabes;
         this.nbors = nbors;
         this.uf = uf;
     }
 
-    public BoruvkaGraph_Lists() {
+    public Boruvka_Lists() {
         super();
         this.wannabes = new ArrayList<Edge>();
         this.nbors = new ArrayList<Edge>();
@@ -121,7 +121,7 @@ public class BoruvkaGraph_Lists extends GraphAdjLists {
 
     public static void main(String[] args) {
 
-        BoruvkaGraph_Lists g = new BoruvkaGraph_Lists();
+        Boruvka_Lists g = new Boruvka_Lists();
         g.addVertices(7);
         g.addEdge(0, 1, 7);
         g.addEdge(0, 3, 5);

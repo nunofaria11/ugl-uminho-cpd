@@ -6,7 +6,7 @@
  * Ideas:       Make an abstract type implementation in adjancy list,
  *              GraphAdjLists<TYPE>, eg.:
  *                  GraphAdjLists<Integer>
- *                  GraphAdjLists<Edge>
+ *                  GraphAdjLists<String>
  *                  (etc.)
  * 
  *              If I do it this way, the classes must have very good control
@@ -18,8 +18,8 @@
 package GraphADT;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
 
 /**
  *
@@ -61,10 +61,14 @@ public class Edge implements Comparable<Edge>, Serializable {
         this.from = from;
     }
 
+    public boolean isValid() {
+        return (from != -1) && (dest != -1) && (weight != -1);
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(from+" -(" + weight + ")-> " + dest + ", ");
+        s.append(from).append(" -(").append(weight).append(")-> ").append(dest).append(", ");
         return s.toString();
     }
 
@@ -82,12 +86,12 @@ public class Edge implements Comparable<Edge>, Serializable {
         Edge c = new Edge(1, 3, 150);
         Edge d = new Edge(2, 1, 1200);
         Edge e = new Edge(2, 0, 90);
-        Vector<Edge> edges = new Vector<Edge>();
-        edges.addElement(a);
-        edges.addElement(b);
-        edges.addElement(c);
-        edges.addElement(d);
-        edges.addElement(e);
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+        edges.add(a);
+        edges.add(b);
+        edges.add(c);
+        edges.add(d);
+        edges.add(e);
         System.out.println(edges);
         Collections.sort(edges);
         System.out.println(edges);

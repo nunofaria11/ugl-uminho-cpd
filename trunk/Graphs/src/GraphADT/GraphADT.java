@@ -13,7 +13,15 @@ import java.util.ArrayList;
  *
  * @author nuno
  */
-public abstract class GraphADT {
+public abstract class GraphADT implements Cloneable{
+
+    public GraphADT() {
+        
+    }
+
+    
+
+    abstract public void clean();        // clean every data in graph
 
     abstract public void addVertices(int i);        // Add some vertices
 
@@ -24,6 +32,10 @@ public abstract class GraphADT {
     public void addEdge(int i, int j, int w) {              // Add undirected edge.
         addArc(i, j, w);
         addArc(j, i, w);
+    }
+
+    public void addEdge(Edge e) {
+        addEdge(e.getFrom(), e.getDest(), e.getWeight());
     }
 
     abstract public void removeArc(int i, int j);   // Remove directed edge.
@@ -49,6 +61,8 @@ public abstract class GraphADT {
 
     abstract public ArrayList neighbors(int i);        // List of (out-) neighbours.
 
+    abstract public ArrayList<Edge> getAllEdges();     // Returns all edges in the graph
+
     abstract public int order();                    // Number of vertices.
 
     /**
@@ -69,11 +83,22 @@ public abstract class GraphADT {
 
     abstract public int getWeight(int i, int j);
 
-    public ArrayList getNeighbors(int x) {
+    public ArrayList<Integer> getNeighbors(int x) {
         ArrayList<Integer> nbors = new ArrayList<Integer>();
         for (int i = 0; i < order(); i++) {
             if (isArc(x, i)) {
                 nbors.add(new Integer(i));
+            }
+        }
+        return nbors;
+    }
+
+    public ArrayList<Edge> getEdgeNeighbors(int x) {
+        ArrayList<Edge> nbors = new ArrayList<Edge>();
+        for (int i = 0; i < order(); i++) {
+            if (isEdge(x, i)) {
+                Edge e = new Edge(x, i, getWeight(x, i));
+                nbors.add(e);
             }
         }
         return nbors;
@@ -88,5 +113,7 @@ public abstract class GraphADT {
     abstract public boolean saveToFile(String fileName);
 
     abstract public GraphADT loadFromFile(String fileName);
+
+
     
 }

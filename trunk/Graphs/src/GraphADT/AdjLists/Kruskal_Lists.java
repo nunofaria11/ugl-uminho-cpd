@@ -1,43 +1,45 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * The Kruskal algorithm consists in implementing a list with all the edges
+ * ordered by non-decreasing order where each minimim edge is extracted in
+ * order to find the MST.
+ *
+ * For this implementation the Union concepts were applied
+ * (see class "UnionFind").
  */
 package GraphADT.AdjLists;
 
+import Support.KruskalInterface;
 import GraphADT.Edge;
 import Support.UnionFind;
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 /**
  *
  * @author nuno
  */
-public class KruskalGraph_Lists extends GraphAdjLists {
+public class Kruskal_Lists extends GraphAdjLists implements KruskalInterface {
 
     private ArrayList<Edge> Q;
-    private ArrayList<Integer> visited;
-    private int[] parent;
-    private boolean[] root;
+    private UnionFind uf;
 
-    public KruskalGraph_Lists(GraphAdjLists g) {
+    public Kruskal_Lists(GraphAdjLists g) {
         super(g);
         Q = new ArrayList<Edge>();
-        visited = new ArrayList<Integer>();
+        uf = new UnionFind(order());
     }
 
-    public KruskalGraph_Lists() {
+    public Kruskal_Lists() {
         super();
         Q = new ArrayList<Edge>();
-        visited = new ArrayList<Integer>();
+        uf = new UnionFind(order());
     }
 
     /*
      * Sorts all adges in the tree
      */
     public void initQ() {
-        visited = new ArrayList<Integer>();
+        ArrayList<Integer> visited = new ArrayList<Integer>();
         Q = new ArrayList<Edge>();
         for (int i = 0; i < order(); i++) {
             visited.add(i);
@@ -60,32 +62,17 @@ public class KruskalGraph_Lists extends GraphAdjLists {
     }
 
     public Edge extractMin() {
-//        System.out.println("\tQsize: " + Q.size());
         return Q.remove(0);
     }
 
-    public void addVisited(int v) {
-        visited.add(v);
-        // whenever we add a visited node we have to remove
-        // all references to that node in the queue
-        ArrayList<Edge> removals = new ArrayList<Edge>();
-        for (Edge e : Q) {
-            if (e.getDest() == v) {
-                System.out.println("Removing: " + removals);
-                removals.add(e);
-            }
-        }
-        Q.removeAll(removals);
-    }
-
-    public KruskalGraph_Lists MST_Kruskal_UnionFind() {
+    public Kruskal_Lists MST_Kruskal_UnionFind() {
         //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
-        KruskalGraph_Lists mst = new KruskalGraph_Lists();
+        Kruskal_Lists mst = new Kruskal_Lists();
         mst.addVertices(order());
         //
         initQ();
         //initialize forest
-        UnionFind uf = new UnionFind(order());
+        uf = new UnionFind(order());
 
         int edges_processed = 0;
         int edges_added = 0;
@@ -113,16 +100,16 @@ public class KruskalGraph_Lists extends GraphAdjLists {
         this.Q = q;
     }
 
-    public ArrayList<Integer> getVisited() {
-        return visited;
+    public UnionFind getUf() {
+        return uf;
     }
 
-    public void setVisited(ArrayList<Integer> visited) {
-        this.visited = visited;
+    public void setUf(UnionFind uf) {
+        this.uf = uf;
     }
 
     public static void main(String[] args) {
-        KruskalGraph_Lists g = new KruskalGraph_Lists();
+        Kruskal_Lists g = new Kruskal_Lists();
         g.addVertices(7);
         g.addEdge(0, 1, 7);
         g.addEdge(0, 3, 5);
@@ -135,7 +122,7 @@ public class KruskalGraph_Lists extends GraphAdjLists {
         g.addEdge(4, 5, 8);
         g.addEdge(4, 6, 9);
         g.addEdge(5, 6, 11);
-        KruskalGraph_Lists mst = new KruskalGraph_Lists(g.MST_Kruskal_UnionFind());
+        Kruskal_Lists mst = new Kruskal_Lists(g.MST_Kruskal_UnionFind());
         System.out.println(g.toString());
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());

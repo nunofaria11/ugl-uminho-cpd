@@ -96,7 +96,7 @@ public class PrimHeapQueue_Lists extends GraphAdjLists implements PrimHeapInterf
         int currentNode = getRandomNode();
         while (visited.size() < order() - 1) { 
             addVisited(currentNode);
-            ArrayList<Edge> nbors = (ArrayList<Edge>) _adj.get(currentNode);
+            ArrayList<Edge> nbors = getEdgeNeighbors(currentNode);
             // UPDATE: It was necessary to add another field to the Edge class: 'from'
             ArrayList<Edge> newEdges = new ArrayList<Edge>();
             for (Edge e : nbors) {
@@ -133,6 +133,7 @@ public class PrimHeapQueue_Lists extends GraphAdjLists implements PrimHeapInterf
         System.out.println(g.toString());
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());
+        
 
 
     }
