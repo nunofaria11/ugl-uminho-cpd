@@ -4,6 +4,7 @@
  */
 package GraphADT.AdjMatrix;
 
+import GraphADT.Edge;
 import GraphADT.GraphADT;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
      */
     private int _adj[][];
 
-    private static int _allocate     (int n)
+    private static int _allocate       (int n)
         [][]
             {
         int matrix[][] = new int[n][n];
@@ -175,18 +176,18 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
 
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         s.append("Matrix:\n  ");
         for (int i = 0; i < order(); i++) {
-            s.append(i + "\t");
+            s.append(i).append("\t");
         }
         s.append("\n");
 
         for (int i = 0; i < order(); i++) {
-            s.append(i + " | ");
+            s.append(i).append(" | ");
             for (int j = 0; j < order(); j++) {
                 if (isArc(i, j)) {
-                    s.append(_adj[i][j] + "\t");
+                    s.append(_adj[i][j]).append("\t");
                 } else {
                     s.append("X\t");
                 }
@@ -205,7 +206,7 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
             visited.add(i);
             for (int j = 0; j < order(); j++) {
 
-                if (!visited.contains(j) && getWeight(i, j)!=-1) {
+                if (!visited.contains(j) && getWeight(i, j) != -1) {
                     System.out.println(i + "->" + j);
                     total += getWeight(i, j);
                 }
@@ -257,5 +258,23 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
     @Override
     public GraphADT loadFromFile(String fileName) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ArrayList<Edge> getAllEdges() {
+        ArrayList<Edge> all = new ArrayList<Edge>();
+        for (int v = 0; v < order(); v++) {
+            for (int i = 0; i < order(); i++) {
+                if (_adj[v][i] != -1) {
+                    all.add(new Edge(v, i, getWeight(v, i)));
+                }
+            }
+        }
+        return all;
+    }
+
+    @Override
+    public void clean() {
+        _allocate(0);
     }
 }

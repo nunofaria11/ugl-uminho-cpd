@@ -96,8 +96,7 @@ public class PrimHeapQueue_Matrix extends GraphAdjMatrix implements PrimHeapInte
         int currentNode = getRandomNode();
         while (visited.size() < order() - 1) { /* *** */
             addVisited(currentNode);
-            System.out.println("Current Node: " + currentNode);
-            ArrayList<Edge> nbors = transformToEdges(currentNode, getNeighbors(currentNode));
+            ArrayList<Edge> nbors = getEdgeNeighbors(currentNode);
             // UPDATE: It was necessary to add another field to the Edge class: 'from'
             ArrayList<Edge> newEdges = new ArrayList<Edge>();
             for (Edge e : nbors) {
@@ -109,10 +108,6 @@ public class PrimHeapQueue_Matrix extends GraphAdjMatrix implements PrimHeapInte
             Edge minEdge = extractMin(); // * The sorting is done in the Edge class by implementing it with the Comparable interface
             mst.addEdge(minEdge.getFrom(), minEdge.getDest(), minEdge.getWeight());
             currentNode = minEdge.getDest();
-            System.out.println("Queue: " + Q);
-            System.out.println("New Edges: " + newEdges);
-            System.out.println("Visited: " + visited + "\n");
-
         }
         return mst;
     }
