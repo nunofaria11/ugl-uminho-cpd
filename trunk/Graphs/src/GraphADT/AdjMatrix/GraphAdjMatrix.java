@@ -28,11 +28,9 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
      */
     private int _adj[][];
 
-    private static int _allocate        (int n)
-        [][]
-            {
+    private static int[][] _allocate(int n) {
         int matrix[][] = new int[n][n];
-        for(int i=0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 matrix[i][j] = -1;
             }
