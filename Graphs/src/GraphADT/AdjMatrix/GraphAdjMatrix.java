@@ -28,7 +28,7 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
      */
     private int _adj[][];
 
-    private static int _allocate       (int n)
+    private static int _allocate        (int n)
         [][]
             {
         int matrix[][] = new int[n][n];
@@ -145,6 +145,18 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
         for (int i = 0; i < order(); i++) {
             if (_adj[v][i] != -1) {
                 nbors.add(new Integer(i));
+            }
+        }
+        return nbors;
+    }
+
+    @Override
+    public ArrayList<Edge> getEdgeNeighbors(int x) {
+        ArrayList<Edge> nbors = new ArrayList<Edge>();
+        for (int i = 0; i < order(); i++) {
+            if (isEdge(x, i)) {
+                Edge e = new Edge(x, i, getWeight(x, i));
+                nbors.add(e);
             }
         }
         return nbors;
@@ -276,5 +288,10 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
     @Override
     public void clean() {
         _allocate(0);
+    }
+
+    @Override
+    public GraphAdjMatrix clone() {
+        return new GraphAdjMatrix(this);
     }
 }

@@ -229,6 +229,11 @@ public class GraphAdjLists extends GraphADT implements Serializable {
     }
 
     @Override
+    public ArrayList<Edge> getEdgeNeighbors(int x) {
+        return neighbors(x);
+    }
+
+    @Override
     public boolean saveToFile(String fileName) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -245,6 +250,11 @@ public class GraphAdjLists extends GraphADT implements Serializable {
             all.addAll((ArrayList<Edge>) _adj.get(i));
         }
         return all;
+    }
+
+    @Override
+    public GraphAdjLists clone() {
+        return new GraphAdjLists(this);
     }
 
     public static void main(String[] args) {
