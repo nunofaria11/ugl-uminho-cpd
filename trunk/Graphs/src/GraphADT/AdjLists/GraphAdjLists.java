@@ -222,4 +222,29 @@ public class GraphAdjLists extends GraphADT implements Serializable {
     public void addEdge(Edge e) {
         addEdge(e.getFrom(), e.getDest(), e.getWeight());
     }
+
+    public ArrayList<Edge> getAllEdges() {
+        ArrayList<Edge> all = new ArrayList<Edge>(size());
+        for (int i = 0; i < order(); i++) {
+            all.addAll((ArrayList<Edge>) _adj.get(i));
+        }
+        return all;
+    }
+
+    public static void main(String[] args) {
+        GraphAdjLists g = new GraphAdjLists();
+        g.addVertices(7);
+        g.addEdge(0, 1, 7);
+        g.addEdge(0, 3, 5);
+        g.addEdge(1, 2, 8);
+        g.addEdge(1, 3, 9);
+        g.addEdge(1, 4, 7);
+        g.addEdge(2, 4, 5);
+        g.addEdge(3, 4, 15);
+        g.addEdge(3, 5, 6);
+        g.addEdge(4, 5, 8);
+        g.addEdge(4, 6, 9);
+        g.addEdge(5, 6, 11);
+        System.out.println(g.getAllEdges());
+    }
 }
