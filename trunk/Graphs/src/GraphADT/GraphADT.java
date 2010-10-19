@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author nuno
  */
-public abstract class GraphADT implements Cloneable{
+public abstract class GraphADT{
 
     public GraphADT() {
         
@@ -93,16 +93,7 @@ public abstract class GraphADT implements Cloneable{
         return nbors;
     }
 
-    public ArrayList<Edge> getEdgeNeighbors(int x) {
-        ArrayList<Edge> nbors = new ArrayList<Edge>();
-        for (int i = 0; i < order(); i++) {
-            if (isEdge(x, i)) {
-                Edge e = new Edge(x, i, getWeight(x, i));
-                nbors.add(e);
-            }
-        }
-        return nbors;
-    }
+    abstract public ArrayList<Edge> getEdgeNeighbors(int x);
 
     /**
      * Checks if all the nodes in the graph are connected
@@ -113,6 +104,10 @@ public abstract class GraphADT implements Cloneable{
     abstract public boolean saveToFile(String fileName);
 
     abstract public GraphADT loadFromFile(String fileName);
+
+
+    @Override
+    abstract public Object clone();
 
 
     
