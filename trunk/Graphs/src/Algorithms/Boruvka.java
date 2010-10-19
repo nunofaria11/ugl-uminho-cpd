@@ -61,6 +61,7 @@ public class Boruvka {
     }
 
     /*
+     * [http://flylib.com/books/en/3.56.1.52/1/]
      * This implementation of Boruvka's MST algorithm uses a version of the
      * union-find ADT from Chapter 4 (with the single-parameter find added to
      * the interface) to associate indices with MST subtrees as they are built.
