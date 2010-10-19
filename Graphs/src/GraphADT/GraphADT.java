@@ -26,8 +26,6 @@ public abstract class GraphADT {
         addArc(j, i, w);
     }
 
-    
-
     abstract public void removeArc(int i, int j);   // Remove directed edge.
 
     public void removeEdge(int i, int j) {           // Remove undirected edge.
@@ -90,4 +88,5 @@ public abstract class GraphADT {
     abstract public boolean saveToFile(String fileName);
 
     abstract public GraphADT loadFromFile(String fileName);
+    
 }

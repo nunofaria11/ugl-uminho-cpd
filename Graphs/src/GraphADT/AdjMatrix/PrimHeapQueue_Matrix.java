@@ -7,7 +7,7 @@
 package GraphADT.AdjMatrix;
 
 import GraphADT.Edge;
-import GraphADT.GraphInterfaces.PrimHeapInterface;
+import Support.PrimHeapInterface;
 import java.util.Collections;
 import java.util.ArrayList;
 

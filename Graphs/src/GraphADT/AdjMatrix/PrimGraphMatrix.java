@@ -4,7 +4,7 @@
  */
 package GraphADT.AdjMatrix;
 
-import GraphADT.GraphInterfaces.PrimInterface;
+import Support.PrimInterface;
 import java.util.ArrayList;
 import java.util.ArrayList;
 

@@ -4,9 +4,7 @@
 package GraphADT.AdjLists;
 
 import GraphADT.Edge;
-import GraphADT.GraphInterfaces.PrimInterface;
-import java.util.ArrayList;
-import java.util.Iterator;
+import Support.PrimInterface;
 import java.util.ArrayList;
 
 /**

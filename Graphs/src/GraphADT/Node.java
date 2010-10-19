@@ -11,6 +11,9 @@ package GraphADT;
  */
 public class Node {
 
-
+/**
+ * THIS WAS DIFFICULT TO IMPLEMENT WHEN ALREADY HAVING THE STRUCTURES WELL DEFINED
+ * The problem is in how to access the nodes when they are not integers.
+ */
 
 }
