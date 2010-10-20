@@ -23,18 +23,12 @@ public class Kruskal implements KruskalInterface {
     private UnionFind uf;
     private GraphADT G;
 
-    public Kruskal(GraphAdjLists g) {
+    public Kruskal(GraphADT g) {
         G = g;
         Q = new ArrayList<Edge>();
         uf = new UnionFind(G.order());
     }
-
-    public Kruskal(GraphAdjMatrix g) {
-        G = g;
-        Q = new ArrayList<Edge>();
-        uf = new UnionFind(G.order());
-    }
-
+    
     /*
      * Sorts all adges in the tree
      */
