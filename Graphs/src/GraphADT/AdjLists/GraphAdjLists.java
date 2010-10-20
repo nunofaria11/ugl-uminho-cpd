@@ -4,6 +4,7 @@
  */
 package GraphADT.AdjLists;
 
+import GraphADT.AdjMatrix.GraphAdjMatrix;
 import GraphADT.Edge;
 import GraphADT.GraphADT;
 import java.io.Serializable;
@@ -217,6 +218,7 @@ public class GraphAdjLists extends GraphADT implements Serializable {
             }
         }
         boolean c = true;
+
         for (boolean existsPath : visited) {
             c &= existsPath;
         }
@@ -255,6 +257,25 @@ public class GraphAdjLists extends GraphADT implements Serializable {
     @Override
     public GraphAdjLists clone() {
         return new GraphAdjLists(this);
+    }
+
+    /**
+     * Converts this adjacency list graph to adjacency matrix.
+     *
+     * @return gmatrix Conversion of the adjacency list to adjacency matrix.
+     */
+    public GraphAdjMatrix toGraphAdjMatrix(){
+        GraphAdjMatrix gmatrix = new GraphAdjMatrix();
+        gmatrix.addVertices(order());
+
+        for(int i=0;i<order();i++){
+            ArrayList<Edge> nbors = getEdgeNeighbors(i);
+            for(Edge e : nbors){
+                gmatrix.addEdge(e);
+            }
+
+        }
+        return gmatrix;
     }
 
     public static void main(String[] args) {
