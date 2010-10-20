@@ -4,6 +4,7 @@
  */
 package GraphADT.AdjMatrix;
 
+import GraphADT.AdjLists.GraphAdjLists;
 import GraphADT.Edge;
 import GraphADT.GraphADT;
 import java.io.Serializable;
@@ -217,7 +218,6 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
             for (int j = 0; j < order(); j++) {
 
                 if (!visited.contains(j) && getWeight(i, j) != -1) {
-                    System.out.println(i + "->" + j);
                     total += getWeight(i, j);
                 }
             }
@@ -291,5 +291,23 @@ public class GraphAdjMatrix extends GraphADT implements Serializable {
     @Override
     public GraphAdjMatrix clone() {
         return new GraphAdjMatrix(this);
+    }
+
+    /**
+     * Converts this adjacency matrix graph to adjacency list.
+     * 
+     * @return glists Conversion of the adjacency matrix to adjacency lists.
+     */
+    public GraphAdjLists toGraphAdjLists(){
+        GraphAdjLists glists = new GraphAdjLists();
+        glists.addVertices(order());
+        for(int i=0;i<order();i++){
+            for(int j=0;j<order();j++){
+                if(i!=j && isEdge(i, j)){
+                    glists.addEdge(i, j, getWeight(i, j));
+                }
+            }
+        }
+        return glists;
     }
 }
