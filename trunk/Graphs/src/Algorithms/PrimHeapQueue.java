@@ -2,13 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Algorithms;
 
 /*
  * For this prim-queued implementation the queue must be sorted by weight.
  */
-
 import GraphADT.AdjLists.GraphAdjLists;
 import GraphADT.AdjMatrix.GraphAdjMatrix;
 import GraphADT.Edge;
@@ -27,13 +25,7 @@ public class PrimHeapQueue implements PrimHeapInterface {
     private ArrayList<Integer> visited;
     private GraphADT G;
 
-    public PrimHeapQueue(GraphAdjLists g) {
-        G = g;
-        Q = new ArrayList<Edge>();
-        visited = new ArrayList<Integer>();
-    }
-
-    public PrimHeapQueue(GraphAdjMatrix g) {
+    public PrimHeapQueue(GraphADT g) {
         G = g;
         Q = new ArrayList<Edge>();
         visited = new ArrayList<Integer>();

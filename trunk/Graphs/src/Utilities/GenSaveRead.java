@@ -1,3 +1,5 @@
+package Utilities;
+
 
 import Algorithms.Boruvka;
 import GraphADT.AdjLists.GraphAdjLists;
@@ -53,6 +55,8 @@ public class GenSaveRead {
 //        write();
 
         Boruvka g_mst = new Boruvka(GenSaveRead.read());
+
+        
 
         System.out.println("MST total weight: " + g_mst.MST_Boruvka_UnionFind().MST_TotalWeight());
 

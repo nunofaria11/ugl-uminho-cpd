@@ -22,20 +22,6 @@ public class Boruvka {
     private UnionFind uf;
     private GraphADT G;
 
-    public Boruvka(GraphAdjMatrix G) {
-        this.G = G;
-        wannabes = new ArrayList<Edge>();
-        nbors = new ArrayList<Edge>();
-        uf = new UnionFind(G.order());
-    }
-
-    public Boruvka(GraphAdjLists G) {
-        this.G = G;
-        wannabes = new ArrayList<Edge>();
-        nbors = new ArrayList<Edge>();
-        uf = new UnionFind(G.order());
-    }
-
     public Boruvka(GraphADT G) {
         this.G = G;
         wannabes = new ArrayList<Edge>();
