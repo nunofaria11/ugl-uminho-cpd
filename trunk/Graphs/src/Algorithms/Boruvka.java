@@ -36,6 +36,13 @@ public class Boruvka {
         uf = new UnionFind(G.order());
     }
 
+    public Boruvka(GraphADT G) {
+        this.G = G;
+        wannabes = new ArrayList<Edge>();
+        nbors = new ArrayList<Edge>();
+        uf = new UnionFind(G.order());
+    }
+
     public ArrayList<Edge> getNbors() {
         return nbors;
     }
