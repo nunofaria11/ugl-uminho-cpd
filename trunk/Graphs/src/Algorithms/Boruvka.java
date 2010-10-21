@@ -94,7 +94,7 @@ public class Boruvka {
             for (int o = 0; o < G.order(); o++) {
                 nbors.set(o, maxEdge);
             }
-            // search every node of very sub-tree
+            
             next = 0;
             for (Edge e : wannabes) {
                 l = uf.find(e.getFrom());

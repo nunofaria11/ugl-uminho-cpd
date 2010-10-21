@@ -32,13 +32,13 @@ public class Matrix_Perf {
 
         if (g instanceof GraphAdjMatrix) {
             gm = (GraphAdjMatrix) g;
-        } else if (g instanceof GraphAdjLists) {
+        } else {
             gm = ((GraphAdjLists) g).toGraphAdjMatrix();
         }
         
-        prim = new PrimHeapQueue(g);
-        kruskal = new Kruskal(g);
-        boruvka = new Boruvka(g);
+        prim = new PrimHeapQueue(gm);
+        kruskal = new Kruskal(gm);
+        boruvka = new Boruvka(gm);
     }
 
     public void runMatrixMSTs() {

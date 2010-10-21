@@ -130,7 +130,5 @@ public class PrimHeapQueue implements PrimHeapInterface {
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());
 
-
-
     }
 }
