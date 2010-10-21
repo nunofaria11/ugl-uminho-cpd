@@ -4,8 +4,8 @@
  */
 package GraphIO;
 
-import GraphADT.AdjLists.GraphAdjLists;
 import GraphADT.GraphADT;
+import PerfTest.GenSaveRead;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -61,9 +61,9 @@ public class GraphInput {
     }
 
     public static void main(String[] args){
-        GraphInput gin = new GraphInput("file2.ser");
+        GraphInput gin = new GraphInput(GenSaveRead.file_name);
 //        GraphAdjMatrix g = (GraphAdjMatrix) gin.readGraph();
-        GraphAdjLists g = (GraphAdjLists) gin.readGraph();
+        GraphADT g = gin.readGraph();
         System.out.println(g.toString());
     }
 }

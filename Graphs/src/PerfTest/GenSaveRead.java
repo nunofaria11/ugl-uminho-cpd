@@ -1,6 +1,7 @@
 package PerfTest;
 
 import Algorithms.Boruvka;
+import GraphADT.AdjLists.GraphAdjLists;
 import GraphADT.AdjMatrix.GraphAdjMatrix;
 import GraphADT.GraphADT;
 import GraphIO.GraphInput;
@@ -18,9 +19,10 @@ import java.io.IOException;
  */
 public class GenSaveRead {
 
-    static double connection_probability = 0.5;
+    public static double connection_probability = 0.5;
 //    static String file_name = "graph_adj_500nodes.ser";
-    static String file_name = "graph_mat_500nodes.ser";
+//    public static String file_name = "graph_mat_500nodes.ser";
+    public static String file_name = "small_example_7nodes_matrix.ser";
 
     /*
      * Create and write a graph.
@@ -39,6 +41,29 @@ public class GenSaveRead {
         gout.closeFile();
     }
 
+    public static void write_small() throws IOException {
+
+        GraphOutput gout = new GraphOutput(GenSaveRead.file_name);
+        GraphAdjLists g = new GraphAdjLists();
+        g.addVertices(7);
+        g.addEdge(0, 1, 7);
+        g.addEdge(0, 3, 5);
+        g.addEdge(1, 2, 8);
+        g.addEdge(1, 3, 9);
+        g.addEdge(1, 4, 7);
+        g.addEdge(2, 4, 5);
+        g.addEdge(3, 4, 15);
+        g.addEdge(3, 5, 6);
+        g.addEdge(4, 5, 8);
+        g.addEdge(4, 6, 9);
+        g.addEdge(5, 6, 11);
+
+
+        gout.saveGraph(g);
+
+        gout.closeFile();
+    }
+
     /*
      * Read the written graph
      */
@@ -52,10 +77,9 @@ public class GenSaveRead {
 
     public static void main(String[] args) throws IOException {
 
-        write();
+        GenSaveRead.write_small();
 
         Boruvka g_mst = new Boruvka(GenSaveRead.read());
-
 
         System.out.println("MST total weight: " + g_mst.MST_Boruvka_UnionFind().MST_TotalWeight());
 

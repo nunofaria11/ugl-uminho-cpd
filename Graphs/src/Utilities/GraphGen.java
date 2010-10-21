@@ -4,6 +4,7 @@
  */
 package Utilities;
 
+import Algorithms.Boruvka;
 import GraphADT.AdjLists.GraphAdjLists;
 import GraphADT.Edge;
 import GraphADT.GraphADT;
@@ -83,27 +84,6 @@ public final class GraphGen {
             }
         }
         return prob;
-    }
-
-    public GraphADT fillGraph(GraphADT G) {
-        Random r = new Random(System.currentTimeMillis());
-
-        while (!G.connected()) {
-            for (int i = 0; i < G.order(); i++) {
-                for (int j = 0; j < G.order(); j++) {
-                    if (i != j) {
-
-                        double random = getRandomProbability();
-                        if (random > p) { // if new random chance is lower than probability connection
-                            int w = r.nextInt(Constants.MAX_WEIGHT) + 1; // weight: [1..20]
-                            G.addEdge(new Edge(i, j, w));
-                        }
-                    }
-                }
-            }
-        }
-        System.out.println("Prob: " + p);
-        return G;
     }
 
     /*
@@ -221,13 +201,14 @@ public final class GraphGen {
             // consider the graph to be undirectioned.
             existingEdges.add(new Integer(target * g.order() + source)); // add double-edge
 
-            int random_weight = random.nextInt(Constants.MAX_WEIGHT) + 1;
+            int random_weight = random.nextInt(Constants.MAX_WEIGHT) + 5;
             g.addEdge(new Edge(source, target, random_weight));
         }
 
         return g;
 
     }
+
     /**
      *
      * In the GNP model we only need the number of vertices (implicit in the <i>order</i>
@@ -254,7 +235,7 @@ public final class GraphGen {
                     // If random indicates this edge exists
                     if (random.nextDouble() <= this.p) {
                         // Create and edge between node i and node j
-                        int random_weight = random.nextInt(Constants.MAX_WEIGHT) + 1;
+                        int random_weight = random.nextInt(Constants.MAX_WEIGHT - Constants.MIN_WEIGHT) + Constants.MIN_WEIGHT;
 
                         g.addEdge(new Edge(i, j, random_weight));
                     }
@@ -264,17 +245,40 @@ public final class GraphGen {
         return g;
     }
 
+    public static double avg_weight(GraphADT g) {
+        int total = 0;
+        int count = 0;
+        ArrayList<Edge> allEdges = g.getAllEdges();
+        ArrayList<Integer> visited = new ArrayList<Integer>();
+        for (Edge e : allEdges) {
+            int source = e.getFrom();
+            int target = e.getDest();
+            int index = source * g.order() + target;
+            int index_reverse = target * g.order() + source;
+            if (!visited.contains(index) && !visited.contains(index_reverse)) {
+                total += e.getWeight();
+                count++;
+                visited.add(index);
+            }
+        }
+        return total / count;
+    }
+
     public static void main(String[] args) {
+
         GraphGen ggen = new GraphGen(0.5);
 
         GraphAdjLists random_graph = new GraphAdjLists();
-        random_graph.addVertices(20);
+        random_graph.addVertices(250);
 
         ggen.generate(random_graph);
 
-        System.out.println(random_graph);
+//        System.out.println(random_graph);
 
-
+        Boruvka b = new Boruvka(random_graph);
+        GraphADT a = b.MST_Boruvka_UnionFind();
+        System.out.println("MST weight: " + a.MST_TotalWeight());
+        System.out.println("AVG weight: " + GraphGen.avg_weight(a));
 
     }
 }

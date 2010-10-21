@@ -71,6 +71,7 @@ public abstract class GraphADT{
      */
     abstract public int size();                     // Number of edges.
 
+    @Override
     abstract public String toString();
 
     public int getRandomNode() {
