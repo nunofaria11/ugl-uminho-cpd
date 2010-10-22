@@ -4,10 +4,10 @@
  */
 package Algorithms;
 
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.AdjMatrix.GraphAdjMatrix;
-import GraphADT.Edge;
-import GraphADT.GraphADT;
+import GraphAD.Representations.GraphAdjLists;
+import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.Edge;
+import GraphAD.GraphAD;
 import Support.UnionFind;
 import java.util.ArrayList;
 
@@ -20,9 +20,9 @@ public class Boruvka {
     private ArrayList<Edge> wannabes;
     private ArrayList<Edge> nbors;
     private UnionFind uf;
-    private GraphADT G;
+    private GraphAD G;
 
-    public Boruvka(GraphADT G) {
+    public Boruvka(GraphAD G) {
         this.G = G;
         wannabes = new ArrayList<Edge>();
         nbors = new ArrayList<Edge>();
@@ -67,8 +67,8 @@ public class Boruvka {
      * numbers as indices. At the end of each phase, each component is united with
      * its nearest neighbor and the nearest-neighbor edges added to the MST.
      */
-    public GraphADT MST_Boruvka_UnionFind() {
-        GraphADT mst = (GraphADT) G.clone();
+    public GraphAD MST_Boruvka_UnionFind() {
+        GraphAD mst = (GraphAD) G.clone();
         mst.clean();
         mst.addVertices(G.order());
 
@@ -149,7 +149,7 @@ public class Boruvka {
         g.addEdge(5, 6, 11);
 
         Boruvka bor = new Boruvka(g);
-        GraphADT mst = bor.MST_Boruvka_UnionFind();
+        GraphAD mst = bor.MST_Boruvka_UnionFind();
         System.out.println(g.toString());
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());

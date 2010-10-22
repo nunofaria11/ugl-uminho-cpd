@@ -4,8 +4,8 @@
  */
 package GraphIO;
 
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.GraphADT;
+import GraphAD.Representations.GraphAdjLists;
+import GraphAD.GraphAD;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -33,7 +33,7 @@ public class GraphOutput {
         }
     }
 
-    public void saveGraph(GraphADT g) throws IOException {
+    public void saveGraph(GraphAD g) throws IOException {
         out.writeObject(g);
     }
 
