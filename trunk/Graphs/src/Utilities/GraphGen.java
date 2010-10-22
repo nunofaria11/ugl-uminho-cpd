@@ -5,9 +5,9 @@
 package Utilities;
 
 import Algorithms.Boruvka;
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.Edge;
-import GraphADT.GraphADT;
+import GraphAD.Representations.GraphAdjLists;
+import GraphAD.Edge;
+import GraphAD.GraphAD;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -99,7 +99,7 @@ public final class GraphGen {
      *      with probability p, with the presence or absence of any two
      *      distinct edges in the graph being independent.
      */
-    public GraphADT generate(GraphADT g) {
+    public GraphAD generate(GraphAD g) {
 
         if (nEdges != -1) // 1)
         {
@@ -123,7 +123,7 @@ public final class GraphGen {
      * @param g Graph pointer to change.
      * @return g Randomly generated graph.
      */
-    private GraphADT gnm(GraphADT g) {
+    private GraphAD gnm(GraphAD g) {
         Random random = new Random(System.currentTimeMillis());
 
         // Auxiliar strcuture used to control the edges that have already been added.
@@ -218,7 +218,7 @@ public final class GraphGen {
      * @param g 
      * @return g Randomly generated graph with connection ratio <i>p</i>
      */
-    private GraphADT gnp(GraphADT g) {
+    private GraphAD gnp(GraphAD g) {
         Random random = new Random(System.currentTimeMillis());
         while (!g.connected()) {
             // For each node
@@ -245,7 +245,7 @@ public final class GraphGen {
         return g;
     }
 
-    public static double avg_weight(GraphADT g) {
+    public static double avg_weight(GraphAD g) {
         int total = 0;
         int count = 0;
         ArrayList<Edge> allEdges = g.getAllEdges();
@@ -276,7 +276,7 @@ public final class GraphGen {
 //        System.out.println(random_graph);
 
         Boruvka b = new Boruvka(random_graph);
-        GraphADT a = b.MST_Boruvka_UnionFind();
+        GraphAD a = b.MST_Boruvka_UnionFind();
         System.out.println("MST weight: " + a.MST_TotalWeight());
         System.out.println("AVG weight: " + GraphGen.avg_weight(a));
 

@@ -1,9 +1,9 @@
 package PerfTest;
 
 import Algorithms.Boruvka;
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.AdjMatrix.GraphAdjMatrix;
-import GraphADT.GraphADT;
+import GraphAD.Representations.GraphAdjLists;
+import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.GraphAD;
 import GraphIO.GraphInput;
 import GraphIO.GraphOutput;
 import Utilities.GraphGen;
@@ -67,9 +67,9 @@ public class GenSaveRead {
     /*
      * Read the written graph
      */
-    public static GraphADT read() {
+    public static GraphAD read() {
         GraphInput gin = new GraphInput(GenSaveRead.file_name);
-        GraphADT g_adt_read = gin.readGraph();
+        GraphAD g_adt_read = gin.readGraph();
 
 //        System.out.println(g_adt_read.toString());
         return g_adt_read;

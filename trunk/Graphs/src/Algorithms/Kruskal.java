@@ -4,11 +4,9 @@
  */
 package Algorithms;
 
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.AdjMatrix.GraphAdjMatrix;
-import GraphADT.Edge;
-import GraphADT.GraphADT;
-import Support.KruskalInterface;
+import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.Edge;
+import GraphAD.GraphAD;
 import Support.UnionFind;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,13 +15,13 @@ import java.util.Collections;
  *
  * @author nuno
  */
-public class Kruskal implements KruskalInterface {
+public class Kruskal{
 
     private ArrayList<Edge> Q;
     private UnionFind uf;
-    private GraphADT G;
+    private GraphAD G;
 
-    public Kruskal(GraphADT g) {
+    public Kruskal(GraphAD g) {
         G = g;
         Q = new ArrayList<Edge>();
         uf = new UnionFind(G.order());
@@ -59,9 +57,9 @@ public class Kruskal implements KruskalInterface {
         return Q.remove(0);
     }
 
-    public GraphADT MST_Kruskal_UnionFind() {
+    public GraphAD MST_Kruskal_UnionFind() {
         //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
-        GraphADT mst = (GraphADT) G.clone();
+        GraphAD mst = (GraphAD) G.clone();
         mst.clean();
         mst.addVertices(G.order());
         //
@@ -120,7 +118,7 @@ public class Kruskal implements KruskalInterface {
         g.addEdge(5, 6, 11);
 
         Kruskal kruskal = new Kruskal(g);
-        GraphADT mst = kruskal.MST_Kruskal_UnionFind();
+        GraphAD mst = kruskal.MST_Kruskal_UnionFind();
         System.out.println(g.toString());
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());

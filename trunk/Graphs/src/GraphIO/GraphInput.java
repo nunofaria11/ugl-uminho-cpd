@@ -4,7 +4,7 @@
  */
 package GraphIO;
 
-import GraphADT.GraphADT;
+import GraphAD.GraphAD;
 import PerfTest.GenSaveRead;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,9 +47,9 @@ public class GraphInput {
         }
     }
 
-    public GraphADT readGraph(){
+    public GraphAD readGraph(){
         try {
-            return (GraphADT) in.readObject();
+            return (GraphAD) in.readObject();
         } catch (IOException ex) {
             Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error reading file '"+file_name+"': " + ex.toString());
@@ -63,7 +63,7 @@ public class GraphInput {
     public static void main(String[] args){
         GraphInput gin = new GraphInput(GenSaveRead.file_name);
 //        GraphAdjMatrix g = (GraphAdjMatrix) gin.readGraph();
-        GraphADT g = gin.readGraph();
+        GraphAD g = gin.readGraph();
         System.out.println(g.toString());
     }
 }

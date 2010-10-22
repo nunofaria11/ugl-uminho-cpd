@@ -7,11 +7,9 @@ package Algorithms;
 /*
  * For this prim-queued implementation the queue must be sorted by weight.
  */
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.AdjMatrix.GraphAdjMatrix;
-import GraphADT.Edge;
-import GraphADT.GraphADT;
-import Support.PrimHeapInterface;
+import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.Edge;
+import GraphAD.GraphAD;
 import java.util.Collections;
 import java.util.ArrayList;
 
@@ -19,13 +17,13 @@ import java.util.ArrayList;
  *
  * @author nuno
  */
-public class PrimHeapQueue implements PrimHeapInterface {
+public class PrimHeapQueue {
 
     private ArrayList<Edge> Q;
     private ArrayList<Integer> visited;
-    private GraphADT G;
+    private GraphAD G;
 
-    public PrimHeapQueue(GraphADT g) {
+    public PrimHeapQueue(GraphAD g) {
         G = g;
         Q = new ArrayList<Edge>();
         visited = new ArrayList<Integer>();
@@ -83,8 +81,8 @@ public class PrimHeapQueue implements PrimHeapInterface {
      * TRY TO INTEGRATE THIS IMPLEMENTATION WITH THE AdjMatrix IMPLEMENTATION
      * TO CREATE A GENERIC IMPLEMENTATION
      */
-    public GraphADT MST_PrimHeap() {
-        GraphADT mst = (GraphADT) G.clone();
+    public GraphAD MST_PrimHeap() {
+        GraphAD mst = (GraphAD) G.clone();
         mst.clean();
         mst.addVertices(G.order());
         Q = new ArrayList<Edge>();
@@ -125,7 +123,7 @@ public class PrimHeapQueue implements PrimHeapInterface {
         g.addEdge(5, 6, 11);
 
         PrimHeapQueue prim = new PrimHeapQueue(g);
-        GraphADT mst = prim.MST_PrimHeap();
+        GraphAD mst = prim.MST_PrimHeap();
         System.out.println(g.toString());
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());

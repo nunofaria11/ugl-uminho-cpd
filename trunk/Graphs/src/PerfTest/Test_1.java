@@ -1,6 +1,6 @@
 package PerfTest;
 
-import GraphADT.GraphADT;
+import GraphAD.GraphAD;
 
 /*
  * To change this template, choose Tools | Templates
@@ -13,7 +13,7 @@ import GraphADT.GraphADT;
 public class Test_1 {
 
     public static void main(String[] args) {
-        GraphADT read_graph = GenSaveRead.read();
+        GraphAD read_graph = GenSaveRead.read();
 
         List_Perf lperf = new List_Perf(read_graph);
         Matrix_Perf mperf = new Matrix_Perf(read_graph);

@@ -7,9 +7,9 @@ package PerfTest;
 import Algorithms.Boruvka;
 import Algorithms.Kruskal;
 import Algorithms.PrimHeapQueue;
-import GraphADT.AdjLists.GraphAdjLists;
-import GraphADT.AdjMatrix.GraphAdjMatrix;
-import GraphADT.GraphADT;
+import GraphAD.Representations.GraphAdjLists;
+import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.GraphAD;
 
 /**
  *
@@ -27,7 +27,7 @@ public class List_Perf {
         boruvka = new Boruvka(read_graph_list);
     }
 
-    public List_Perf(GraphADT g) {
+    public List_Perf(GraphAD g) {
         GraphAdjLists gl;
 
         if (g instanceof GraphAdjLists) {
@@ -42,9 +42,9 @@ public class List_Perf {
     }
 
     public void runListMSTs() {
-        GraphADT boruvka_mst = boruvka.MST_Boruvka_UnionFind();
-        GraphADT prim_mst = prim.MST_PrimHeap();
-        GraphADT kruskal_mst = kruskal.MST_Kruskal_UnionFind();
+        GraphAD boruvka_mst = boruvka.MST_Boruvka_UnionFind();
+        GraphAD prim_mst = prim.MST_PrimHeap();
+        GraphAD kruskal_mst = kruskal.MST_Kruskal_UnionFind();
 
         System.out.println("LIST:");
         System.out.println("\tBoruvka MST weight: " + boruvka_mst.MST_TotalWeight());
@@ -53,7 +53,7 @@ public class List_Perf {
     }
 
     public static void main(String[] args) {
-        GraphADT read_graph = GenSaveRead.read();
+        GraphAD read_graph = GenSaveRead.read();
 
         List_Perf lperf = new List_Perf(read_graph);
 
