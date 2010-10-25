@@ -71,13 +71,10 @@ public class Boruvka {
         GraphAD mst = (GraphAD) G.clone();
         mst.clean();
         mst.addVertices(G.order());
-
         Edge maxEdge = new Edge(-1, -1, Integer.MAX_VALUE);
         this.uf = new UnionFind(G.order());
         this.wannabes = new ArrayList<Edge>(G.size());
-
         ArrayList<Edge> allEdges = G.getAllEdges();
-
         for (int i = 0; i < allEdges.size(); i++) {
             wannabes.add(i, allEdges.get(i));
         }
@@ -86,15 +83,12 @@ public class Boruvka {
             nbors.add(i, null);
         }
         int next;
-
         // Repeat until there is only on tree
         for (int i = allEdges.size(); i != 0; i = next) {
-
             int l, m, n;
             for (int o = 0; o < G.order(); o++) {
                 nbors.set(o, maxEdge);
             }
-            
             next = 0;
             for (Edge e : wannabes) {
                 l = uf.find(e.getFrom());
@@ -124,10 +118,7 @@ public class Boruvka {
                     }
                 }
             }
-
         }
-
-
         return mst;
     }
 

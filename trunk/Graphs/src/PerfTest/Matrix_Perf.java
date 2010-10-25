@@ -6,6 +6,7 @@ package PerfTest;
 
 import Algorithms.Boruvka;
 import Algorithms.Kruskal;
+import Algorithms.PrimFibonacciHeap;
 import Algorithms.PrimHeapQueue;
 import GraphAD.Representations.GraphAdjLists;
 import GraphAD.Representations.GraphAdjMatrix;
@@ -18,6 +19,7 @@ import GraphAD.GraphAD;
 public class Matrix_Perf {
 
     private PrimHeapQueue prim;
+    private PrimFibonacciHeap prim_fib;
     private Kruskal kruskal;
     private Boruvka boruvka;
 
@@ -25,6 +27,7 @@ public class Matrix_Perf {
         prim = new PrimHeapQueue(read_graph_matrix);
         kruskal = new Kruskal(read_graph_matrix);
         boruvka = new Boruvka(read_graph_matrix);
+        prim_fib = new PrimFibonacciHeap(read_graph_matrix);
     }
 
     public Matrix_Perf(GraphAD g) {
@@ -39,17 +42,20 @@ public class Matrix_Perf {
         prim = new PrimHeapQueue(gm);
         kruskal = new Kruskal(gm);
         boruvka = new Boruvka(gm);
+        prim_fib = new PrimFibonacciHeap(gm);
     }
 
     public void runMatrixMSTs() {
-        GraphAD boruvka_mst = boruvka.MST_Boruvka_UnionFind();
+//        GraphAD boruvka_mst = boruvka.MST_Boruvka_UnionFind();
         GraphAD prim_mst = prim.MST_PrimHeap();
-        GraphAD kruskal_mst = kruskal.MST_Kruskal_UnionFind();
+//        GraphAD kruskal_mst = kruskal.MST_Kruskal_UnionFind();
+        GraphAD prim_fib_mst = prim_fib.MST_PrimHeap();
 
-        System.out.println("LIST:");
-        System.out.println("\tBoruvka MST weight: " + boruvka_mst.MST_TotalWeight());
+        System.out.println("Matrix:");
+//        System.out.println("\tBoruvka MST weight: " + boruvka_mst.MST_TotalWeight());
         System.out.println("\tPrim MST weight: " + prim_mst.MST_TotalWeight());
-        System.out.println("\tKruskal MST weight: " + kruskal_mst.MST_TotalWeight());
+        System.out.println("\tPrim Fibonacci MST weight: " + prim_fib_mst.MST_TotalWeight());
+//        System.out.println("\tKruskal MST weight: " + kruskal_mst.MST_TotalWeight());
     }
 
     public static void main(String[] args){

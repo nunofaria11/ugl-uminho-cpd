@@ -4,29 +4,50 @@
  */
 package Algorithms;
 
-/*
- * For this prim-queued implementation the queue must be sorted by weight.
- */
-import GraphAD.Representations.GraphAdjMatrix;
 import GraphAD.Edge;
 import GraphAD.GraphAD;
-import java.util.Collections;
+import GraphAD.Representations.GraphAdjMatrix;
+import Utilities.FibonacciHeap;
 import java.util.ArrayList;
 
 /**
  *
  * @author nuno
  */
-public class PrimHeapQueue {
+public class PrimFibonacciHeap {
 
-    private ArrayList<Edge> Q;
+    private FibonacciHeap<Edge> _fib_heap;
     private ArrayList<Integer> visited;
     private GraphAD G;
 
-    public PrimHeapQueue(GraphAD g) {
+    public PrimFibonacciHeap(FibonacciHeap _fib_heap) {
+        this._fib_heap = _fib_heap;
+        this.visited = new ArrayList<Integer>();
+    }
+
+    public PrimFibonacciHeap(GraphAD g) {
         G = g;
-        Q = new ArrayList<Edge>();
-        visited = new ArrayList<Integer>();
+        this._fib_heap = new FibonacciHeap();
+        this.visited = new ArrayList<Integer>();
+    }
+
+    /*
+     * Methods
+     */
+    public FibonacciHeap<Edge> getFib_heap() {
+        return _fib_heap;
+    }
+
+    public void setFib_heap(FibonacciHeap<Edge> _fib_heap) {
+        this._fib_heap = _fib_heap;
+    }
+
+    public ArrayList<Integer> getVisited() {
+        return visited;
+    }
+
+    public void setVisited(ArrayList<Integer> visited) {
+        this.visited = visited;
     }
 
     /**
@@ -34,34 +55,18 @@ public class PrimHeapQueue {
      * @return minimum value in queue
      */
     public Edge extractMin() {
-        return Q.remove(0);
+        return _fib_heap.removeMin().getData();
     }
 
-    public void addToQ(Edge x) {
-        Q.add(x);
-        Collections.sort(Q);
+    public void addToHeap(Edge x) {
+        // the key sorting factor in the heap will be the weight of the connection
+        _fib_heap.insert(x, x.getWeight());
     }
 
-    public void addToQ(ArrayList x) {
-        ArrayList<Edge> xx = (ArrayList<Edge>) x;
-        Q.addAll(xx);
-        Collections.sort(Q);
-    }
-
-    public ArrayList<Edge> getQ() {
-        return Q;
-    }
-
-    public void setQ(ArrayList<Edge> Q) {
-        this.Q = Q;
-    }
-
-    public boolean QisEmpty() {
-        return Q.isEmpty();
-    }
-
-    public boolean isInQ(Edge x) {
-        return Q.contains(x);
+    public void addToHeap(ArrayList<Edge> x) {
+        for (Edge e : x) {
+            addToHeap(e);
+        }
     }
 
     public void addVisited(int v) {
@@ -69,20 +74,24 @@ public class PrimHeapQueue {
         // whenever we add a visited node we have to remove
         // all references to that node in the queue
         ArrayList<Edge> removals = new ArrayList<Edge>();
-        for (Edge e : Q) {
+        for (Edge e : _fib_heap.getAllElements()) {
             if (e.getDest() == v) {
-                removals.add(e);
+                _fib_heap.delete(e, e.getWeight());
             }
         }
-        Q.removeAll(removals);
     }
 
-    
+    public void removeAll(ArrayList<Edge> rem) {
+        for (Edge e : rem) {
+            _fib_heap.delete(e, e.getWeight());
+        }
+    }
+
     public GraphAD MST_PrimHeap() {
         GraphAD mst = (GraphAD) G.clone();
         mst.clean();
         mst.addVertices(G.order());
-        Q = new ArrayList<Edge>();
+        _fib_heap = new FibonacciHeap<Edge>();
         visited = new ArrayList<Integer>();
         int currentNode = G.getRandomNode();
         while (visited.size() < G.order() - 1) {
@@ -95,8 +104,8 @@ public class PrimHeapQueue {
                     newEdges.add(e);
                 }
             }
-            addToQ(newEdges);
-            Edge minEdge = extractMin(); // * The sorting is done in the Edge class by implementing it with the Comparable interface
+            addToHeap(newEdges);
+            Edge minEdge = extractMin();
             mst.addEdge(minEdge.getFrom(), minEdge.getDest(), minEdge.getWeight());
             currentNode = minEdge.getDest();
         }
@@ -119,7 +128,7 @@ public class PrimHeapQueue {
         g.addEdge(4, 6, 9);
         g.addEdge(5, 6, 11);
 
-        PrimHeapQueue prim = new PrimHeapQueue(g);
+        PrimFibonacciHeap prim = new PrimFibonacciHeap(g);
         GraphAD mst = prim.MST_PrimHeap();
         System.out.println(g.toString());
         System.out.println(mst.toString());
