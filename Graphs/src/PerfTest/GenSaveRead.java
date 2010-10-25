@@ -21,8 +21,8 @@ public class GenSaveRead {
 
     public static double connection_probability = 0.5;
 //    static String file_name = "graph_adj_500nodes.ser";
-//    public static String file_name = "graph_mat_500nodes.ser";
-    public static String file_name = "small_example_7nodes_matrix.ser";
+    public static String file_name = "graph_mat_500nodes.ser";
+//    public static String file_name = "small_example_7nodes_matrix.ser";
 
     /*
      * Create and write a graph.
@@ -77,7 +77,7 @@ public class GenSaveRead {
 
     public static void main(String[] args) throws IOException {
 
-        GenSaveRead.write_small();
+        GenSaveRead.write();
 
         Boruvka g_mst = new Boruvka(GenSaveRead.read());
 
