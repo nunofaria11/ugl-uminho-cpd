@@ -6,7 +6,7 @@ package Algorithms;
 
 import GraphAD.Edge;
 import GraphAD.GraphAD;
-import GraphAD.Representations.GraphAdjMatrix;
+import GraphAD.Representations.GraphAdjLists;
 import Utilities.FibonacciHeap;
 import java.util.ArrayList;
 
@@ -74,11 +74,16 @@ public class PrimFibonacciHeap {
         // whenever we add a visited node we have to remove
         // all references to that node in the queue
         ArrayList<Edge> removals = new ArrayList<Edge>();
+        System.out.println("*** Fib tree: " + _fib_heap.toString());
+        System.out.println("*** ALL ELS: " + _fib_heap.getAllElements());
         for (Edge e : _fib_heap.getAllElements()) {
             if (e.getDest() == v) {
-                _fib_heap.delete(e, e.getWeight());
+                System.out.println("*** Removing " + e.toString());
+                removals.add(e);
+//                _fib_heap.delete(e, e.getWeight());
             }
         }
+        removeAll(removals);
     }
 
     public void removeAll(ArrayList<Edge> rem) {
@@ -97,7 +102,6 @@ public class PrimFibonacciHeap {
         while (visited.size() < G.order() - 1) {
             addVisited(currentNode);
             ArrayList<Edge> nbors = G.getEdgeNeighbors(currentNode);
-            // UPDATE: It was necessary to add another field to the Edge class: 'from'
             ArrayList<Edge> newEdges = new ArrayList<Edge>();
             for (Edge e : nbors) {
                 if (!visited.contains(e.getDest())) {
@@ -105,16 +109,24 @@ public class PrimFibonacciHeap {
                 }
             }
             addToHeap(newEdges);
+            System.out.println("Visited: " + visited);
+            System.out.println("Adding to heap: " + newEdges.toString());
+            System.out.println("ALL ELS: " + _fib_heap.getAllElements());
+            System.out.println(_fib_heap.toString());
+
             Edge minEdge = extractMin();
+            System.out.println("Extracted: " + minEdge.toString());
             mst.addEdge(minEdge.getFrom(), minEdge.getDest(), minEdge.getWeight());
             currentNode = minEdge.getDest();
+            System.out.println("Next node:" + currentNode + "\n");
+
         }
         return mst;
     }
 
     public static void main(String[] args) {
-//        GraphAdjLists g = new GraphAdjLists();
-        GraphAdjMatrix g = new GraphAdjMatrix();
+        GraphAdjLists g = new GraphAdjLists();
+//        GraphAdjMatrix g = new GraphAdjMatrix();
         g.addVertices(7);
         g.addEdge(0, 1, 7);
         g.addEdge(0, 3, 5);
@@ -128,9 +140,10 @@ public class PrimFibonacciHeap {
         g.addEdge(4, 6, 9);
         g.addEdge(5, 6, 11);
 
+        System.out.println(g.toString());
         PrimFibonacciHeap prim = new PrimFibonacciHeap(g);
         GraphAD mst = prim.MST_PrimHeap();
-        System.out.println(g.toString());
+
         System.out.println(mst.toString());
         System.out.println("Total weight: " + mst.MST_TotalWeight());
 

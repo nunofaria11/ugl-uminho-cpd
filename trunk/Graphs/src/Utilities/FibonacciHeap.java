@@ -5,6 +5,7 @@ package Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  *
@@ -53,34 +54,47 @@ public class FibonacciHeap<T> {
 
     public FibonacciHeapNode<T> removeMin() {
         FibonacciHeapNode<T> z = minNode;
+
         if (z != null) {
-            int numChilds = z.degree;
-            FibonacciHeapNode<T> ch = z.child;
-            FibonacciHeapNode<T> tmpRight;
-            while (numChilds > 0) {
-                tmpRight = ch.right;
+            int numKids = z.degree;
+            FibonacciHeapNode<T> x = z.child;
+            FibonacciHeapNode<T> tempRight;
+
+            // for each child of z do...
+            while (numKids > 0) {
+                tempRight = x.right;
+
                 // remove x from child list
-                ch.left.right = ch.right;
-                ch.right.left = ch.left;
+                x.left.right = x.right;
+                x.right.left = x.left;
+
                 // add x to root list of heap
-                ch.left = minNode;
-                ch.right = minNode.right;
-                minNode.right = ch;
-                ch.right.left = ch;
+                x.left = minNode;
+                x.right = minNode.right;
+                minNode.right = x;
+                x.right.left = x;
+
                 // set parent[x] to null
-                ch.parent = null;
-                ch = tmpRight;
-                numChilds--;
+                x.parent = null;
+                x = tempRight;
+                numKids--;
             }
-            z.right.left = z.left;
+
+            // remove z from root list of heap
             z.left.right = z.right;
+            z.right.left = z.left;
+
             if (z == z.right) {
                 minNode = null;
             } else {
                 minNode = z.right;
                 consolidate();
             }
+
+            // decrement size of heap
+            nNodes--;
         }
+
         return z;
     }
 
@@ -231,9 +245,11 @@ public class FibonacciHeap<T> {
             throw new IllegalArgumentException(
                     "decreaseKey() got larger key value");
         }
+
         x.key = k;
 
         FibonacciHeapNode<T> y = x.parent;
+
         if ((y != null) && (x.key < y.key)) {
             cut(x, y);
             cascadingCut(y);
@@ -242,7 +258,6 @@ public class FibonacciHeap<T> {
         if (x.key < minNode.key) {
             minNode = x;
         }
-
     }
 
     protected void cascadingCut(FibonacciHeapNode<T> y) {
@@ -282,24 +297,98 @@ public class FibonacciHeap<T> {
     }
 
     public void delete(T d, int k) {
-        FibonacciHeapNode x = new FibonacciHeapNode(d, k);
+        System.out.println("\t finding node: " + d.toString());
+        FibonacciHeapNode<T> x = findNode(minNode, d, k);
+        System.out.println("\t found node: " + x);
+        System.out.println("--- " + x.toString());
         // make x as small as possible
+
         decreaseKey(x, Integer.MIN_VALUE);
 
         // remove the smallest, which decreases n also
         removeMin();
     }
 
+    protected FibonacciHeapNode<T> findNode(FibonacciHeapNode<T> start, T d, int k) {
+        FibonacciHeapNode<T> x = start.right;
+        if (x != null) {
+            if (x.child != null) {
+                FibonacciHeapNode<T> ch;
+                if ((ch = findNode(x.child, d, k)) != null)// it means it found something on childs...so returns it
+                {
+                    return ch;
+                }
+            }
+            while (x != start) {
+                if (x.equals(d) && k == start.key) {
+                    return x;
+                }
+                x = x.right;
+            }
+        }
+        return null;
+    }
+
     /**
-     * 
+     * Runs through every element in every subtree.
+     *
      * @return all <T> data elements in tree.
      */
     public ArrayList<T> getAllElements() {
+        return getAllNodes(minNode);
+    }
+
+    public ArrayList<T> getAllNodes(FibonacciHeapNode<T> start) {
         ArrayList<T> els = new ArrayList<T>();
-        FibonacciHeapNode<T> x = minNode;
-        while (x != minNode) {
+        if (start == null) {
+            return els;
+        }
+
+        els.add(start.getData());
+
+        FibonacciHeapNode<T> x = start.right;
+        // gets all neighbors...
+        while (x != start) {
             els.add(x.getData());
+            // ...and each neighbors child
+            if (x.child != null) {
+                els.addAll(getAllNodes(x.child));
+            }
+            x = x.right;
         }
         return els;
+    }
+
+    @Override
+    public String toString() {
+        if (minNode == null) {
+            return "FibonacciHeap=[]";
+        }
+        // create a new stack and put root on it
+        Stack<FibonacciHeapNode<T>> stack = new Stack<FibonacciHeapNode<T>>();
+        stack.push(minNode);
+        StringBuilder buf = new StringBuilder(512);
+        buf.append("FibonacciHeap=[");
+        // do a simple breadth-first traversal on the tree
+        while (!stack.empty()) {
+            FibonacciHeapNode<T> curr = stack.pop();
+            buf.append(curr.toString());
+            buf.append(", ");
+            if (curr.child != null) {
+                stack.push(curr.child);
+            }
+            FibonacciHeapNode<T> start = curr;
+            curr = curr.right;
+            while (curr != start) {
+                buf.append(curr);
+                buf.append(", ");
+                if (curr.child != null) {
+                    stack.push(curr.child);
+                }
+                curr = curr.right;
+            }
+        }
+        buf.append(']');
+        return buf.toString();
     }
 }
