@@ -291,42 +291,49 @@ public class FibonacciHeap<T> {
     public void delete(FibonacciHeapNode<T> x) {
         // make x as small as possible
         decreaseKey(x, Integer.MIN_VALUE);
-
         // remove the smallest, which decreases n also
         removeMin();
     }
 
     public void delete(T d, int k) {
-        System.out.println("\t finding node: " + d.toString());
         FibonacciHeapNode<T> x = findNode(minNode, d, k);
-        System.out.println("\t found node: " + x);
-        System.out.println("--- " + x.toString());
         // make x as small as possible
-
         decreaseKey(x, Integer.MIN_VALUE);
-
         // remove the smallest, which decreases n also
         removeMin();
     }
 
     protected FibonacciHeapNode<T> findNode(FibonacciHeapNode<T> start, T d, int k) {
-        FibonacciHeapNode<T> x = start.right;
-        if (x != null) {
-            if (x.child != null) {
-                FibonacciHeapNode<T> ch;
-                if ((ch = findNode(x.child, d, k)) != null)// it means it found something on childs...so returns it
-                {
-                    return ch;
-                }
+        if (start == null) { // this should never happen
+            return null;
+        }
+        // create a new stack and put root on it
+        Stack<FibonacciHeapNode<T>> stack = new Stack<FibonacciHeapNode<T>>();
+        stack.push(start);
+
+        // do a simple breadth-first traversal on the tree
+        while (!stack.empty()) {
+            FibonacciHeapNode<T> curr = stack.pop();
+            if (curr.getData().equals(d) && k == curr.key) {
+                return curr;
             }
-            while (x != start) {
-                if (x.equals(d) && k == start.key) {
-                    return x;
+            if (curr.child != null) {
+                stack.push(curr.child);
+            }
+            FibonacciHeapNode<T> startx = curr;
+            curr = curr.right;
+            while (curr != startx) {
+                if (curr.getData().equals(d) && k == curr.key) {
+                    return curr;
                 }
-                x = x.right;
+                if (curr.child != null) {
+                    stack.push(curr.child);
+                }
+                curr = curr.right;
             }
         }
-        return null;
+
+        return null;// this happens if it doesnt find the node
     }
 
     /**
@@ -334,28 +341,33 @@ public class FibonacciHeap<T> {
      *
      * @return all <T> data elements in tree.
      */
-    public ArrayList<T> getAllElements() {
-        return getAllNodes(minNode);
-    }
-
-    public ArrayList<T> getAllNodes(FibonacciHeapNode<T> start) {
+    public ArrayList<T> getAllNodes() {
         ArrayList<T> els = new ArrayList<T>();
-        if (start == null) {
+        if (minNode == null) {
             return els;
         }
+        // create a new stack and put root on it
+        Stack<FibonacciHeapNode<T>> stack = new Stack<FibonacciHeapNode<T>>();
+        stack.push(minNode);
 
-        els.add(start.getData());
-
-        FibonacciHeapNode<T> x = start.right;
-        // gets all neighbors...
-        while (x != start) {
-            els.add(x.getData());
-            // ...and each neighbors child
-            if (x.child != null) {
-                els.addAll(getAllNodes(x.child));
+        // do a simple breadth-first traversal on the tree
+        while (!stack.empty()) {
+            FibonacciHeapNode<T> curr = stack.pop();
+            els.add(curr.getData());
+            if (curr.child != null) {
+                stack.push(curr.child);
             }
-            x = x.right;
+            FibonacciHeapNode<T> start = curr;
+            curr = curr.right;
+            while (curr != start) {
+                els.add(curr.getData());
+                if (curr.child != null) {
+                    stack.push(curr.child);
+                }
+                curr = curr.right;
+            }
         }
+
         return els;
     }
 
@@ -390,5 +402,21 @@ public class FibonacciHeap<T> {
         }
         buf.append(']');
         return buf.toString();
+    }
+
+    public static void main(String[] args) {
+        FibonacciHeap<Integer> fib = new FibonacciHeap<Integer>();
+
+        fib.insert(1, 1);
+        fib.insert(2, 2);
+        fib.insert(3, 3);
+        fib.insert(0, 0);
+
+        System.out.println(fib.toString());
+
+        System.out.println("Removed: " + fib.removeMin());
+
+        System.out.println(fib.toString());
+
     }
 }
