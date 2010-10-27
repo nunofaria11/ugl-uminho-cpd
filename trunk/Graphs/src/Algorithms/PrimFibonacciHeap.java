@@ -74,13 +74,9 @@ public class PrimFibonacciHeap {
         // whenever we add a visited node we have to remove
         // all references to that node in the queue
         ArrayList<Edge> removals = new ArrayList<Edge>();
-        System.out.println("*** Fib tree: " + _fib_heap.toString());
-        System.out.println("*** ALL ELS: " + _fib_heap.getAllElements());
-        for (Edge e : _fib_heap.getAllElements()) {
+        for (Edge e : _fib_heap.getAllNodes()) {
             if (e.getDest() == v) {
-                System.out.println("*** Removing " + e.toString());
                 removals.add(e);
-//                _fib_heap.delete(e, e.getWeight());
             }
         }
         removeAll(removals);
@@ -109,17 +105,11 @@ public class PrimFibonacciHeap {
                 }
             }
             addToHeap(newEdges);
-            System.out.println("Visited: " + visited);
-            System.out.println("Adding to heap: " + newEdges.toString());
-            System.out.println("ALL ELS: " + _fib_heap.getAllElements());
-            System.out.println(_fib_heap.toString());
 
             Edge minEdge = extractMin();
-            System.out.println("Extracted: " + minEdge.toString());
+
             mst.addEdge(minEdge.getFrom(), minEdge.getDest(), minEdge.getWeight());
             currentNode = minEdge.getDest();
-            System.out.println("Next node:" + currentNode + "\n");
-
         }
         return mst;
     }
