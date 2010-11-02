@@ -1,19 +1,39 @@
 /*
- * Try to create a generic identifier class for Integer/Char/String(etc) values.
- * For this we need to use generic classes in Java.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
-
 package GraphAD;
 
 /**
  *
  * @author nuno
  */
-public class Node {
+public class Node<T> {
 
-/**
- * THIS WAS DIFFICULT TO IMPLEMENT WHEN ALREADY HAVING THE STRUCTURES WELL DEFINED
- * The problem is in how to access the nodes when they are not integers.
- */
+    T data;
 
+    public Node(T data) {
+        this.data = data;
+    }
+
+    public Node() {
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return data.toString().equals(obj.toString());
+    }
+
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright: JGraphT.
  */
-package Utilities;
+package Support;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -314,18 +314,22 @@ public class FibonacciHeap<T> {
         // do a simple breadth-first traversal on the tree
         while (!stack.empty()) {
             FibonacciHeapNode<T> curr = stack.pop();
+            // **
             if (curr.getData().equals(d) && k == curr.key) {
                 return curr;
             }
+            // **
             if (curr.child != null) {
                 stack.push(curr.child);
             }
             FibonacciHeapNode<T> startx = curr;
             curr = curr.right;
             while (curr != startx) {
+                // **
                 if (curr.getData().equals(d) && k == curr.key) {
                     return curr;
                 }
+                // **
                 if (curr.child != null) {
                     stack.push(curr.child);
                 }
@@ -353,14 +357,14 @@ public class FibonacciHeap<T> {
         // do a simple breadth-first traversal on the tree
         while (!stack.empty()) {
             FibonacciHeapNode<T> curr = stack.pop();
-            els.add(curr.getData());
+            els.add(curr.getData());// **
             if (curr.child != null) {
                 stack.push(curr.child);
             }
             FibonacciHeapNode<T> start = curr;
             curr = curr.right;
             while (curr != start) {
-                els.add(curr.getData());
+                els.add(curr.getData());// **
                 if (curr.child != null) {
                     stack.push(curr.child);
                 }

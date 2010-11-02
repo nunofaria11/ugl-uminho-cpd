@@ -7,7 +7,7 @@ package Algorithms;
 import GraphAD.Edge;
 import GraphAD.GraphAD;
 import GraphAD.Representations.GraphAdjLists;
-import Utilities.FibonacciHeap;
+import Support.FibonacciHeap;
 import java.util.ArrayList;
 
 /**

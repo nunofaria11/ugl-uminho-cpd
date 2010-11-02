@@ -71,7 +71,6 @@ public class PrimHeapQueue {
         ArrayList<Edge> removals = new ArrayList<Edge>();
         for (Edge e : Q) {
             if (e.getDest() == v) {
-                System.out.println("*** Removing " + e.toString());
                 removals.add(e);
             }
         }
@@ -96,16 +95,13 @@ public class PrimHeapQueue {
                     newEdges.add(e);
                 }
             }
-            System.out.println("Visited: " + visited);
-            System.out.println("Adding to heap: " + newEdges.toString());
-            System.out.println("Q: " + Q.toString());
-
+            
             addToQ(newEdges);
             Edge minEdge = extractMin(); // * The sorting is done in the Edge class by implementing it with the Comparable interface
-            System.out.println("Extracted: " + minEdge.toString());
+            
             mst.addEdge(minEdge.getFrom(), minEdge.getDest(), minEdge.getWeight());
             currentNode = minEdge.getDest();
-            System.out.println("Next node:" + currentNode + "\n");
+            
         }
         return mst;
     }
