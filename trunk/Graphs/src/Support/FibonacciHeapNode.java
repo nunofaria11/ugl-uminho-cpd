@@ -6,7 +6,7 @@
  * we want to store - so it will be correspondent to the '<T> data' represented
  * in the jgraph library.
  */
-package Utilities;
+package Support;
 
 /**
  *
