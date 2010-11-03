@@ -5,7 +5,7 @@
  */
 package EdgeOriented;
 
-import GraphAD.Node;
+import NodeOriented.Node;
 
 /**
  * Edge of node-oriented.
@@ -66,6 +66,15 @@ public class EdgeEO<T, Y> {
     public Node<T> getRandom() {
         return Math.random() < 0.5 ? getNode1() : getNode2();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(node1.toString()).append(" -(").append(edge_data.toString()).append(")-> ").append(node2.toString()).append(", ");
+        return s.toString();
+    }
+
+
 
     @Override
     public boolean equals(Object obj) {
