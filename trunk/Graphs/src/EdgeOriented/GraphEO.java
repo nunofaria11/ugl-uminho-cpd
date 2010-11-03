@@ -4,7 +4,7 @@
  */
 package EdgeOriented;
 
-import GraphAD.Node;
+import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

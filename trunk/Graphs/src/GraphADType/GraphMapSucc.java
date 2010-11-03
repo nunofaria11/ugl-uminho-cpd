@@ -1,0 +1,117 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package GraphADType;
+
+import NodeOriented.Node;
+import java.util.HashMap;
+import java.util.Set;
+
+/**
+ *
+ * @author nuno
+ */
+public class GraphMapSucc<T, Y> extends GraphADT<T, Y> {
+
+    // a node-oriented graph
+    HashMap<Node<T>, HashMap<Node<T>, Y>> _adj_map;
+
+    private HashMap<Node<T>, HashMap<Node<T>, Y>> _allocate(int n) {
+        HashMap<Node<T>, HashMap<Node<T>, Y>> map = new HashMap<Node<T>, HashMap<Node<T>, Y>>(n);
+        Set<Node<T>> keyset = map.keySet();
+        for (Node<T> node : keyset) {
+            map.put(node, new HashMap<Node<T>, Y>());
+        }
+        return map;
+    }
+
+    public GraphMapSucc() {
+        _adj_map = _allocate(0);
+    }
+
+    public GraphMapSucc(int n) {
+        _adj_map = _allocate(n);
+    }
+
+    public void addVertices(int n) {
+        _adj_map = _allocate(n);
+    }
+
+    @Override
+    public void addArc(Node n1, Node n2, Object w) {
+        HashMap<Node<T>, Y> neighbors = _adj_map.get(n1);
+        if (neighbors == null) {
+            neighbors = new HashMap<Node<T>, Y>();
+        }
+        neighbors.put(n2, (Y) w);
+        _adj_map.put(n1, neighbors);
+    }
+
+    @Override
+    public void addEdge(Node n1, Node n2, Object w) {
+        addArc(n1, n2, w);
+        addArc(n2, n1, w);
+    }
+
+    public boolean isArc(Node n1, Node n2) {
+        HashMap<Node<T>, Y> neighbors = _adj_map.get(n1);
+        return neighbors.keySet().contains(n2);
+    }
+
+    public Y getWeight(Node n1, Node n2) {
+        if (!isArc(n1, n2)) {
+            return null;
+        }
+        return _adj_map.get(n1).get(n2);
+    }
+
+    public int order() {
+        return _adj_map.keySet().size();
+    }
+
+    public HashMap<Node<T>, HashMap<Node<T>, Y>> getAdj_map() {
+        return _adj_map;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for(Node<T> node : _adj_map.keySet()){
+            s.append(node.toString());
+            s.append(": ");
+            s.append(_adj_map.get(node).toString());
+            s.append("\n");
+        }
+        return s.toString();
+    }
+
+    public static void main(String[] args) {
+        GraphMapSucc<Integer, Double> g = new GraphMapSucc<Integer, Double>();
+        g.addVertices(7);
+
+        Node<Integer> n0 = new Node<Integer>(0);
+        Node<Integer> n1 = new Node<Integer>(1);
+        Node<Integer> n2 = new Node<Integer>(2);
+        Node<Integer> n3 = new Node<Integer>(3);
+        Node<Integer> n4 = new Node<Integer>(4);
+        Node<Integer> n5 = new Node<Integer>(5);
+        Node<Integer> n6 = new Node<Integer>(6);
+
+        g.addEdge(n0, n1, 7.1);
+        g.addEdge(n0, n3, 5.2);
+        g.addEdge(n1, n2, 8.3);
+        g.addEdge(n1, n3, 9.4);
+        g.addEdge(n1, n4, 7.5);
+        g.addEdge(n2, n4, 5.6);
+        g.addEdge(n3, n4, 15.7);
+        g.addEdge(n3, n5, 6.8);
+        g.addEdge(n4, n5, 8.9);
+        g.addEdge(n4, n6, 9.10);
+        g.addEdge(n5, n6, 11.11);
+        
+        System.out.println(g.toString());
+    }
+
+
+}
