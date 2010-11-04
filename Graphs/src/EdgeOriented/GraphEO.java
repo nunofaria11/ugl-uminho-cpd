@@ -17,7 +17,7 @@ import java.util.Map;
  * Y: datatype of edge.
  * @author nuno
  */
-public class GraphEO<T, Y>{
+public class GraphEO<T, Y extends Comparable<Y>>{
 
     List<EdgeEO<T, Y>> edges;
 

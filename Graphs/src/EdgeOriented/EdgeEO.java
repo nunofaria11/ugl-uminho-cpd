@@ -11,7 +11,7 @@ import NodeOriented.Node;
  * Edge of node-oriented.
  * @author nuno
  */
-public class EdgeEO<T, Y> {
+public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, Y>> {
 
     Node<T> node1;
     Node<T> node2;
@@ -74,8 +74,6 @@ public class EdgeEO<T, Y> {
         return s.toString();
     }
 
-
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof EdgeEO)) {
@@ -92,5 +90,18 @@ public class EdgeEO<T, Y> {
             return false;
         }
         return true;
+    }
+
+    public int compareTo(EdgeEO<T, Y> that) {
+        if (this.edge_data == null && that.edge_data == null) {
+            return 0;
+        }
+        if (this.edge_data == null) {
+            return -1;
+        }
+        if (that.edge_data == null) {
+            return 1;
+        }
+        return this.edge_data.compareTo(that.edge_data);
     }
 }

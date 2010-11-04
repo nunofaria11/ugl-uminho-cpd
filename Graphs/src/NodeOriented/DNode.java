@@ -12,7 +12,7 @@ import java.util.List;
  * Directed Node.
  * @author nuno
  */
-public class DNode<T, Y> extends Node<T> {
+public class DNode<T, Y extends Comparable<Y>> extends Node<T> {
 
     List<EdgeEO<T, Y>> in;
     List<EdgeEO<T, Y>> out;
