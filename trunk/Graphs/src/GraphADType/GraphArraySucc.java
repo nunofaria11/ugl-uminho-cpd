@@ -1,15 +1,20 @@
 package GraphADType;
 
+import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
 import Utilities.Constants;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  *
  * @author nuno
  */
-public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
+public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
 
     HashMap<Node<T>, Integer> _index;
     Object[] _succs;
@@ -32,12 +37,21 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         _allocate(n);
     }
 
-    public void addVertex(Node<T> node) {
-        _index.put(node, -1);
+    public GraphArraySucc(HashMap<Node<T>, Integer> _index, Object[] _succs, Object[] _weights, int avail_index) {
+        this._index = (HashMap<Node<T>, Integer>) _index.clone();
+        this._succs = _succs.clone();
+        this._weights = _weights.clone();
+        this.avail_index = avail_index;
     }
 
     @Override
-    public void addVertices(int n) {
+    public boolean addNode(Node<T> node) {
+        _index.put(node, -1);
+        return true;
+    }
+
+    @Override
+    public void addNodes(int n) {
         _allocate(n);
     }
 
@@ -46,17 +60,18 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         return _index.keySet().size();
     }
 
-    private boolean isVertex(Node<T> node) {
+    @Override
+    public boolean isNode(Node<T> node) {
         return _index.keySet().contains(node);
     }
 
     @Override
     public void addArc(Node<T> n1, Node<T> n2, Y w) {
-        if (!isVertex(n1)) {
-            addVertex(n1);
+        if (!isNode(n1)) {
+            addNode(n1);
         }
-        if (!isVertex(n2)) {
-            addVertex(n2);
+        if (!isNode(n2)) {
+            addNode(n2);
         }
 
         if (_index.get(n1) == -1) {
@@ -86,7 +101,6 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         int index = _index.get(node);
         System.arraycopy(_succs, index, _succs, index + 1, avail_index - index);
         System.arraycopy(_weights, index, _weights, index + 1, avail_index - index);
-
     }
 
     @Override
@@ -127,12 +141,44 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         return null;
     }
 
+
     @Override
-    public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<Node<T>> getNodes() {
+        return new ArrayList<Node<T>>(_index.keySet());
     }
 
+    public Node<T> getRandom() {
+        return (Node<T>) _index.keySet().toArray()[new Random().nextInt(order())];
+    }
 
+    @Override
+    public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node) {
+        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
+        int index = _index.get(node);
+        Collection<Integer> indices = new ArrayList<Integer>(_index.values());
+        indices.remove(index);// indices has beginning indices of every other node
+        for (int i = index; i < avail_index && !indices.contains(i); i++) {
+            edges.add(new EdgeEO<T, Y>(node, (Node<T>) _succs[i], (Y) _weights[i]));
+        }
+        return edges;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("ArraySucc:\n");
+        for (Node<T> node : _index.keySet()) {
+            s.append(node.toString()).append(" ::: ");
+            s.append(getNeighborEdges(node));
+            s.append("\n");
+        }
+        return s.toString();
+    }
+
+    @Override
+    public GraphADT clone() {
+        return new GraphArraySucc(_index, _succs, _weights, avail_index);
+    }
     /*
      * Debuging Methods
      */
@@ -169,26 +215,31 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         return s.toString();
     }
 
+    @Override
+    public void clean(){
+        _allocate(0);
+    }
+
     public static void main(String[] args) {
         GraphArraySucc<String, Double> g = new GraphArraySucc<String, Double>(7);
 
-        Node<String> n0 = new Node<String>("0");
-        Node<String> n1 = new Node<String>("1");
-        Node<String> n2 = new Node<String>("2");
-        Node<String> n3 = new Node<String>("3");
-        Node<String> n4 = new Node<String>("4");
-        Node<String> n5 = new Node<String>("5");
-        Node<String> n6 = new Node<String>("6");
+        Node<String> n0 = new Node<String>("A");
+        Node<String> n1 = new Node<String>("B");
+        Node<String> n2 = new Node<String>("C");
+        Node<String> n3 = new Node<String>("D");
+        Node<String> n4 = new Node<String>("E");
+        Node<String> n5 = new Node<String>("F");
+        Node<String> n6 = new Node<String>("G");
 
-        g.addVertex(n0);
-        g.addVertex(n1);
-        g.addVertex(n2);
-        g.addVertex(n3);
-        g.addVertex(n4);
-        g.addVertex(n5);
-        g.addVertex(n6);
+        g.addNode(n0);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.addNode(n3);
+        g.addNode(n4);
+        g.addNode(n5);
+        g.addNode(n6);
 
-        System.out.println(g.stateString());
+//        System.out.println(g.stateString());
 
         g.addEdge(n0, n1, 7.1);
         g.addEdge(n0, n3, 5.2);
@@ -202,8 +253,16 @@ public class GraphArraySucc<T, Y> extends GraphADT<T, Y> {
         g.addEdge(n4, n6, 9.10);
         g.addEdge(n5, n6, 11.11);
 
-        System.out.println();
-        System.out.println(g.stateString());
+//        System.out.println();
+//        System.out.println(g.stateString());
+
+//        System.out.println(g.getNeighborEdges(n0)+"\n");
+//        System.out.println(g.getNeighborEdges(n1)+"\n");
+//        System.out.println(g.getNeighborEdges(n2)+"\n");
+        System.out.println(g.toString());
 
     }
+
+
+
 }

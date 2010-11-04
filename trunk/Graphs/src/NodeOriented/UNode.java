@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author nuno
  */
-public class UNode<T, Y> extends Node<T> {
+public class UNode<T, Y extends Comparable<Y>> extends Node<T> {
 
     List<EdgeEO<T, Y>> edges;
 
