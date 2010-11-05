@@ -7,29 +7,27 @@ package GraphADType.Algorithms;
 import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
+import GraphADType.Support.UnionFind_ADT;
 import GraphADType.YArithmeticOperations;
 import NodeOriented.Node;
-import Support.UnionFind;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
  *
  * @author nuno
  */
-public class KruskalADT<T, Y extends Comparable<Y>> {
+public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
-    GraphADT g;
-    PriorityQueue<EdgeEO<T, Y>> Q;
+    private PriorityQueue<EdgeEO<T, Y>> Q;
+    private UnionFind_ADT<Node<T>> uf;
+    private GraphADT g;
 
-    public KruskalADT(GraphADT g) {
-        this.g = g;
-//        Q = new PriorityQueue<EdgeEO<T, Y>>();
+    public KruskalADT_UF(GraphADT g) {
+        this.g = g.clone();
+        uf = new UnionFind_ADT<Node<T>>(this.g.getNodes());
         initQ();
-
     }
 
     public void initQ() {
@@ -49,46 +47,30 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
     }
 
     public GraphADT getMst() {
-        GraphADT mst = g.clone(); // we clone the graph so that the resulting mst has the same Graph-type than 'g'
+        //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
+        GraphADT mst = g.clone();
         mst.clean();
         mst.addNodes(g.order());
         //
-        Node<T> key = null;
-        int size = 0;
-        Map<Node<T>, GraphADT<T, Y>> trees = new HashMap<Node<T>, GraphADT<T, Y>>();
-        GraphADT<T, Y> graphTmp, graph2;
-        for (Node<T> node : new ArrayList<Node<T>>(g.getNodes())) {
-            graphTmp = mst.clone();
-            graphTmp.clean();
-            graphTmp.addNode(node);
-            trees.put(node, graphTmp);
-            key = node;
-            size++;
-        }
-        EdgeEO<T, Y> edge;
-        while (size > 1 && !Q.isEmpty()) {
-            edge = Q.poll();
-            graphTmp = trees.get(edge.getNode1());
-            graph2 = trees.get(edge.getNode2());
-            if (!graph2.equals(graphTmp)) {
-                for (Node<T> node : graph2.getNodes()) {
-                    graphTmp.addNode(node);
-                }
-                for (EdgeEO<T, Y> edge1 : graph2.getEdges()) {
-                    graphTmp.addEdge(edge1.getNode1(), edge1.getNode2(), edge1.getEdge_data());
-                }
-                graphTmp.addEdge(edge.getNode1(), edge.getNode2(), edge.getEdge_data());
-                for (Node<T> node : graph2.getNodes()) {
-                    trees.put(node, graphTmp);
-                }
-                size--;
+        int edges_processed = 0;
+        int edges_added = 0;
+        while (edges_processed < g.size() && edges_added < g.order() - 1) {
+            EdgeEO minEdge = Q.poll();
+            Node<T> ck1 = uf.find(minEdge.getNode1());
+            Node<T> ck2 = uf.find(minEdge.getNode2());
+            if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
+                mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
+                // A U {(u,v)}
+                uf.union(ck1, ck2);
+                edges_added++;
             }
+            edges_processed++;
         }
-        return trees.get(key);
         //
+        return mst;
     }
 
-    public static void main(String[] args) {
+     public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -119,7 +101,7 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
         // create Prim instance...
-        KruskalADT kruskal = new KruskalADT(g);
+        KruskalADT_UF kruskal = new KruskalADT_UF(g);
         GraphADT mst = kruskal.getMst();
         System.out.println(mst.toString());
         // define arithmetic operations to calculate the total weight of type Y
