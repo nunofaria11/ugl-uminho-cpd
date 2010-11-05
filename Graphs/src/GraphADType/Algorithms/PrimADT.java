@@ -68,7 +68,7 @@ public class PrimADT<T, Y extends Comparable<Y>> {
     }
 
     public static void main(String[] args) {
-        GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>(7);
+        GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
         Node<String> n1 = new Node<String>("B");
@@ -86,30 +86,30 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         g.addNode(n5);
         g.addNode(n6);
         // link nodes together...
-        g.addEdge(n0, n1, 7);
-        g.addEdge(n0, n3, 5);
-        g.addEdge(n1, n2, 8);
-        g.addEdge(n1, n3, 9);
-        g.addEdge(n1, n4, 7);
-        g.addEdge(n2, n4, 5);
-        g.addEdge(n3, n4, 15);
-        g.addEdge(n3, n5, 6);
-        g.addEdge(n4, n5, 8);
-        g.addEdge(n4, n6, 9);
-        g.addEdge(n5, n6, 11);
+        g.addEdge(n0, n1, 7.1);
+        g.addEdge(n0, n3, 5.1);
+        g.addEdge(n1, n2, 8.1);
+        g.addEdge(n1, n3, 9.1);
+        g.addEdge(n1, n4, 7.1);
+        g.addEdge(n2, n4, 5.1);
+        g.addEdge(n3, n4, 15.1);
+        g.addEdge(n3, n5, 6.1);
+        g.addEdge(n4, n5, 8.1);
+        g.addEdge(n4, n6, 9.1);
+        g.addEdge(n5, n6, 11.1);
         // create Prim instance...
         PrimADT prim = new PrimADT(g);
         GraphADT mst_prim = prim.getMst();
         System.out.println(mst_prim.toString());
         // define arithmetic operations to calculate the total weight of type Y
-        YArithmeticOperations<Integer> arith = new YArithmeticOperations<Integer>() {
+        YArithmeticOperations<Double> arith = new YArithmeticOperations<Double>() {
 
-            public Integer Add(Integer a, Integer b) {
+            public Double Add(Double a, Double b) {
                 return a + b;
             }
         };
-        Integer total = 0;
-        total = (Integer) mst_prim.getMstWeight(arith, total);
+        Double total = 0.0;
+        total = (Double) mst_prim.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
     }
 }

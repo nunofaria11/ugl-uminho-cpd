@@ -27,6 +27,14 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public int order();
 
+    public int size() {
+        int total = 0;
+        for (Node<T> n : getNodes()) {
+            total += getNeighborEdges(n).size();
+        }
+        return total;
+    }
+
     /**
      * Adds single node to graph.
      * 
@@ -70,14 +78,21 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
         for (Node<T> node1 : allnodes) {
             visited.add(node1);
-//            allnodes.remove(node1);
             for (Node<T> node2 : allnodes) {
                 if (getWeight(node1, node2) != null && !visited.contains(node2)) {
-//                    total += (float) getWeight(node1, node2);
                     total = arithmetic.Add(total, getWeight(node1, node2));
                 }
             }
         }
         return total;
+    }
+
+    public Collection<EdgeEO<T, Y>> getEdges() {
+        Collection<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
+        ;
+        for (Node<T> node : getNodes()) {
+            edges.addAll(getNeighborEdges(node));
+        }
+        return edges;
     }
 }
