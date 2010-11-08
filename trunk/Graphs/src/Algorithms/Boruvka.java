@@ -85,6 +85,8 @@ public class Boruvka {
         int next;
         // Repeat until there is only on tree
         for (int i = allEdges.size(); i != 0; i = next) {
+            System.out.println("Nbors:"+ nbors.toString());
+            System.out.println("Wannabes:"+ wannabes.toString()+"\n");
             int l, m, n;
             for (int o = 0; o < G.order(); o++) {
                 nbors.set(o, maxEdge);

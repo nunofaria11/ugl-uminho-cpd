@@ -33,6 +33,15 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
     }
 
     public EdgeEO() {
+        this.node1 = new Node<T>();
+        this.node2 = new Node<T>();
+        this.edge_data = null;
+    }
+
+    public EdgeEO(Node<T> node1, Node<T> node2, Object edge_data) {
+        this.node1 = node1;
+        this.node2 = node2;
+        this.edge_data = (Y) edge_data;
     }
 
     public Y getEdge_data() {
@@ -67,10 +76,13 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
         return Math.random() < 0.5 ? getNode1() : getNode2();
     }
 
+
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(node1.toString()).append(" -(").append(edge_data.toString()).append(")-> ").append(node2.toString()).append(", ");
+        String w = edge_data.toString();
+        s.append(node1.toString()).append(" -(").append(w).append(")-> ").append(node2.toString()).append(", ");
         return s.toString();
     }
 
@@ -80,6 +92,10 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
             return false;
         }
         EdgeEO edge = (EdgeEO) obj;
+
+        if (edge.node1 == null || edge.node2 == null || edge.edge_data == null) {
+            return false;
+        }
         if (!edge.getNode1().equals(node1)) {
             return false;
         }
@@ -93,6 +109,13 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
     }
 
     public int compareTo(EdgeEO<T, Y> that) {
+        if (that == null) {
+            return 1;
+        }
+
+        if (that.node1 == null || that.node2 == null) {
+            return 1;
+        }
         if (this.edge_data == null && that.edge_data == null) {
             return 0;
         }
@@ -103,5 +126,15 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
             return 1;
         }
         return this.edge_data.compareTo(that.edge_data);
+    }
+
+    public static void main(String[] args) {
+        Node<String> n0 = new Node<String>("A");
+        Node<String> n1 = new Node<String>("B");
+        Node<String> n2 = new Node<String>("C");
+
+        EdgeEO<String, Double> e1 = new EdgeEO<String, Double>(n0, n1, 10);
+        EdgeEO<String, Double> e2 = null;//new EdgeEO<String, Double>(n0, n2, 20);
+        System.out.println(e1.compareTo(e2));
     }
 }
