@@ -21,6 +21,12 @@ public class Node<T> {
     public Node() {
     }
 
+    public Node(Object o, boolean control) {
+        Node<T> n = (Node<T>) o;
+        this.data = (T)n.getData();
+        this.mark = n.mark;
+    }
+
     public T getData() {
         return data;
     }
@@ -31,6 +37,19 @@ public class Node<T> {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+//        Node<T> n = (Node<T>) obj;
+//        if (n.data == null && this.data == null) {
+//            return true;
+//        }
+//        if (this.data == null) {
+//            return false;
+//        }
+//        if (n.data == null) {
+//            return false;
+//        }
         return data.toString().equals(obj.toString());
     }
 
