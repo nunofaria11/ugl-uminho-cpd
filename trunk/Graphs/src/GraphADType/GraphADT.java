@@ -4,6 +4,7 @@
  */
 package GraphADType;
 
+import GraphADType.Support.TArithmeticOperations;
 import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public Collection<Node<T>> getNodes();
 
-    public Y getMstWeight(YArithmeticOperations<Y> arithmetic, Y total) {
+    public Y getMstWeight(TArithmeticOperations<Y> arithmetic, Y total) {
         Collection<Node<T>> allnodes = getNodes();
         ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
         for (Node<T> node1 : allnodes) {

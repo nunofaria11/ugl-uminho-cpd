@@ -5,6 +5,7 @@
 package GraphIO;
 
 import GraphAD.GraphAD;
+import GraphADType.GraphADT;
 import PerfTest.GenSaveRead;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,23 +48,36 @@ public class GraphInput {
         }
     }
 
-    public GraphAD readGraph(){
+    public GraphAD readGraph() {
         try {
             return (GraphAD) in.readObject();
         } catch (IOException ex) {
             Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error reading file '"+file_name+"': " + ex.toString());
+            System.out.println("Error reading file '" + file_name + "': " + ex.toString());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Class doesn't exist in file '"+file_name+"': " + ex.toString());
+            System.out.println("Class doesn't exist in file '" + file_name + "': " + ex.toString());
         }
         return null;
     }
 
-    public static void main(String[] args){
-        GraphInput gin = new GraphInput(GenSaveRead.file_name);
+    public GraphADT readGraphADT() {
+        try {
+            return (GraphADT) in.readObject();
+        } catch (IOException ex) {
+            Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error reading file '" + file_name + "': " + ex.toString());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Class doesn't exist in file '" + file_name + "': " + ex.toString());
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        GraphInput gin = new GraphInput(/*GenSaveRead.file_name*/"file1_ADT.ser");
 //        GraphAdjMatrix g = (GraphAdjMatrix) gin.readGraph();
-        GraphAD g = gin.readGraph();
+        GraphADT g = gin.readGraphADT();
         System.out.println(g.toString());
     }
 }

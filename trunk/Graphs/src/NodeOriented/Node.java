@@ -4,11 +4,13 @@
  */
 package NodeOriented;
 
+import java.io.Serializable;
+
 /**
  *
  * @author nuno
  */
-public class Node<T> {
+public class Node<T> implements Serializable{
 
     T data;
     boolean mark;

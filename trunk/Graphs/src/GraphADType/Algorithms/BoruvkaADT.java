@@ -8,7 +8,7 @@ import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphADType.Support.UnionFind_ADT;
-import GraphADType.YArithmeticOperations;
+import GraphADType.Support.TArithmeticOperations;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -171,10 +171,18 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         GraphADT mst = bor.getMst();
         System.out.println(mst.toString());
         // define arithmetic operations to calculate the total weight of type Y - in this case Y=Double
-        YArithmeticOperations<Double> arith = new YArithmeticOperations<Double>() {
+        TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
 
             public Double Add(Double a, Double b) {
                 return a + b;
+            }
+
+            public Double Cat(Double a, Double b) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            public Double null_element() {
+                return -1.0;
             }
         };
         Double total = 0.0;
