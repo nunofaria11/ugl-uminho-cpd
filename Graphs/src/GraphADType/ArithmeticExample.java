@@ -5,6 +5,8 @@
 
 package GraphADType;
 
+import GraphADType.Support.TArithmeticOperations;
+
 /**
  *
  * @author nuno
@@ -12,16 +14,24 @@ package GraphADType;
 
 public class ArithmeticExample<T extends Number> {
 
-    public T Add(YArithmeticOperations<T> ops, T a, T b) {
+    public T Add(TArithmeticOperations<T> ops, T a, T b) {
         return ops.Add(a, b);
     }
 
     public static void main(String[] args){
         ArithmeticExample<Double> a = new ArithmeticExample<Double>();
 
-        YArithmeticOperations<Double> ar = new YArithmeticOperations<Double>() {
+        TArithmeticOperations<Double> ar = new TArithmeticOperations<Double>() {
             public Double Add(Double a, Double b) {
                 return a+b;
+            }
+
+            public Double Cat(Double a, Double b) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            public Double null_element() {
+                throw new UnsupportedOperationException("Not supported yet.");
             }
         };
 

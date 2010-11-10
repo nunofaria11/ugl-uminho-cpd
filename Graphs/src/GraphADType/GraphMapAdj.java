@@ -6,6 +6,7 @@ package GraphADType;
 
 import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Random;
  *
  * @author nuno
  */
-public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
+public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
     HashMap<Node<T>, List<EdgeEO<T, Y>>> _adj_map;
 

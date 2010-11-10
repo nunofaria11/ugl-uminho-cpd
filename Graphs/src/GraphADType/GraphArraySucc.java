@@ -3,6 +3,7 @@ package GraphADType;
 import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
 import Utilities.Constants;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Random;
  *
  * @author nuno
  */
-public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
+public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
     HashMap<Node<T>, Integer> _index;
     Object[] _succs;
@@ -21,7 +22,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
 
     private void _allocate(int n) {
         _index = new HashMap<Node<T>, Integer>(n);
-        int max_num_edges = Constants.posibleEdgesNum(n) * 2 /* *2 for double edges*/;
+        int max_num_edges = Constants.possibleEdgesNum(n) * 2 /* *2 for double edges*/;
         _succs = new Object[max_num_edges];
         _weights = new Object[max_num_edges];
         avail_index = 0;
@@ -139,7 +140,6 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
         return null;
     }
 
-
     @Override
     public Collection<Node<T>> getNodes() {
         return new ArrayList<Node<T>>(_index.keySet());
@@ -180,6 +180,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
     /*
      * Debuging Methods
      */
+
     public String toStringSuccs() {
         StringBuilder s = new StringBuilder();
         for (Object o : _succs) {
@@ -214,7 +215,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
     }
 
     @Override
-    public void clean(){
+    public void clean() {
         _allocate(0);
     }
 
@@ -260,7 +261,4 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
         System.out.println(g.toString());
 
     }
-
-
-
 }

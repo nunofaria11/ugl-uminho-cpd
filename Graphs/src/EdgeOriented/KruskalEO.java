@@ -17,12 +17,4 @@ public class KruskalEO {
         this.g = g;
     }
 
-    public <T,Y>GraphEO<T,Y> getMst(){
-        GraphEO mst = new GraphEO();
-
-
-
-        return mst;
-    }
-
 }

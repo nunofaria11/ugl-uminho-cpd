@@ -6,12 +6,13 @@
 package EdgeOriented;
 
 import NodeOriented.Node;
+import java.io.Serializable;
 
 /**
  * Edge of node-oriented.
  * @author nuno
  */
-public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, Y>> {
+public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, Y>>, Serializable {
 
     Node<T> node1;
     Node<T> node2;
@@ -75,8 +76,6 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
     public Node<T> getRandom() {
         return Math.random() < 0.5 ? getNode1() : getNode2();
     }
-
-
 
     @Override
     public String toString() {
