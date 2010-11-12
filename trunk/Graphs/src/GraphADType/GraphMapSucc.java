@@ -18,7 +18,7 @@ import java.util.Set;
  * @author nuno
  */
 public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
-
+    // nao suporta arcos repetidos
     // a node-oriented graph
     HashMap<Node<T>, HashMap<Node<T>, Y>> _adj_map;
 

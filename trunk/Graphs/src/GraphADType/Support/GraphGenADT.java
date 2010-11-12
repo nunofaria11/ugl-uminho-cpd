@@ -5,19 +5,18 @@
 package GraphADType.Support;
 
 import GraphADType.GraphADT;
-import Utilities.Constants;
+import GraphADType.GraphMapSucc;
+import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Random GraphADT generator. Focus on:
  * <ol>
  * <li>parameter interface where the random function for Y-typed values must be
  *      defined.
- * </li>
- *
- * <li>the T type must enumerable in order to be generated automatically and
- *      must also have a method in the interface mentioned on 1).
  * </li>
  * </ol>
  * @author nuno
@@ -26,49 +25,102 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
 
     final Y MAX_WEIGHT;
     final Y MIN_WEIGHT;
-    final TYRandomizer<T, Y> yrand;
+    final YRandomizer<Y> yrand;
+    final TArithmeticOperations<T> arith;
+    final ArrayList<T> alphabet;
     private int nEdges;
     private double prob;
 
-    public GraphGenADT(int numV, Y MAX_WEIGHT, Y MIN_WEIGHT, TYRandomizer<T, Y> yrand) {
+    public GraphGenADT(
+            int numV,
+            Y MAX_WEIGHT,
+            Y MIN_WEIGHT,
+            YRandomizer<Y> yrand,
+            TArithmeticOperations<T> arith,
+            ArrayList<T> alphabet) {
         this.MAX_WEIGHT = MAX_WEIGHT;
         this.MIN_WEIGHT = MIN_WEIGHT;
         this.yrand = yrand;
         this.nEdges = Constants.possibleEdgesNum(numV);
         this.prob = -1;
+        this.arith = arith;
+        this.alphabet = alphabet;
     }
 
-    public GraphGenADT(double p, Y MAX_WEIGHT, Y MIN_WEIGHT, TYRandomizer<T, Y> yrand) {
+    public GraphGenADT(
+            double p,
+            Y MAX_WEIGHT,
+            Y MIN_WEIGHT,
+            YRandomizer<Y> yrand,
+            TArithmeticOperations<T> arith,
+            ArrayList<T> alphabet) {
         this.MAX_WEIGHT = MAX_WEIGHT;
         this.MIN_WEIGHT = MIN_WEIGHT;
         this.yrand = yrand;
         this.nEdges = -1;
         this.prob = p;
+        this.arith = arith;
+        this.alphabet = alphabet;
     }
 
-    public GraphADT generate(GraphADT g) {
+    /**
+     * Random graph generation function, that builds a random graph according to
+     * a connection probability or the number of edges wanted. The Erdős–Rényi
+     * model is followed, and the sub-models are:
+     * <ol>
+     *  <li>In the G(n, M) model, a graph is chosen uniformly at random from the
+     *      collection of all graphs which have <b>n</b> nodes and <b>M</b> edges.
+     * For example, in the G(3, 2) model, each of the three possible graphs on
+     * three vertices and two edges are included with probability 1/3.</li>
+     * <br>
+     *  <li>In the G(n, p) model, a graph is thought to be constructed by
+     *      connecting nodes randomly. Each edge is included in the graph
+     *      with probability <b>p</b>, with the presence or absence of any two
+     *      distinct edges in the graph being independent.</li>
+     * </ol>
+     * @param g GraphADT instance
+     * @param N number of nodes
+     * @return Random graph
+     */
+    public GraphADT generate(GraphADT g, int N) {
         if (nEdges != -1) // 1)
         {
-            return this.gnm(g);
+            return this.gnm(g, N);
         } else // 2)
         {
-            return this.gnp(g);
+            return this.gnp(g, N);
         }
     }
 
-    private GraphADT gnm(GraphADT g) {
+    private GraphADT gnm(GraphADT g, int N) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private GraphADT gnp(GraphADT g) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public Collection<T> randomNodes(TArithmeticOperations<T> arith, Collection<T> alphabet, int N) {
-        int numN = 0;
-        int level = 1;
-
-        return null;
+    private GraphADT gnp(GraphADT g, int N) {
+        Random random = new Random(System.currentTimeMillis());
+        // create nodes ids and insert nodes in graph
+        ArrayList<T> t_node_ids = (ArrayList<T>) createNodeIds(alphabet, arith, N);
+        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) g.insertAllNodes(t_node_ids);
+        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
+        // create random egdes while the graph is not connected
+        while (!g.connected()) {
+            // For each node
+            for (Node<T> i : allnodes) {
+                visited.add(i);
+                // For every other node
+                ArrayList<Node<T>> available = new ArrayList<Node<T>>(allnodes);
+                available.removeAll(visited);
+                for (Node<T> j : available) {
+                    // If random indicates this edge exists
+                    if (random.nextDouble() <= this.prob) {
+                        // Create and edge between node i and node j
+                        Y random_weight = this.yrand.random(MIN_WEIGHT, MAX_WEIGHT);
+                        g.addEdge(i, j, random_weight);
+                    }
+                }
+            }
+        }
+        return g;
     }
 
     /**
@@ -77,7 +129,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
      * @param root Structure to store nodes
      * @param N Number of nodes wanted
      * @param level Level in tree in which this recursive function is
-     * @param arith_str Operation-handler for type <i>T</i>
+     * @param arith Operation-handler for type <i>T</i>
      * @return Combinations of the alphabet in an N-ary tree.
      */
     private NTreeADT<T> recursiveT(
@@ -134,41 +186,53 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         return root;
     }
 
+    /**
+     * Generates <b>N</b> graphs (<i>N = n_areas</i>) and then joins them in
+     * order to generate a graph with <b>n_areas</b> dense areas.
+     * @param g Dummy graph to denote the instance type of the resulting graph
+     * @param n_areas Number of density areas
+     * @param total_edges Number of total edges in the cluster
+     * @param total_nodes Number of total nodes in the cluster
+     * @return Clustered graph
+     */
+    public GraphADT createCluster(
+            GraphADT<T, Y> g,
+            int areas,
+            int total_edges,
+            int total_nodes) {
+        GraphADT cluster = g;
+        //
+
+        //
+        return cluster;
+    }
+
     public static void main(String[] args) throws InterruptedException {
 
+        TArithmeticOperations<String> strArith = Constants.strArith;
 
-//        int nNodes = 10;
-//        Collection<Integer> alphabet = new ArrayList<Integer>(nNodes);
-//        for (int i = 0; i < nNodes; i++) {
-//            System.out.println(GraphADType.Support.Constants.randTYIntDouble.random(20.0, 50.0));
-//            alphabet.add(i);
-//        }
+        YRandomizer<Double> dRand = Constants.randDouble;
+        YRandomizer<Integer> iRand = Constants.randInteger;
 
         ArrayList<String> alpha = new ArrayList<String>();
-        alpha.add("Aa");
-        alpha.add("Bb");
-        alpha.add("Cc");
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
 
-        NTreeADT<String> tree = new NTreeADT<String>("");
-//        NTreeADT<String> res = GraphGenADT.recursiveStr(alpha, tree, 8, 0);
-//        System.out.println(res.BFSElements());
-        TArithmeticOperations<String> arith_str = new TArithmeticOperations<String>() {
+        GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
+                0.75,
+                90,
+                5,
+                iRand,
+                strArith,
+                alpha);
 
-            public String Add(String a, String b) {
-                return a + b;
-            }
+        GraphMapSucc<String, Integer> g = new GraphMapSucc<String, Integer>();
 
-            public String Cat(String a, String b) {
-                return a + b;
-            }
-
-            public String null_element() {
-                return "";
-            }
-        };
-        GraphGenADT<String, Double> ggen = new GraphGenADT<String, Double>(0, Double.MAX_VALUE, Double.MIN_NORMAL, null);
-        System.out.println(ggen.createNodeIds(alpha, arith_str, 12));
-
-
+        g = (GraphMapSucc<String, Integer>) ggen.generate(g, 20);
+        System.out.println(g.toString());
     }
 }

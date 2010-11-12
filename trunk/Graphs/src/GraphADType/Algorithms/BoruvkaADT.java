@@ -33,7 +33,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
      * The maximum edge had to be calculated according to the maximum edge present
      * in the graph. I couldn't create a generic maximum edge.
      */
-    private final EdgeEO<T,Y> maxEdge;
+    private final EdgeEO<T, Y> maxEdge;
 
     public BoruvkaADT(GraphADT g) {
         this.g = g.clone();
@@ -45,7 +45,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
     }
 
     private EdgeEO<T, Y> getMaxEdge() {
-        ArrayList<EdgeEO<T,Y>> edges = new ArrayList<EdgeEO<T, Y>>(g.size());
+        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>(g.size());
         edges.addAll(g.getEdges());
         if (edges.size() < 1) {
             return null;
@@ -83,7 +83,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         // get wannabe edges in MST
         this.wannabes = new ArrayList<EdgeEO<T, Y>>(g.size());
         wannabes.addAll(g.getEdges());
-        
+
         // initialize forest (nbors hashmap - each node is initially a root)
         this.nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
         ArrayList<Node<T>> allnodes = new ArrayList<Node<T>>(g.getNodes());
@@ -166,6 +166,8 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n5, 8.1);
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
+
+        System.out.println("Connected: " + g.connected());
         // create Boruvka instance...
         BoruvkaADT bor = new BoruvkaADT(g);
         GraphADT mst = bor.getMst();

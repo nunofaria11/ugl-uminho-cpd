@@ -9,6 +9,7 @@ import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  *
@@ -90,10 +91,31 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     public Collection<EdgeEO<T, Y>> getEdges() {
         Collection<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
-        ;
         for (Node<T> node : getNodes()) {
             edges.addAll(getNeighborEdges(node));
         }
         return edges;
+    }
+
+    public boolean connected() {
+        // just check if all nodes are some other nodes target
+        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) getNodes();
+        // visited array
+        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
+        ArrayList<EdgeEO<T, Y>> alledges = (ArrayList<EdgeEO<T, Y>>) getEdges();
+        for (EdgeEO edge : alledges) {
+            visited.add(edge.getNode2());
+        }
+        return visited.containsAll(allnodes);
+    }
+
+    public Collection<Node<T>> insertAllNodes(Collection<T> datalist) {
+        ArrayList<Node<T>> nodes = new ArrayList<Node<T>>();
+        for (T data : datalist) {
+            Node<T> new_node = new Node<T>(data);
+            addNode(new_node);
+            nodes.add(new_node);
+        }
+        return nodes;
     }
 }
