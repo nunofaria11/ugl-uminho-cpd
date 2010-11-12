@@ -4,8 +4,7 @@
  */
 package GraphADType.Support;
 
-import NodeOriented.Node;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -14,15 +13,37 @@ import java.util.Random;
  */
 public class Constants {
 
-    public static TYRandomizer<Integer, Double> randTYIntDouble = new TYRandomizer<Integer, Double>() {
+    public static int possibleEdgesNum(int v) {
+        return (v * (v - 1)) / 2;
+    }
+    public static YRandomizer<Double> randDouble = new YRandomizer<Double>() {
 
         public Double random(Double lower, Double upper) {
             Random r = new Random(System.currentTimeMillis());
             return r.nextDouble() * (upper - lower) + lower;
         }
+    };
 
-        public Collection<Node<Integer>> randomizeNodes(int n, Collection<Integer> alphabet) {
-            throw new UnsupportedOperationException("Not supported yet.");
+    public static YRandomizer<Integer> randInteger = new YRandomizer<Integer>() {
+
+        public Integer random(Integer lower, Integer upper) {
+            Random r = new Random(System.currentTimeMillis());
+            return r.nextInt(upper - lower) + lower;
+        }
+    };
+
+    public static TArithmeticOperations<String> strArith = new TArithmeticOperations<String>() {
+
+        public String Add(String a, String b) {
+            return a + b;
+        }
+
+        public String Cat(String a, String b) {
+            return a + b;
+        }
+
+        public String null_element() {
+            return "";
         }
     };
 }
