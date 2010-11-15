@@ -139,7 +139,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
             int level,
             TArithmeticOperations<T> arith) {
         //
-        if (Math.pow(alpha.size(), level) > N) {
+        if (Math.pow(alpha.size(), level - 1) > N) {
             return null;
         }
 
@@ -151,16 +151,28 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         return root;
     }
 
+    /**
+     * Returns a collection of T-typed node-ids ready to use, without repetitions.
+     * @param alpha Alphabet to consider in creating the id collection (accepts less elements than the number of nodes wanted).
+     * @param arith Arithmetic interface in order to perform operations on the type T.
+     * @param N Number of nodes wanted.
+     * @return Collection of T's which will serve has node-ids.
+     */
     public Collection<T> createNodeIds(
             Collection<T> alpha,
             TArithmeticOperations<T> arith,
             int N) {
         Collection<T> nodeIds = new ArrayList<T>();
+        // add null element of alphabet to root for prefix operations
         NTreeADT<T> root = new NTreeADT<T>(arith.null_element());
-        root = recursiveT(new ArrayList<T>(alpha), root, N + 1, 0, arith);
+        // build tree recursively
+        root = recursiveT(new ArrayList<T>(alpha), root, N, 0, arith);
+        // get array of tree with all elements
         ArrayList<T> aux = (ArrayList<T>) root.BFSElements();
-        // now use only N elemnts, since the recursive function may return more than needed
-        for (int i = 1; i <= N; i++) {
+        // removing null element in root
+        aux.remove(0);
+        // now use only N elements, since the recursive function may return more than needed
+        for (int i = 0; i < N; i++) {
             nodeIds.add(aux.get(i));
         }
         return nodeIds;
@@ -223,7 +235,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         alpha.add("F");
 
         GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
-                0.75,
+                0.40,
                 90,
                 5,
                 iRand,
@@ -232,7 +244,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
 
         GraphMapSucc<String, Integer> g = new GraphMapSucc<String, Integer>();
 
-        g = (GraphMapSucc<String, Integer>) ggen.generate(g, 20);
+        g = (GraphMapSucc<String, Integer>) ggen.generate(g, 100);
         System.out.println(g.toString());
     }
 }

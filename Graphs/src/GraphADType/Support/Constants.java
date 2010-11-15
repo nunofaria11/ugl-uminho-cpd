@@ -46,4 +46,21 @@ public class Constants {
             return "";
         }
     };
+
+    public static TArithmeticOperations<Integer> intArith = new TArithmeticOperations<Integer>() {
+
+        public Integer Add(Integer a, Integer b) {
+            return a+b;
+        }
+
+        public Integer Cat(Integer a, Integer b) {
+            return Integer.parseInt(a.toString()+b.toString());
+        }
+
+        public Integer null_element() {
+            return 0;
+        }
+
+
+    };
 }
