@@ -43,7 +43,7 @@ public class NTreeADT<X> {
      * Returns the elements in the tree in a BFS fashion.
      * @return
      */
-    public Collection<X> BFSElements() {
+    public Collection<X> BFSTreeElements() {
         NTreeADT<X> rootNode = this;
         Collection<X> ret = new ArrayList<X>();
         //BFS uses Queue data structure
@@ -53,9 +53,6 @@ public class NTreeADT<X> {
         rootNode.visited = true;
         while (!q.isEmpty()) {
             NTreeADT<X> n = q.remove();
-            NTreeADT child = null;
-
-
             for(NTreeADT<X> ch : n.childs){
                 ch.visited = true;
                 ret.add(ch.data);
@@ -98,6 +95,6 @@ public class NTreeADT<X> {
         root.addChild("C");
 
         System.out.println(root.size());
-        System.out.println(root.BFSElements());
+        System.out.println(root.BFSTreeElements());
     }
 }
