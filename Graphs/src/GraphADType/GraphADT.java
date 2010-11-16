@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- *
+ * Graph Abstract Data-Type
  * @author nuno
  */
 abstract public class GraphADT<T, Y extends Comparable<Y>> {
