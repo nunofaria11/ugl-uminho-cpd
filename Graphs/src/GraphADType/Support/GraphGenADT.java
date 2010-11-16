@@ -168,7 +168,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         // build tree recursively
         root = recursiveT(new ArrayList<T>(alpha), root, N, 0, arith);
         // get array of tree with all elements
-        ArrayList<T> aux = (ArrayList<T>) root.BFSElements();
+        ArrayList<T> aux = (ArrayList<T>) root.BFSTreeElements();
         // removing null element in root
         aux.remove(0);
         // now use only N elements, since the recursive function may return more than needed
@@ -235,7 +235,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         alpha.add("F");
 
         GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
-                0.40,
+                0.60,
                 90,
                 5,
                 iRand,
