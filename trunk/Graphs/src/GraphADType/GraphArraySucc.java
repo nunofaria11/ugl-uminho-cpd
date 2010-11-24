@@ -2,7 +2,9 @@ package GraphADType;
 
 import EdgeOriented.EdgeEO;
 import NodeOriented.Node;
-import Utilities.Constants;
+
+import GraphADType.Support.Constants;
+import GraphADType.Support.TArithmeticOperations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +21,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     Object[] _succs;
     Object[] _weights;
     int avail_index;
+    int total_num_edges;
 
     private void _allocate(int n) {
         _index = new HashMap<Node<T>, Integer>(n);
@@ -26,6 +29,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         _succs = new Object[max_num_edges];
         _weights = new Object[max_num_edges];
         avail_index = 0;
+        total_num_edges = max_num_edges;
     }
 
     public GraphArraySucc() {
@@ -66,6 +70,10 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 
     @Override
     public void addArc(Node<T> n1, Node<T> n2, Y w) {
+        if (avail_index >= _succs.length) {
+//            System.out.println("ALERT!!!: " + avail_index + " > " + _succs.length);
+            return;
+        }
         if (!isNode(n1)) {
             addNode(n1);
         }
@@ -78,28 +86,54 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
             _index.put(n1, avail_index);
             _succs[avail_index] = n2;
             _weights[avail_index] = w;
+
         } else {
             // it is not empty and shift is needed...
             // when inserting in the middle of the arrays - check made in shift function
             int index = _index.get(n1);
             shiftNextIndices(n1);
+
             _succs[index] = n2;
             _weights[index] = w;
         }
         avail_index++;
+        
+
+    }
+
+    private void shift(Object[] array, int index) {
+        Object[] tmp = new Object[(array.length - index) - 1];
+        for (int i = 0; i < tmp.length && i + index < array.length; i++) {
+            tmp[i] = array[i + index];
+        }
+        System.arraycopy(tmp, 0, array, index + 1, tmp.length);
+    }
+
+    private void shiftIndexMap(Node<T> node) {
+        // get list of nodes to change
+        ArrayList<Node<T>> nodes = new ArrayList<Node<T>>(_index.keySet());
+        ArrayList<Node<T>> nodes2change = new ArrayList<Node<T>>();
+        nodes.remove(node);
+        for (Node n : nodes) {
+            if (_index.get(n) >= _index.get(node) && !nodes2change.contains(n)) {
+                nodes2change.add(n);
+            }
+        }
+        for (Node n : nodes2change) {
+            int x = _index.get(n);
+            _index.put(n, x + 1);
+        }
+
     }
 
     private void shiftNextIndices(Node<T> node) {
-        for (Node n : _index.keySet()) {
-            if (_index.get(n) >= _index.get(node) && !node.equals(n) && _index.get(n) != -1) {
-                _index.put(n, _index.get(n) + 1);
-            }
-        }
+        // shift the index hashmap
+        shiftIndexMap(node);
         // when shifted the _index map right - also shift all elements from that
         // shifting index in the _succ and weight array
         int index = _index.get(node);
-        System.arraycopy(_succs, index, _succs, index + 1, avail_index - index);
-        System.arraycopy(_weights, index, _weights, index + 1, avail_index - index);
+        shift(_succs, index);
+        shift(_weights, index);
     }
 
     @Override
@@ -110,6 +144,9 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 
     @Override
     public boolean isArc(Node<T> n1, Node<T> n2) {
+        if (!_index.containsKey(n1)) {
+            return false;
+        }
         if (_index.get(n1) == -1) {
             return false;
         }
@@ -126,11 +163,16 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 
     @Override
     public Y getWeight(Node<T> n1, Node<T> n2) {
+//        if (!_index.containsKey(n1)) {
+//            return null;
+//        }
+
         if (_index.get(n1) == -1) {
             return null;
         }
         int index = _index.get(n1);
-        Collection<Integer> indices = _index.values();
+        // need to create a new collection or the item would be removed from the graph
+        Collection<Integer> indices = new ArrayList<Integer>(_index.values());
         indices.remove(index);// indices has beginning indices of every other node
         for (int i = index; i < avail_index && !indices.contains(i); i++) {
             if (n2.equals((Node<T>) _succs[i])) {
@@ -149,14 +191,52 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         return (Node<T>) _index.keySet().toArray()[new Random().nextInt(order())];
     }
 
+    private int getMaxIndex() {
+        ArrayList<Integer> indices = new ArrayList<Integer>(_index.values());
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < indices.size(); i++) {
+            if (max < indices.get(i)) {
+                max = indices.get(i);
+            }
+        }
+        return max;
+    }
+
+    private int getNextHigherIndex(int curr_index) {
+        ArrayList<Integer> indices = new ArrayList<Integer>(_index.values());
+        // get higher index in _succ array
+        Integer next = getMaxIndex();
+        // try to find another index higher 'current' but lower than the maximum
+        for (int i = 0; i < indices.size(); i++) {
+            if (indices.get(i) != i && indices.get(i) < next && indices.get(i) > curr_index) {
+                next = indices.get(i);
+            }
+        }
+        // check if it is last element (20==20 but it may have more the 20 edges)
+        if (curr_index == next) {
+            int x;
+            for (x = next; x < _succs.length && _succs[x] != null && x < avail_index; x++) {
+            }
+            next = x;
+        }
+        return next;
+    }
+
     @Override
     public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node) {
         ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
         int index = _index.get(node);
-        Collection<Integer> indices = new ArrayList<Integer>(_index.values());
-        indices.remove(index);// indices has beginning indices of every other node
-        for (int i = index; i < avail_index && !indices.contains(i); i++) {
-            edges.add(new EdgeEO<T, Y>(node, (Node<T>) _succs[i], (Y) _weights[i]));
+        int next_higher_index = getNextHigherIndex(index);
+//        System.out.println("Next Higher Index: " + next_higher_index);
+//        System.out.println("Avail index: " + avail_index + "\n");
+        for (int i = index; i < next_higher_index; i++) {
+            if (_succs[i] != null) {
+//                System.out.println("Succ: " + _succs[i]);
+                EdgeEO<T, Y> e = new EdgeEO<T, Y>(node, (Node<T>) _succs[i], (Y) _weights[i]);
+                if (e.getNode2() != null && e.getEdge_data() != null) {
+                    edges.add(e);
+                }
+            }
         }
         return edges;
     }
@@ -216,7 +296,31 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 
     @Override
     public void clean() {
-        _allocate(0);
+        _allocate(order()); // need to re-allocate another N nodes - if it were 0 it would cause errors
+    }
+
+    public GraphMapSucc<T, Y> toGraphMapSucc() {
+        GraphMapSucc<T, Y> graph = new GraphMapSucc<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
+    public GraphMapAdj<T, Y> toGraphMapAdj() {
+        GraphMapAdj<T, Y> graph = new GraphMapAdj<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
     }
 
     public static void main(String[] args) {
@@ -259,6 +363,27 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 //        System.out.println(g.getNeighborEdges(n1)+"\n");
 //        System.out.println(g.getNeighborEdges(n2)+"\n");
         System.out.println(g.toString());
+        double total3 = 0.0;
+        TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
 
+            public Double Add(Double a, Double b) {
+                return a + b;
+            }
+
+            public Double Cat(Double a, Double b) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            public Double null_element() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+        System.out.println(g.getMstWeight(arith, total3));
+
+        System.out.println(g.stateString());
+        System.out.println("Max Index: " + g.getMaxIndex());
+        System.out.println("Next Higher Index: " + g.getNextHigherIndex(g.getMaxIndex()));
+
+        System.out.println(g.getNeighborEdges(n6));
     }
 }

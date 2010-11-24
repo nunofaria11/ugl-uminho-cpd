@@ -81,8 +81,10 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (Node<T> node1 : allnodes) {
             visited.add(node1);
             for (Node<T> node2 : allnodes) {
-                if (getWeight(node1, node2) != null && !visited.contains(node2)) {
-                    total = arithmetic.Add(total, getWeight(node1, node2));
+                if (!visited.contains(node2)) {
+                    if (getWeight(node1, node2) != null) {
+                        total = arithmetic.Add(total, getWeight(node1, node2));
+                    }
                 }
             }
         }
@@ -94,6 +96,21 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (Node<T> node : getNodes()) {
             edges.addAll(getNeighborEdges(node));
         }
+        return edges;
+    }
+
+    public Collection<EdgeEO<T, Y>> getUnduplicatedEdges() {
+        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
+        ArrayList<EdgeEO<T, Y>> edges2rem = new ArrayList<EdgeEO<T, Y>>();
+        for (EdgeEO<T, Y> edge : new ArrayList<EdgeEO<T, Y>>(getEdges())) {
+            EdgeEO<T, Y> rev_edge = new EdgeEO<T, Y>(edge.getNode2(), edge.getNode1(), edge.getEdge_data());
+            edges.add(edge);
+            if (!edges2rem.contains(edge)) {
+                edges2rem.add(rev_edge);
+            }
+        }
+
+        edges.removeAll(edges2rem);
         return edges;
     }
 

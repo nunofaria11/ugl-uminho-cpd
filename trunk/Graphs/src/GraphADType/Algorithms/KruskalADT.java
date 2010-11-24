@@ -7,7 +7,12 @@ package GraphADType.Algorithms;
 import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
+import GraphADType.GraphMapSucc;
+import GraphADType.Support.Constants;
+import GraphADType.Support.GenSaveReadADT;
+import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
+import GraphADType.Support.YRandomizer;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,12 +69,15 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
             key = node;
             size++;
         }
+
+//        System.out.println("Started processing...");
         EdgeEO<T, Y> edge;
         while (size > 1 && !Q.isEmpty()) {
             edge = Q.poll();
-            graphTmp = trees.get(edge.getNode1());
-            graph2 = trees.get(edge.getNode2());
+            graphTmp = trees.get(edge.getNode1()).clone();
+            graph2 = trees.get(edge.getNode2()).clone();
             if (!graph2.equals(graphTmp)) {
+                
                 for (Node<T> node : graph2.getNodes()) {
                     graphTmp.addNode(node);
                 }
@@ -82,12 +90,61 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
                 }
                 size--;
             }
+//            System.out.println("Size: " + size);
         }
         return trees.get(key);
         //
     }
 
-    public static void main(String[] args) {
+    public static void test_implementations(int size) {
+        TArithmeticOperations<String> strArith = Constants.strArith;
+
+        YRandomizer<Integer> iRand = Constants.randInteger;
+
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
+        GraphGenADT ggen = new GraphGenADT(0.5, 90, 5, iRand, strArith, alpha);
+        /// copy random data to three different implementations
+        GraphMapAdj<String, Integer> g_map_adj = new GraphMapAdj<String, Integer>(size);
+//        GraphArraySucc<String, Integer> g_array_succ = new GraphArraySucc<String, Integer>(size);
+        GraphMapSucc<String, Integer> g_map_succ = new GraphMapSucc<String, Integer>(size);
+        System.out.println("generating...");
+
+        g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.readTestBenchGraph(200);
+        System.out.println("converting...");
+        g_map_succ = g_map_adj.toGraphMapSucc();
+//        System.out.println("converting...");
+//        g_array_succ = g_map_adj.toGraphArraySucc();
+
+        // test boruvka for each implementation
+        KruskalADT b1 = new KruskalADT(g_map_adj); // exceeds heap memory
+        KruskalADT b2 = new KruskalADT(g_map_succ);
+//        BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
+
+        System.out.println("1:");
+        GraphADT mst1 = b1.getMst(); // MUITO POUCO EFICIENTE - CAUSA memory heap space exceeded
+
+        System.out.println("2:");
+        GraphADT mst2 = b2.getMst();
+
+//        System.out.println("3:");
+//        GraphADT mst3 = b3.getMst();
+
+        int total1 = 0;
+        int total2 = 0;
+//        int total3 = 0;
+        System.out.println(mst1.getMstWeight(Constants.intArith, total1));
+        System.out.println(mst2.getMstWeight(Constants.intArith, total2));
+//        System.out.println(mst3.getMstWeight(Constants.intArith, total3));
+
+    }
+
+    public static void main2(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -139,5 +196,9 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         Double total = 0.0;
         total = (Double) mst.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
+    }
+
+    public static void main(String[] args) {
+        KruskalADT.test_implementations(100);
     }
 }
