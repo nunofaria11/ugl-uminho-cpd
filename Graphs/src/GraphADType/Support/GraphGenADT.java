@@ -4,12 +4,17 @@
  */
 package GraphADType.Support;
 
+import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
-import GraphADType.GraphMapSucc;
+import GraphADType.GraphMapAdj;
+import GraphIO.GraphInput;
+import GraphIO.GraphOutput;
 import NodeOriented.Node;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 /**
@@ -31,6 +36,17 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
     private int nEdges;
     private double prob;
 
+    /**
+     * Constructor to define the number of nodes and automatically assign the
+     * graph with the maximum number of edges.
+     *
+     * @param numV Number of vertices
+     * @param MAX_WEIGHT Higher limit for the edge weight
+     * @param MIN_WEIGHT Higher limit for the edge weight
+     * @param yrand Handler for random edge weights
+     * @param arith Handler for arithmetic operations on node ids, to generate the necessary ids.
+     * @param alphabet The elements in this collection will be used to form an id for each node the graph needs.
+     */
     public GraphGenADT(
             int numV,
             Y MAX_WEIGHT,
@@ -47,6 +63,44 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         this.alphabet = alphabet;
     }
 
+    /**
+     * Constructor to define the number of nodes and manually assign the number of edges.
+     *
+     * @param numV Number of vertices
+     * @param numE Number of edges. If the number of edges passed here is not enough the GNM algorithm changes it to the minimum number of edges needed.
+     * @param MAX_WEIGHT Higher limit for the edge weight
+     * @param MIN_WEIGHT Higher limit for the edge weight
+     * @param yrand Handler for random edge weights
+     * @param arith Handler for arithmetic operations on node ids, to generate the necessary ids.
+     * @param alphabet The elements in this collection will be used to form an id for each node the graph needs.
+     */
+    public GraphGenADT(
+            int numV,
+            int numE,
+            Y MAX_WEIGHT,
+            Y MIN_WEIGHT,
+            YRandomizer<Y> yrand,
+            TArithmeticOperations<T> arith,
+            ArrayList<T> alphabet) {
+        this.MAX_WEIGHT = MAX_WEIGHT;
+        this.MIN_WEIGHT = MIN_WEIGHT;
+        this.yrand = yrand;
+        this.nEdges = numE;
+        this.prob = -1;
+        this.arith = arith;
+        this.alphabet = alphabet;
+    }
+
+    /**
+     * Constructor to define the connection probability each graph node will have
+     * of connecting to another different node.
+     * @param p Connection probability
+     * @param MAX_WEIGHT Higher limit for the edge weight
+     * @param MIN_WEIGHT Higher limit for the edge weight
+     * @param yrand Handler for random edge weights
+     * @param arith Handler for arithmetic operations on node ids, to generate the necessary ids.
+     * @param alphabet The elements in this collection will be used to form an id for each node the graph needs.
+     */
     public GraphGenADT(
             double p,
             Y MAX_WEIGHT,
@@ -93,7 +147,53 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
     }
 
     private GraphADT gnm(GraphADT g, int N) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Random random = new Random(System.currentTimeMillis());
+
+        ArrayList<EdgeEO> existingEdges = new ArrayList<EdgeEO>();
+
+        // choose the minimum edges needed so that the graph may be ?connected?
+        int nE = Math.min(
+                this.nEdges,
+                (int) (N * (N - 1) / 2));
+        
+        // The idea here is that if the source and target we
+        // initially chose has already been created, then create
+        // the next closest edge according to our enumeration. ---> USING TArithmeticOperations
+        // Randomly selecting a new edge is computationally
+        // prohibitive when the number of edges approaches the maximum
+        // (due to performance issues).
+        Queue<Node<T>> nodeQ = new LinkedList<Node<T>>();
+        // create all node ids
+        ArrayList<T> t_node_ids = (ArrayList<T>) createNodeIds(alphabet, arith, N);
+        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) g.insertAllNodes(t_node_ids);
+        // add all node ids to node queue
+        nodeQ.addAll(allnodes);
+
+        for (int i = 0; i < nE; i++) {
+            ArrayList<Node<T>> removed = new ArrayList<Node<T>>();
+//            System.out.println("Queue: "+nodeQ);
+            Node source = nodeQ.poll(); // removes source node from queue
+            Node target = nodeQ.peek(); // DOESN'T remove the target node from queue
+            removed.add(source);
+
+//            System.out.println("Source:"+source+"\tTarget:"+target);
+            // if "edge:source->target" exists in graph, so does "edge:target->source"
+            boolean check = (g.getWeight(source, target) != null) ? (false) : (true);
+            // if check is false it means the edge already exists and we must
+            // find another target node
+            while (!check) {
+                target = nodeQ.poll();
+                removed.add(target);
+                check = (g.getWeight(source, target) == null) ? (false) : (true);
+            }
+
+            // when check is finally true, it means the found edge doesnt exist yet - we can add it to the graph
+            Y random_w = yrand.random(MIN_WEIGHT, MAX_WEIGHT);
+            g.addEdge(source, target, random_w);
+            nodeQ.addAll(removed);
+        }
+
+        return g;
     }
 
     private GraphADT gnp(GraphADT g, int N) {
@@ -219,7 +319,55 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         return cluster;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    /**
+     * generate graph with the #edges according to the parameter 'opt'
+     * @param numNodes
+     * @param opt
+     */
+    public static GraphADT genGNumEdge(int numNodes, int opt) {
+        // opt = 0 -> minEdges
+        // opt = 1 -> normal #edges
+        // opt = 2 -> maxEdges
+        int numEdges;
+        switch (opt) {
+            case 0:
+                numEdges = numNodes - 1;
+                break;
+            case 1:
+                numEdges = (numNodes * (numNodes - 1)) / 2;
+                break;
+            case 2:
+                numEdges = numNodes * (numNodes - 1);
+                break;
+            default:
+                numEdges = (numNodes * (numNodes - 1)) / 2;
+        }
+        
+        TArithmeticOperations<String> strArith = Constants.strArith;
+        YRandomizer<Integer> iRand = Constants.randInteger;
+
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
+        // following the GNM model
+        GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
+                numNodes, // numV
+                numEdges, // numE
+                90,// max_weight
+                5, // min_weight
+                iRand,
+                strArith,
+                alpha);
+        GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>(numNodes);
+        g = (GraphMapAdj<String, Integer>) ggen.generate(g, numNodes);
+        return g;
+    }
+
+    public static void main2(String[] args) throws InterruptedException {
 
         TArithmeticOperations<String> strArith = Constants.strArith;
 
@@ -234,17 +382,49 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         alpha.add("E");
         alpha.add("F");
 
+//        GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
+//                0.60,
+//                90,
+//                5,
+//                iRand,
+//                strArith,
+//                alpha);
         GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
-                0.60,
-                90,
-                5,
+                10, // numV
+                9, // numE
+                90,// max_weight
+                5, // min_weight
                 iRand,
                 strArith,
                 alpha);
 
-        GraphMapSucc<String, Integer> g = new GraphMapSucc<String, Integer>();
+        GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>(10);
 
-        g = (GraphMapSucc<String, Integer>) ggen.generate(g, 100);
+        g = (GraphMapAdj<String, Integer>) ggen.generate(g, 10);
         System.out.println(g.toString());
+
+//        PrimADT bor = new PrimADT(g);
+//        long begin = System.currentTimeMillis();
+//        GraphADT mst = bor.getMst();
+//        long end = System.currentTimeMillis();
+//        System.out.println(mst);
+//        System.out.println("Time: " + (end - begin) + " ms");
+    }
+
+    public static void main(String[] args) throws IOException {
+
+//        int opt = Integer.parseInt(args[0]);
+//        int min = Integer.parseInt(args[1]);
+//        int max = Integer.parseInt(args[2]);
+//        for (int size = min; size <= max; size += 50) {
+//            GraphOutput gout = new GraphOutput("bench" + size + "_test_edgevar" + opt + ".ser");
+//            GraphADT g = genGNumEdge(size, opt);
+//            gout.saveGraphADT(g);
+//        }
+
+        GraphInput gin = new GraphInput("bench50_test_edgevar2.ser");
+        GraphADT g = gin.readGraphADT();
+        System.out.println(g);
+        System.out.println(g.connected());
     }
 }

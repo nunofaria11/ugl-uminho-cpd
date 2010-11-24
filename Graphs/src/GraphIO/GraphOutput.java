@@ -4,14 +4,17 @@
  */
 package GraphIO;
 
+import EdgeOriented.EdgeEO;
 import GraphAD.GraphAD;
 import GraphADType.GraphADT;
-import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
 import NodeOriented.Node;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -56,32 +59,28 @@ public class GraphOutput {
         }
     }
 
-    public static void main(String[] args) throws IOException{
-//        GraphAdjMatrix g = new GraphAdjMatrix();
-//        GraphAdjLists g = new GraphAdjLists();
-//        g.addVertices(7);
-//        g.addEdge(0, 1, 7);
-//        g.addEdge(0, 3, 5);
-//        g.addEdge(1, 2, 8);
-//        g.addEdge(1, 3, 9);
-//        g.addEdge(1, 4, 7);
-//        g.addEdge(2, 4, 5);
-//        g.addEdge(3, 4, 15);
-//        g.addEdge(3, 5, 6);
-//        g.addEdge(4, 5, 8);
-//        g.addEdge(4, 6, 9);
-//        g.addEdge(5, 6, 11);
+    public void GraphtoDot(GraphADT g) throws IOException {
 
-        GraphArraySucc<String, Double> g = new GraphArraySucc<String, Double>();
-        g.addNodes(7);
+        FileWriter file_w = new FileWriter(file_name);
+        PrintWriter print_w = new PrintWriter(file_w);
 
-//        Node<Integer> n0 = new Node<Integer>(0);
-//        Node<Integer> n1 = new Node<Integer>(1);
-//        Node<Integer> n2 = new Node<Integer>(2);
-//        Node<Integer> n3 = new Node<Integer>(3);
-//        Node<Integer> n4 = new Node<Integer>(4);
-//        Node<Integer> n5 = new Node<Integer>(5);
-//        Node<Integer> n6 = new Node<Integer>(6);
+        print_w.write("graph g{\n");
+
+
+        // write each node and edge as a dot format
+        ArrayList<EdgeEO> edges = (ArrayList<EdgeEO>) g.getUnduplicatedEdges();
+        for (EdgeEO edge : edges) {
+            print_w.write("\t" + edge.getNode1().toString() + " -- " + edge.getNode2().toString());
+            print_w.write(" [label=\"" + edge.getEdge_data() + "\", len="+edge.getEdge_data()+"];\n");
+        }
+        //
+        print_w.write("}\n");
+        file_w.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
+        // create nodes...
         Node<String> n0 = new Node<String>("A");
         Node<String> n1 = new Node<String>("B");
         Node<String> n2 = new Node<String>("C");
@@ -89,25 +88,32 @@ public class GraphOutput {
         Node<String> n4 = new Node<String>("E");
         Node<String> n5 = new Node<String>("F");
         Node<String> n6 = new Node<String>("G");
+        // add nodes to graph...
+        g.addNode(n0);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.addNode(n3);
+        g.addNode(n4);
+        g.addNode(n5);
+        g.addNode(n6);
+        // link nodes together...
+        g.addEdge(n0, n1, 7);
+        g.addEdge(n0, n3, 5);
+        g.addEdge(n1, n2, 8);
+        g.addEdge(n1, n3, 9);
+        g.addEdge(n1, n4, 7);
+        g.addEdge(n2, n4, 5);
+        g.addEdge(n3, n4, 15);
+        g.addEdge(n3, n5, 6);
+        g.addEdge(n4, n5, 8);
+        g.addEdge(n4, n6, 9);
+        g.addEdge(n5, n6, 11);
 
+        GraphOutput gdot = new GraphOutput("g.dot");
+        gdot.GraphtoDot(g);
 
-        g.addEdge(n0, n1, 7.1);
-        g.addEdge(n0, n3, 5.2);
-        g.addEdge(n1, n2, 8.3);
-        g.addEdge(n1, n3, 9.4);
-        g.addEdge(n1, n4, 7.5);
-        g.addEdge(n2, n4, 5.6);
-        g.addEdge(n3, n4, 15.7);
-        g.addEdge(n3, n5, 6.8);
-        g.addEdge(n4, n5, 8.9);
-        g.addEdge(n4, n6, 9.10);
-        g.addEdge(n5, n6, 11.11);
+//        System.out.println(g.getUnduplicatedEdges());
 
-
-        GraphOutput gout = new GraphOutput("file1_ADT.ser");
-        gout.saveGraphADT(g);
-        gout.closeFile();
 
     }
-
 }

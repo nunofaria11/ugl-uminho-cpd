@@ -22,9 +22,9 @@ import java.util.PriorityQueue;
 public class BFS<T, Y extends Comparable<Y>> {
 
     GraphADT<T, Y> g;
-    BFS_Visitor<Node<T>, EdgeEO<T, Y>> visitor;
+    Visitor<Node<T>, EdgeEO<T, Y>> visitor;
 
-    public BFS(GraphADT<T, Y> g, BFS_Visitor<Node<T>, EdgeEO<T, Y>> visitor) {
+    public BFS(GraphADT<T, Y> g, Visitor<Node<T>, EdgeEO<T, Y>> visitor) {
         this.g = g;
         this.visitor = visitor;
     }
@@ -80,13 +80,15 @@ public class BFS<T, Y extends Comparable<Y>> {
         return node_list;
     }
 
-    public Collection<Node<T>> bfs_with_visitor(
+    public GraphADT<T, Y> bfs_with_visitor(
             Node<T> start_node,
             HashMap<Node<T>, Y> dist,
             TArithmeticOperations<Y> arith,
             HashMap<Node<T>, Node<T>> pred) {
 
-        ArrayList<Node<T>> node_list = new ArrayList<Node<T>>();
+        GraphADT bfs_g = g.clone();
+        bfs_g.clean();
+//        ArrayList<Node<T>> node_list = new ArrayList<Node<T>>();
         //initialization
         for (Node n : g.getNodes()) {
             // initialize with visitor according to the BFS initialization "contract"
@@ -106,26 +108,29 @@ public class BFS<T, Y extends Comparable<Y>> {
         Q.add(start_node);
         while (!Q.isEmpty()) {
             Node<T> node = Q.poll();
-//            visitor.discover(node);
+            visitor.discover(node);
             if (((ColorDecorator) node.getProperty("color")).color == ColorEnum.GREY) {
-                node_list.add(node);
+//                node_list.add(node);
+                bfs_g.addNode(node);
             }
             for (EdgeEO<T, Y> ei : g.getNeighborEdges(node)) {
                 if (visitor.process(ei)) {
                     Node<T> target = ei.getNode2();
-                    visitor.discover(target);
+//                    visitor.discover(target);
+
+                    target.addProperty(new ColorDecorator(ColorEnum.GREY));
                     Q.add(target); // enqueue white neighbors (now grey neighbors) of current node
                     dist.put(
                             node,
                             arith.Add(dist.get(node), ei.getEdge_data()));
                     pred.put(target, node);
-
+                    bfs_g.addEdge(node, target, (Y) ei.getEdge_data());
                 }
             }
             visitor.finish(node);
         }
 
-        return node_list;
+        return bfs_g;
 
     }
 
@@ -190,7 +195,7 @@ public class BFS<T, Y extends Comparable<Y>> {
 
         System.out.println(bfs.bfs(n0, distances, arith, predecessors));
 
-        System.out.println("Start: " + n1);
+        System.out.println("Start: " + n0);
         System.out.println("Dists: " + distances);
         System.out.println("Preds: " + predecessors);
 
@@ -200,7 +205,7 @@ public class BFS<T, Y extends Comparable<Y>> {
         distances = new HashMap<Node<String>, Double>();
         System.out.println(bfs.bfs_with_visitor(n0, distances, arith, predecessors));
 
-        System.out.println("Start: " + n1);
+        System.out.println("Start: " + n0);
         System.out.println("Dists: " + distances);
         System.out.println("Preds: " + predecessors);
 

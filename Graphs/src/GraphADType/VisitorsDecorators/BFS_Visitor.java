@@ -11,7 +11,7 @@ import NodeOriented.Node;
  *
  * @author nuno
  */
-public class BFS_Visitor<N extends Node, E extends EdgeEO> implements Visitor<N, E> {
+public final class BFS_Visitor<N extends Node, E extends EdgeEO> implements Visitor<N, E> {
 
     public void initializes(N n) {
         n.addProperty(new ColorDecorator());

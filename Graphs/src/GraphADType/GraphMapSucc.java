@@ -139,6 +139,30 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         return s.toString();
     }
 
+    public GraphMapAdj<T, Y> toGraphMapAdj() {
+        GraphMapAdj<T, Y> graph = new GraphMapAdj<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
+    public GraphArraySucc<T, Y> toGraphArraySucc() {
+        GraphArraySucc<T, Y> graph = new GraphArraySucc<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
     public static void main(String[] args) {
         GraphMapSucc<String, Double> g = new GraphMapSucc<String, Double>();
         g.addNodes(7);

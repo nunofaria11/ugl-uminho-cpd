@@ -6,9 +6,15 @@ package GraphADType.Algorithms;
 
 import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
+import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
+import GraphADType.GraphMapSucc;
+import GraphADType.Support.Constants;
+import GraphADType.Support.GenSaveReadADT;
+import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.UnionFind_ADT;
 import GraphADType.Support.TArithmeticOperations;
+import GraphADType.Support.YRandomizer;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -136,7 +142,92 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-    public static void main(String[] args) {
+    public static void test_implementations(int size) {
+        TArithmeticOperations<String> strArith = Constants.strArith;
+
+        YRandomizer<Integer> iRand = Constants.randInteger;
+
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
+
+        // copy random data to three different implementations
+        GraphMapAdj<String, Integer> g_map_adj = new GraphMapAdj<String, Integer>(size);
+        GraphArraySucc<String, Integer> g_array_succ = new GraphArraySucc<String, Integer>(size);
+        GraphMapSucc<String, Integer> g_map_succ = new GraphMapSucc<String, Integer>(size);
+        System.out.println("generating...");
+
+        g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.readTestBenchGraph(size);
+        System.out.println("converting...");
+        g_map_succ = g_map_adj.toGraphMapSucc();
+        System.out.println("converting...");
+        g_array_succ = g_map_adj.toGraphArraySucc();
+
+        // test boruvka for each implementation
+        BoruvkaADT b1 = new BoruvkaADT(g_map_adj);
+        BoruvkaADT b2 = new BoruvkaADT(g_map_succ);
+        BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
+
+        System.out.println("1:");
+        GraphADT mst1 = b1.getMst();
+        System.out.println("2:");
+        GraphADT mst2 = b2.getMst();
+        System.out.println("3:");
+        GraphADT mst3 = b3.getMst();
+
+        int total1 = 0;
+        int total2 = 0;
+        int total3 = 0;
+        System.out.println(mst1.getMstWeight(Constants.intArith, total1));
+        System.out.println(mst2.getMstWeight(Constants.intArith, total2));
+        System.out.println(mst3.getMstWeight(Constants.intArith, total3));
+
+    }
+
+    public static void testArraySucc(int size) {
+        TArithmeticOperations<String> strArith = Constants.strArith;
+
+        YRandomizer<Integer> iRand = Constants.randInteger;
+
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
+
+        // copy random data to three different implementations
+//        GraphMapAdj<String, Integer> g_map_adj = new GraphMapAdj<String, Integer>();
+        GraphArraySucc<String, Integer> g_array_succ = new GraphArraySucc<String, Integer>(size);
+        System.out.println("generating...");
+        GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
+                0.5,
+                90, // maximum
+                5, // minimum
+                iRand, // interface for random Y-weight values
+                strArith, // interface for node ids creation operations
+                alpha);     // alphabet to consider in node-ids
+
+//        g_array_succ = (GraphArraySucc<String, Integer>) ggen.generate(g_array_succ, size);
+        GraphMapAdj<String, Integer> g_map_adj = new GraphMapAdj<String, Integer>(size);
+        g_map_adj = (GraphMapAdj<String, Integer>) ggen.generate(g_map_adj, size);
+//        GraphMapAdj<String, Integer> g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.readTestBenchGraph();
+        g_array_succ = g_map_adj.toGraphArraySucc();
+//        System.out.println(g_array_succ);
+
+        BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
+        GraphADT mst = b3.getMst();
+        int total = 0;
+        System.out.println(mst.getMstWeight(Constants.intArith, total));
+
+    }
+
+    public static void main2(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -190,5 +281,10 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         Double total = 0.0;
         total = (Double) mst.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
+    }
+
+    public static void main(String[] args) {
+        BoruvkaADT.test_implementations(400);
+//        BoruvkaADT.testArraySucc(400);
     }
 }

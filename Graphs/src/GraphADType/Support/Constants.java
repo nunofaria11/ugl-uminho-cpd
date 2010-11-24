@@ -4,8 +4,9 @@
  */
 package GraphADType.Support;
 
-import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,6 +32,19 @@ public class Constants {
             return r.nextInt(upper - lower) + lower;
         }
     };
+
+    public static YRandomizer<Integer> sleepIntRand = new YRandomizer<Integer>() {
+
+            public Integer random(Integer lower, Integer upper) {
+                Random r = new Random(System.currentTimeMillis());
+                try {
+                    Thread.sleep(1, 2);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GenSaveReadADT.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return r.nextInt(upper - lower) + lower;
+            }
+        };
 
     public static TArithmeticOperations<String> strArith = new TArithmeticOperations<String>() {
 

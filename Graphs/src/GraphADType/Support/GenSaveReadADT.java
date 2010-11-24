@@ -11,6 +11,9 @@ import GraphIO.GraphOutput;
 import NodeOriented.Node;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +21,7 @@ import java.util.ArrayList;
  */
 public class GenSaveReadADT {
 
-    public static int NUM_NODES = 500;
+    public static int NUM_NODES = 100;
     public static double connection_probability = 0.5;
     public static String file_name = "graphADT_" + NUM_NODES + "nodes.ser";
 
@@ -37,10 +40,10 @@ public class GenSaveReadADT {
 
         GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
                 GenSaveReadADT.connection_probability,
-                90,         // maximum
-                5,          // minimum
-                iRand,      // interface for random Y-weight values
-                strArith,   // interface for node ids creation operations
+                90, // maximum
+                5, // minimum
+                iRand, // interface for random Y-weight values
+                strArith, // interface for node ids creation operations
                 alpha);     // alphabet to consider in node-ids
 
         GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
@@ -106,9 +109,58 @@ public class GenSaveReadADT {
         return g_adt_read;
     }
 
-    public static void main(String[] args) {
-        GenSaveReadADT.write();
-        GraphADT read_g = GenSaveReadADT.read();
-        System.out.println(read_g.toString());
+    public static GraphADT readTestBenchGraph(int size) {
+        GraphInput gin = new GraphInput("bench" + size + "_test.ser");
+        return gin.readGraphADT();
+    }
+
+    public static void GenerateAndWriteTestBenchGraph(int size) throws IOException {
+        TArithmeticOperations<String> strArith = Constants.strArith;
+        YRandomizer<Integer> iRand = Constants.sleepIntRand;
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.add("A");
+        alpha.add("B");
+        alpha.add("C");
+        alpha.add("D");
+        alpha.add("E");
+        alpha.add("F");
+        GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
+                0.5,
+                9, // maximum
+                5, // minimum
+                iRand, // interface for random Y-weight values
+                strArith, // interface for node ids creation operations
+                alpha);     // alphabet to consider in node-ids
+        GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
+        g = (GraphMapAdj<String, Integer>) ggen.generate(g, size);
+        GraphOutput gout = new GraphOutput("bench" + size + "_test_wrange.ser");
+        gout.saveGraphADT(g);
+    }
+
+    public static void main(String[] args) throws IOException {
+//        GenSaveReadADT.write_small();
+////        GraphADT read_g = GenSaveReadADT.read();
+//        GraphInput gin = new GraphInput("small_example_ADT.ser");
+//        GraphADT read_g = gin.readGraphADT();
+//
+////        GraphOutput gdot = new GraphOutput("g" + NUM_NODES + ".dot");
+//        GraphOutput gdot = new GraphOutput("small.dot");
+//        gdot.GraphtoDot(read_g);
+//
+//        System.out.println(read_g.toString());
+
+        for (int s = 1000; s <= 1200; s += 50) {
+            GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
+        }
+
+
+
+//        GraphInput gin = new GraphInput("bench100_test_wrange.ser");
+//        GraphADT g = gin.readGraphADT();//GenSaveReadADT.readTestBenchGraph(50);
+//        System.out.println(g.toString());
+//        GraphOutput gout = new GraphOutput("bench50_test_wrange.dot");
+//        gout.GraphtoDot(g);
+
+
     }
 }
