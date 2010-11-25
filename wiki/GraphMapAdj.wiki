@@ -1,5 +1,5 @@
 #summary Explaining the GraphMapAdj implementation structure
-This [http://code.google.com/p/ugl-uminho-cpd/wiki/GraphMapAdj GraphMapAdj] implementation uses a list of neighborhoods stored for each node.
+This [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java GraphMapAdj] implementation uses a list of neighborhoods stored for each node.
 
 {{{
 public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
