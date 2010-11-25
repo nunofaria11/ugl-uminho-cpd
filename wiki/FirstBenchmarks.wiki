@@ -14,5 +14,5 @@ http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_boruvka.png
  * Test with different weight ranges (a graph with a weight range of [5, 90] may be more efficient than another with [5, 9] since the decisions are made faster).
  * New structure implementations
 
-===Result table===
+===Results table===
 [http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_results.png]
