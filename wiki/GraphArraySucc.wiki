@@ -32,7 +32,7 @@ foreach newNode in nodesToAdd {
 
 However, for graphs that are built over time, like an MST is built as an algorithm runs, or even when building a random graph, the order in which the neighbors of a given node are added are not for sure added all following each other. Therefore, the target nodes (of a given source node *A*) in the _targets array_ will not be contiguous, unless we perform a shift operation in the position of node *A*, stored in the _index_ map, in order to make the targets of *A* contiguous in _targets_.
 
-This will obviously result in a major overhead when building a new graph, and even though the graph building processing isn't directly linked to running an algorithm, in an MST calculation, where we need to create a new graph as the algorithm evolves, the shifting process kills the potential performance and good memory locality achieved.
+This will obviously result in a major overhead when building a new graph, and even though the graph building processing isn't directly linked to running an algorithm, like in an MST calculation, where we need to create a new graph as the algorithm evolves, the shifting process kills the potential performance and good memory locality achieved.
 
 ===Possible solution?===
 Try to implement a threading mechanism that performs the shift operation on a separate thread.
