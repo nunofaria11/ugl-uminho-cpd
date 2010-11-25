@@ -1,0 +1,32 @@
+#summary Explaining the GraphArraySucc implementation
+
+The [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java GraphArraySucc] implementation uses a compressed-row concept to store the edges in the graph. So far, this is the most _tricky_ implementation.
+The concept here is to store the graph connection info in two main structures: 
+ * one that stores the target nodes of each source node (the targets of each source node must be next to each other in the _target array_) - it has _#edges_ positions (`targets[NUM_EDGES]`).
+ * another one that has NUM_NODES elements, and it stores the indices of the starting positions where the target nodes are stored in the _targets_ array.
+
+{{{
+public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y>{
+    // ...
+    HashMap<Node<T>, Integer> _index;
+    Object[] _succs;
+    Object[] _weights;
+    // ...
+}
+}}}
+
+Three structures are used:
+ * `HashMap<Node<T>, Integer> _index`: has #Nodes elements; stores each starting index of the targets array.
+ * `Object[] _succs`: has #Edges elements; stores each target node for every source node.
+ * `Object[] _weights`: same logic than the previous one, except it stores the *weight of the edge* instead of the target node.
+
+==Disadvantages==
+This implementation works well for static graphs, that are built with in a constant fashion:
+{{{
+foreach newNode in nodesToAdd {
+   foreach neighbor in neighborsOf(newNode) {
+      addNeighbor(neighbor)
+   }
+}
+}}}
+
