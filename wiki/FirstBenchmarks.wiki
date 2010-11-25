@@ -1,3 +1,10 @@
+#sidebar TableOfContents
+ * [Prim]
+ * [Kruskal]
+ * [Boruvka]
+
+
+
 =First Benchmarks=
 The benchmarks were performed for each implementation (MapSucc, MapAdj and ArraySucc) for the following algorithms.
 ==Prim==
