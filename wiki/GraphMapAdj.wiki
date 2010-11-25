@@ -1,0 +1,11 @@
+#summary Explaining the GraphMapAdj implementation structure
+This implementation uses a list of neighborhoods stored for each node.
+
+{{{
+public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> {
+    // ...
+    HashMap<Node<T>, List<EdgeEO<T, Y>>> _adj_map;
+    // ...
+}}}
+
+This is the implementation that produced the best results for most benchmarks, so far. An implementation idea close to this one is using a `Queue` instead of a `List` in order to keep the neighbors list ordered, accordingly to a crescent or decrescent criteria - in the MST (*Minimum* Spanning Tree) problem we would want the smaller weighted edges to be easily accessible, so the queue would be in increasing order.
