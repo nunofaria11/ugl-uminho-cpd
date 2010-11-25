@@ -1,4 +1,4 @@
-#summary Some results; more results will be added here as I get them.
+#summary Some benchmarking results; more will be added here as I get them.
 =First Benchmarks=
 The benchmarks were performed for each implementation ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java MapSucc], [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java MapAdj] and [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java ArraySucc]) for the following algorithms.
 ==Prim==
