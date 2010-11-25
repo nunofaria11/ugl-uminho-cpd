@@ -1,5 +1,5 @@
 =First Benchmarks=
-The benchmarks were performed for each implementation ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java MapSucc], MapAdj and ArraySucc) for the following algorithms.
+The benchmarks were performed for each implementation ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java MapSucc], [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java MapAdj] and [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySuc.java ArraySucc]) for the following algorithms.
 ==Prim==
 http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_prim.png
 ==Kruskal==
