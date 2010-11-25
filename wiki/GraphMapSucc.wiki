@@ -1,6 +1,6 @@
 #summary Explaining the GraphMapSucc implementation
 
-This implementation was an attempt to reduce the memory overhead of storing the specific structure that has the edge info ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/EdgeOriented/EdgeEO.java EdgeEO])
+This [http://code.google.com/p/ugl-uminho-cpd/wiki/GraphMapSucc GraphMapSucc] was an attempt to reduce the memory overhead of storing the specific structure that has the edge info ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/EdgeOriented/EdgeEO.java EdgeEO])
 
 {{{
 public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y>{
