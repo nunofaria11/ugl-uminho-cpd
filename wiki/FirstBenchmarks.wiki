@@ -15,4 +15,4 @@ http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_boruvka.png
  * New structure implementations
 
 ===Results table===
-[http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_results.png]
+http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_results.png
