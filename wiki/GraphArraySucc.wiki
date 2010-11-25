@@ -24,7 +24,7 @@ Three structures are used:
 This implementation works well for static graphs, that are built in an ordered fashion:
 {{{
 foreach newNode in nodesToAdd {
-   foreach neighbor in neighborsOf(newNode) {
+   foreach neighbor in neighborsOfNewNode {
       addNeighbor(neighbor)
    }
 }
