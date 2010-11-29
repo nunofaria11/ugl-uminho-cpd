@@ -116,7 +116,7 @@ public class GenSaveReadADT {
 
     public static void GenerateAndWriteTestBenchGraph(int size) throws IOException {
         TArithmeticOperations<String> strArith = Constants.strArith;
-        YRandomizer<Integer> iRand = Constants.sleepIntRand;
+        YRandomizer<Integer> iRand = Constants.randInteger;
         ArrayList<String> alpha = new ArrayList<String>();
         alpha.add("A");
         alpha.add("B");
@@ -126,14 +126,14 @@ public class GenSaveReadADT {
         alpha.add("F");
         GraphGenADT<String, Integer> ggen = new GraphGenADT<String, Integer>(
                 0.5,
-                9, // maximum
+                90, // maximum
                 5, // minimum
                 iRand, // interface for random Y-weight values
                 strArith, // interface for node ids creation operations
                 alpha);     // alphabet to consider in node-ids
         GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
         g = (GraphMapAdj<String, Integer>) ggen.generate(g, size);
-        GraphOutput gout = new GraphOutput("bench" + size + "_test_wrange.ser");
+        GraphOutput gout = new GraphOutput("bench" + size + "_test_matrix.ser");
         gout.saveGraphADT(g);
     }
 
@@ -149,7 +149,7 @@ public class GenSaveReadADT {
 //
 //        System.out.println(read_g.toString());
 
-        for (int s = 1000; s <= 1200; s += 50) {
+        for (int s = 250; s <= 1200; s += 50) {
             GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
         }
 

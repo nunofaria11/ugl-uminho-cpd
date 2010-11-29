@@ -11,7 +11,7 @@ import GraphADType.GraphADT;
 import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
 import GraphADType.GraphMapSucc;
-import GraphADType.Support.Constants;
+import GraphADType.GraphMatrix;
 import GraphIO.GraphInput;
 
 /**
@@ -30,6 +30,9 @@ public class RunBenchmark {
         }
         if (type.equals("arraysucc")) {
             return new GraphArraySucc<String, Integer>(size);
+        }
+        if (type.equals("matrix")) {
+            return new GraphMatrix<String, Integer>(size);
         }
         return null;
     }
@@ -79,6 +82,10 @@ public class RunBenchmark {
         if (type.equals("arraysucc")) {
 //            System.out.println("convert to arraysucc...");
             return ((GraphMapAdj) gg).toGraphArraySucc();
+        }
+        if (type.equals("matrix")) {
+//            System.out.println("convert to arraysucc...");
+            return ((GraphMapAdj) gg).toGraphMatrix();
         }
         return gg;
     }
