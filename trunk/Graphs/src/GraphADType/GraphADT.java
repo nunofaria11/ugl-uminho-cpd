@@ -135,4 +135,50 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         }
         return nodes;
     }
+
+    public GraphMapAdj<T, Y> toGraphMapAdj() {
+        GraphMapAdj<T, Y> graph = new GraphMapAdj<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getUnduplicatedEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
+    public GraphArraySucc<T, Y> toGraphArraySucc() {
+        GraphArraySucc<T, Y> graph = new GraphArraySucc<T, Y>(order());
+
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getUnduplicatedEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
+    public GraphMatrix<T, Y> toGraphMatrix() {
+        GraphMatrix<T, Y> graph = new GraphMatrix<T, Y>(order());
+        for (Node node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getUnduplicatedEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
+
+    public GraphMapSucc<T, Y> toGraphMapSucc() {
+        GraphMapSucc<T, Y> graph = new GraphMapSucc<T, Y>(order());
+        for (Node<T> node : this.getNodes()) {
+            graph.addNode(node);
+        }
+        for (EdgeEO edge : this.getUnduplicatedEdges()) {
+            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        }
+        return graph;
+    }
 }

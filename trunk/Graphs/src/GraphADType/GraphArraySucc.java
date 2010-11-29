@@ -97,7 +97,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
             _weights[index] = w;
         }
         avail_index++;
-        
+
 
     }
 
@@ -297,30 +297,6 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     @Override
     public void clean() {
         _allocate(order()); // need to re-allocate another N nodes - if it were 0 it would cause errors
-    }
-
-    public GraphMapSucc<T, Y> toGraphMapSucc() {
-        GraphMapSucc<T, Y> graph = new GraphMapSucc<T, Y>(order());
-
-        for (Node node : this.getNodes()) {
-            graph.addNode(node);
-        }
-        for (EdgeEO edge : this.getEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
-        }
-        return graph;
-    }
-
-    public GraphMapAdj<T, Y> toGraphMapAdj() {
-        GraphMapAdj<T, Y> graph = new GraphMapAdj<T, Y>(order());
-
-        for (Node node : this.getNodes()) {
-            graph.addNode(node);
-        }
-        for (EdgeEO edge : this.getEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
-        }
-        return graph;
     }
 
     public static void main(String[] args) {

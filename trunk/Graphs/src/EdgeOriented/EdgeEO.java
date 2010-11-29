@@ -81,7 +81,7 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
     public String toString() {
         StringBuilder s = new StringBuilder();
         String w = edge_data.toString();
-        s.append(node1.toString()).append(" -(").append(w).append(")-> ").append(node2.toString()).append(", ");
+        s.append(node1.toString()).append(" -(").append(w).append(")-> ").append(node2.toString());
         return s.toString();
     }
 
