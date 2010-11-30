@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class GenSaveReadADT {
 
-    public static int NUM_NODES = 50;
+    public static int NUM_NODES = 200;
     public static double connection_probability = 0.5;
     public static String file_name = "graphADT_" + NUM_NODES + "nodes.ser";
 
@@ -132,6 +132,32 @@ public class GenSaveReadADT {
         g = (GraphMapAdj<String, Integer>) ggen.generate(g, size);
         GraphOutput gout = new GraphOutput("bench" + size + "_test_matrix.ser");
         gout.saveGraphADT(g);
+    }
+
+    public static GraphADT createSmallGraphADT(){
+        GraphMapAdj<String, Integer> adt_g = new GraphMapAdj<String, Integer>();
+        adt_g.addNodes(7);
+        Node<String> n0 = new Node<String>("A");
+        Node<String> n1 = new Node<String>("B");
+        Node<String> n2 = new Node<String>("C");
+        Node<String> n3 = new Node<String>("D");
+        Node<String> n4 = new Node<String>("E");
+        Node<String> n5 = new Node<String>("F");
+        Node<String> n6 = new Node<String>("G");
+        adt_g.addEdge(n0, n1, 7);
+        adt_g.addEdge(n0, n3, 5);
+        adt_g.addEdge(n1, n2, 8);
+        adt_g.addEdge(n1, n3, 9);
+        adt_g.addEdge(n1, n4, 7);
+        adt_g.addEdge(n2, n4, 5);
+        adt_g.addEdge(n3, n4, 15);
+        adt_g.addEdge(n3, n5, 6);
+        adt_g.addEdge(n4, n5, 8);
+        adt_g.addEdge(n4, n6, 9);
+        adt_g.addEdge(n5, n6, 11);
+//        System.out.println(adt_g);
+        return adt_g;
+
     }
 
     public static void main(String[] args) throws IOException {

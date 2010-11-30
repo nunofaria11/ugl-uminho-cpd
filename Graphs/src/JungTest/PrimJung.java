@@ -100,8 +100,6 @@ public class PrimJung<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-
-
     public Y getMstWeight(UndirectedSparseGraph<T, EdgeJ<Y>> g, TArithmeticOperations<Y> arith) {
         Y w = arith.zero_element();
         Collection<T> allnodes = g.getVertices();
@@ -140,6 +138,5 @@ public class PrimJung<T, Y extends Comparable<Y>> {
         };
         PrimMinimumSpanningTree<String, Integer> primJung_original = new PrimMinimumSpanningTree<String, Integer>(factory);
         System.out.println(primJung_original.transform(gjung));
-
     }
 }

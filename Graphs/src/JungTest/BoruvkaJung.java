@@ -4,10 +4,13 @@
  */
 package JungTest;
 
+import GraphADType.Algorithms.BoruvkaADT;
 import GraphADType.GraphADT;
 import GraphADType.Support.Constants;
+import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.UnionFind_ADT;
+import GraphIO.GraphInput;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import java.util.ArrayList;
@@ -96,7 +99,6 @@ public class BoruvkaJung<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-
     public Y getMstWeight(UndirectedSparseGraph<T, EdgeJ<Y>> g, TArithmeticOperations<Y> arith) {
         Y w = arith.zero_element();
         Collection<T> allnodes = g.getVertices();
@@ -112,14 +114,24 @@ public class BoruvkaJung<T, Y extends Comparable<Y>> {
         }
         return w;
     }
-    
-    public static void main(String[] args){
-        GraphADT g = JungConverter.createSmallGraphADT();
-        JungConverter jconv = new JungConverter();
 
+    public static void main(String[] args) {
+//        GraphADT g = JungConverter.createSmallGraphADT();
+        // generate random graph
+        GenSaveReadADT.write();
+        GraphInput gin = new GraphInput(GenSaveReadADT.file_name);
+        GraphADT g = gin.readGraphADT();
+
+        // first with GraphADT ...
+        BoruvkaADT borADT = new BoruvkaADT(g);
+        GraphADT mstADT = borADT.getMst();
+        int total = 0;
+        System.out.println("MST ADT weight: " + mstADT.getMstWeight(Constants.intArith, total));
+
+        // ... now with JUNG
+        JungConverter jconv = new JungConverter();
         BoruvkaJung borJung = new BoruvkaJung((UndirectedSparseGraph) jconv.ADTtoJung(g));
         UndirectedSparseGraph mst_jung = borJung.getMst();
-        System.out.println(mst_jung);
         System.out.println("MST Jung weight: " + borJung.getMstWeight(mst_jung, Constants.intArith));
     }
 }

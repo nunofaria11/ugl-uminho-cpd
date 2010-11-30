@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package GraphADType;
 
 import EdgeOriented.EdgeEO;
@@ -17,8 +16,9 @@ import java.util.Queue;
  *
  * @author nuno
  */
-public class GraphMapAdj2 <T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
+public class GraphMapAdj2<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
+    private static final long serialVersionUID = -4330765585850038580L;
     // The edges
     HashMap<Node<T>, Queue<EdgeEO<T, Y>>> _adj_map;
 
@@ -100,5 +100,4 @@ public class GraphMapAdj2 <T, Y extends Comparable<Y>> extends GraphADT<T, Y> im
     public Collection<Node<T>> getNodes() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

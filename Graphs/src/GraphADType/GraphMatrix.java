@@ -19,6 +19,7 @@ import java.util.Random;
  */
 public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
+    private static final long serialVersionUID = 4864427781536818158L;
     Object[][] _matrix;
     // auxilary structures to map the node with the index of rows and columns in the matrix
     HashMap<Node<T>, Integer> _rows;
