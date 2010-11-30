@@ -56,7 +56,7 @@ public class Constants {
             return a + b;
         }
 
-        public String null_element() {
+        public String zero_element() {
             return "";
         }
     };
@@ -71,7 +71,7 @@ public class Constants {
             return Integer.parseInt(a.toString()+b.toString());
         }
 
-        public Integer null_element() {
+        public Integer zero_element() {
             return 0;
         }
 

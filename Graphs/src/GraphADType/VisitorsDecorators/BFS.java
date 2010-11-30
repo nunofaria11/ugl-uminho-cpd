@@ -44,7 +44,7 @@ public class BFS<T, Y extends Comparable<Y>> {
         for (Node n : g.getNodes()) {
             // set initial color of each node to WHITE
             n.addProperty(white_decorator);
-            dist.put(n, arith.null_element());
+            dist.put(n, arith.zero_element());
             pred.put(n, null);
         }
         // queue to order nodes by color
@@ -93,7 +93,7 @@ public class BFS<T, Y extends Comparable<Y>> {
         for (Node n : g.getNodes()) {
             // initialize with visitor according to the BFS initialization "contract"
             visitor.initializes(n);
-            dist.put(n, arith.null_element());
+            dist.put(n, arith.zero_element());
             pred.put(n, null);
         }
         PriorityQueue<Node<T>> Q = new PriorityQueue<Node<T>>(g.order(), new Comparator<Node<T>>() {
@@ -188,7 +188,7 @@ public class BFS<T, Y extends Comparable<Y>> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            public Double null_element() {
+            public Double zero_element() {
                 return 0.0;
             }
         };

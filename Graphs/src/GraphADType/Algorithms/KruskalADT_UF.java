@@ -168,7 +168,7 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            public Double null_element() {
+            public Double zero_element() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };

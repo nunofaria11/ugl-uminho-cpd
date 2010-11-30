@@ -11,9 +11,6 @@ import GraphIO.GraphOutput;
 import NodeOriented.Node;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class GenSaveReadADT {
 
-    public static int NUM_NODES = 100;
+    public static int NUM_NODES = 50;
     public static double connection_probability = 0.5;
     public static String file_name = "graphADT_" + NUM_NODES + "nodes.ser";
 
