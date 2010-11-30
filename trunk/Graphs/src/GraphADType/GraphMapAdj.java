@@ -19,6 +19,7 @@ import java.util.Random;
  */
 public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
+    private static final long serialVersionUID = -5003866598946151368L;
     HashMap<Node<T>, List<EdgeEO<T, Y>>> _adj_map;
 
     private HashMap<Node<T>, List<EdgeEO<T, Y>>> _allocate(int n) {

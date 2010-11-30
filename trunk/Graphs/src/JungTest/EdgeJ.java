@@ -52,8 +52,13 @@ public class EdgeJ<Y extends Comparable<Y>> implements Comparable<EdgeJ<Y>> {
         if (this.data != other.data && (this.data == null || !this.data.equals(other.data))) {
             return false;
         }
+        if (this.id != other.id) {
+            return false;
+        }
         return true;
     }
+
+
 
     @Override
     public int hashCode() {

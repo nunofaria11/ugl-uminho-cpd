@@ -8,6 +8,7 @@ import com.sun.corba.se.impl.orbutil.graph.Graph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  *
@@ -49,18 +50,26 @@ public class test1 {
 
     public void create_test() {
         SparseMultigraph<String, myLink> g = new SparseMultigraph<String, myLink>();
-
         g.addVertex("A");
         g.addVertex("B");
         g.addVertex("C");
         g.addVertex("D");
-
         g.addEdge(new myLink(3), "A", "C");
         g.addEdge(new myLink(3), "A", "B");
         g.addEdge(new myLink(5), "B", "D");
         g.addEdge(new myLink(1), "B", "C");
-
         System.out.println(g.toString());
+        // ======================
+        UndirectedGraph<String, Integer> g2 = new UndirectedSparseGraph<String, Integer>();
+        g2.addVertex("A");
+        g2.addVertex("B");
+        g2.addVertex("C");
+        g2.addVertex("D");
+        g2.addEdge(3, "A", "C");
+        g2.addEdge(3, "A", "B"); // error here
+        g2.addEdge(2, "B", "D");
+        g2.addEdge(5, "B", "C");
+        System.out.println(g2.toString());
 
     }
     

@@ -17,6 +17,7 @@ import java.util.Random;
  */
 public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
+    private static final long serialVersionUID = 6990005528953386502L;
     HashMap<Node<T>, Integer> _index;
     Object[] _succs;
     Object[] _weights;
