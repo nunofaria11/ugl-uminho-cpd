@@ -30,7 +30,7 @@ public class ArithmeticExample<T extends Number> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            public Double null_element() {
+            public Double zero_element() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };

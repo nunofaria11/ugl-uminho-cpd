@@ -20,6 +20,6 @@ public interface TArithmeticOperations<T> {
      * 
      * @return
      */
-    T null_element();
+    T zero_element();
 }
 

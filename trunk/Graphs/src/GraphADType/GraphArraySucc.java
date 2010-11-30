@@ -350,7 +350,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            public Double null_element() {
+            public Double zero_element() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };

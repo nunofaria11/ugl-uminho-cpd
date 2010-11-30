@@ -264,7 +264,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
             int N) {
         Collection<T> nodeIds = new ArrayList<T>();
         // add null element of alphabet to root for prefix operations
-        NTreeADT<T> root = new NTreeADT<T>(arith.null_element());
+        NTreeADT<T> root = new NTreeADT<T>(arith.zero_element());
         // build tree recursively
         root = recursiveT(new ArrayList<T>(alpha), root, N, 0, arith);
         // get array of tree with all elements
