@@ -7,7 +7,8 @@ The implementation of this algorithm uses three main concepts:
  * *smallest neighbor map*: a map containing all nodes in the graph has _keys_ and their smallest associated edges has _values_ (at the beginning of each iteration the edge will be maximum).
  * *a forest* (UnionFind_ADT): the forest is a group of trees (initially, each node is a tree) used to keep track of the MST structure, the algorithm has found the MST graph when there is only one tree in the forest.
 
-Simply put, Boruvka's algorithm, runs through every node in the graph and searches for the minimum edge associated to it - the structure where we store this is `nbors`. However, at first we do not explicitly iterate through all the nodes - we iterate through the available edges (`wannabe` edges). We need to build the `nbors` map at each new iterationeach
+Simply put, Boruvka's algorithm, runs through every node in the graph and searches for the minimum edge associated to it - the structure where we store this is `nbors`. However, at first we do not explicitly iterate through all the nodes - we iterate through the available edges (`wannabe` edges). We need to build the `nbors` map at each new iteration and then we run through every node and (if they are not in the same tree in the forest, in case there are ) the minimum edge associated with it is added.
+
 {{{
         for (int i = g.size(); i != 0; i = nextIteration) {
             // initialize each node's minEdge with null - which will correspond to the maximum edge
@@ -56,4 +57,4 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
 }}}
 
 
-http://upload.wikimedia.org/wikipedia/commons/a/a8/Prim_Algorithm_0.svg
+http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/graph_image.png
