@@ -56,4 +56,4 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
 }}}
 
 
-[http://upload.wikimedia.org/wikipedia/commons/a/a8/Prim_Algorithm_0.svg]
+http://upload.wikimedia.org/wikipedia/commons/a/a8/Prim_Algorithm_0.svg
