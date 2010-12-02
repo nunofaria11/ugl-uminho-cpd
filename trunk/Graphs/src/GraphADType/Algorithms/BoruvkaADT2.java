@@ -12,140 +12,99 @@ import GraphADType.GraphMapSucc;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
-import GraphADType.Support.UnionFind_ADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
 import NodeOriented.Node;
+import PerfTest.GenSaveRead;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
 /**
+ * TO DO:
+ * 1) "Arranjar" o algoritmo de Boruvka (DONE)
+ *  - inserir toda a construção das estruturas auxiliares no método principal
+ *  - a maxEdge é agora considerada como null
+ *  - reescrever o ciclo que percorre todas as 'wannabes' para não percorrer 
+ *    todas as edges desnecessariamente.
+ * 
+ * 2) Fazer o rearrange das estruturas auxiliares dos algoritmos p/ que se 
+ *    insiram nas implementações das estruturas, de modo a que as possíveis
+ *    melhorias se baseiem nas implementações.
  *
  * @author nuno
  */
-public class BoruvkaADT<T, Y extends Comparable<Y>> {
+public class BoruvkaADT2<T, Y extends Comparable<Y>> {
 
-    /*
-     * The wannabe and nbors arrays had to be transformed from arrays to hashmaps
-     * in order to being able to associate
-     */
-    private ArrayList<EdgeEO<T, Y>> wannabes;
-    private HashMap<Node<T>, EdgeEO<T, Y>> nbors;
-    private UnionFind_ADT<Node<T>> uf;
-    private GraphADT g;
-    /*
-     * The maximum edge had to be calculated according to the maximum edge present
-     * in the graph. I couldn't create a generic maximum edge.
-     */
-    private final EdgeEO<T, Y> maxEdge;
-
-    public BoruvkaADT(GraphADT g) {
-        this.g = g.clone();
-        this.wannabes = new ArrayList<EdgeEO<T, Y>>(g.size());
-        this.nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
-        this.uf = new UnionFind_ADT(this.g.getNodes());
-        // create maximum edge for comparison effects
-        this.maxEdge = getMaxEdge();
-    }
-
-    private EdgeEO<T, Y> getMaxEdge() {
-        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>(g.size());
-        edges.addAll(g.getEdges());
-        if (edges.size() < 1) {
-            return null;
-        }
-        // create a priority queue where in non-INcreasing order
-        // i.e., the highest element is the head.
-        PriorityQueue<EdgeEO<T, Y>> q = new PriorityQueue<EdgeEO<T, Y>>(edges.size(), new Comparator<EdgeEO<T, Y>>() {
-
-            public int compare(EdgeEO<T, Y> o1, EdgeEO<T, Y> o2) {
-                return o2.getEdge_data().compareTo(o1.getEdge_data());
-            }
-        });
-        q.addAll(edges);
-        return q.remove();
-    }
-
-    /*
-     * [http://flylib.com/books/en/3.56.1.52/1/]
-     * This implementation of Boruvka's MST algorithm uses a version of the
-     * union-find ADT from Chapter 4 (with the single-parameter find added to
-     * the interface) to associate indices with MST subtrees as they are built.
-     * Each phase checks all the remaining edges; those that connect disjoint
-     * subtrees are kept for the next phase. The array a has the edges not yet
-     * discarded and not yet in the MST. The index N is used to store those being
-     * saved for the next phase (the code resets E from N at the end of each phase)
-     * and the index h is used to access the next edge to be checked. Each
-     * component's nearest neighbor is kept in the array b with find component
-     * numbers as indices. At the end of each phase, each component is united with
-     * its nearest neighbor and the nearest-neighbor edges added to the MST.
-     */
-    public GraphADT getMst() {
+    public GraphADT getMst(GraphADT g) {
         // mst edges
         ArrayList<EdgeEO<T, Y>> mstEdges = new ArrayList<EdgeEO<T, Y>>();
 
-        // get wannabe edges in MST
-        this.wannabes = new ArrayList<EdgeEO<T, Y>>(g.size());
-        wannabes.addAll(g.getUnduplicatedEdges());
+        // get wannabe edges in MST from original graph (unduplicated ones)
+        ArrayList<EdgeEO<T, Y>> wannabes = new ArrayList<EdgeEO<T, Y>>(g.getUnduplicatedEdges());
+
+        // build control forest
+        g.initUnionFind();
 
         // initialize forest (nbors hashmap - each node is initially a root)
-        this.nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
-        ArrayList<Node<T>> allnodes = new ArrayList<Node<T>>(g.getNodes());
-        for (Node<T> node : allnodes) {
-            nbors.put(node, maxEdge);
-        }
+        HashMap<Node<T>, EdgeEO<T, Y>> nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
 
-        int next;
+        ArrayList<Node<T>> allnodes = new ArrayList<Node<T>>(g.getNodes());
+
+        // the nextIteration variable controls if any wannabe was processed
+        // - if it wasnt, no more wannabes means stop
+        // - if wannabes were processed keep on to next iteration
+        int nextIteration;
         // Repeat until there is only one tree
-        for (int i = g.size(); i != 0; i = next) {
+        for (int i = g.size(); i != 0; i = nextIteration) {
+            // initialize each node's minEdge with null - which will correspond to the maximum edge
             for (Node<T> node : allnodes) {
-                nbors.put(node, maxEdge);
+                nbors.put(node, null);
             }
+            // edges to add found in this iteration
             ArrayList<EdgeEO<T, Y>> edges2add = new ArrayList<EdgeEO<T, Y>>();
             Node<T> l, m;
-            next = 0;
+            nextIteration = 0;
             for (EdgeEO<T, Y> e : wannabes) {
-                l = uf.find(e.getNode1());
-                m = uf.find(e.getNode2());
+                // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
+                l = (Node<T>) g._union_find.find(e.getNode1());
+                m = (Node<T>) g._union_find.find(e.getNode2());
                 if (l.equals(m)) {
                     continue;
                 }
                 // if e.getWeight() < nbors.get(l).getWeight()
-                if (e.compareTo(nbors.get(l)) == -1) {
-
-                    this.nbors.put(l, e);
+                // (weight==null)?(isMax):(notMax)
+                if (e.compareTo(nbors.get(l)) == -1 || nbors.get(l) == null) {
+                    nbors.put(l, e);
                 }
                 // if e.getWeight() < nbors.get(m).getWeight()
-                if (e.compareTo(nbors.get(m)) == -1) {
-
-                    this.nbors.put(m, e);
+                // (weight==null)?(isMax):(notMax)
+                if (e.compareTo(nbors.get(m)) == -1 || nbors.get(m) == null) {
+                    nbors.put(m, e);
                 }
-//                this.wannabes.set(next, e);
-                next++;
+                nextIteration++;
             }
             // for every vertex check its nearest neighbor
             for (Node<T> n : allnodes) {
-                EdgeEO<T, Y> nEdge = this.nbors.get(n);
-                if (!nEdge.equals(maxEdge)) {
-
+                if (nbors.get(n) != null) {
+                    EdgeEO<T, Y> nEdge = nbors.get(n);
                     l = nEdge.getNode1();
                     m = nEdge.getNode2();
-                    if (!uf.find(l, m)) {
-                        uf.union(l, m);
-//                        mst.addEdge(nEdge.getNode1(), nEdge.getNode2(), nEdge.getEdge_data());
+                    if (!g._union_find.find(l, m)) {
+                        g._union_find.union(l, m);
                         edges2add.add(nEdge);
                     }
                 }
             }
+            // remove wannabe edges that are already in the mst (duplicated ones also)
             wannabes.removeAll(edges2add);
             mstEdges.addAll(edges2add);
         }
+        // build graph of same type and fill it with the MST info
         GraphADT mst = g.clone();
         mst.clean();
         mst.addNodes(g.order());
         mst.addAllEdges(mstEdges);
+        //
         return mst;
     }
 
@@ -168,23 +127,23 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         GraphMapSucc<String, Integer> g_map_succ = new GraphMapSucc<String, Integer>(size);
         System.out.println("generating...");
 
-        g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.readTestBenchGraph(size);
+        g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.read();
         System.out.println("converting...");
         g_map_succ = g_map_adj.toGraphMapSucc();
         System.out.println("converting...");
         g_array_succ = g_map_adj.toGraphArraySucc();
 
         // test boruvka for each implementation
-        BoruvkaADT b1 = new BoruvkaADT(g_map_adj);
-        BoruvkaADT b2 = new BoruvkaADT(g_map_succ);
-        BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
+        BoruvkaADT2 b1 = new BoruvkaADT2();
+        BoruvkaADT2 b2 = new BoruvkaADT2();
+        BoruvkaADT2 b3 = new BoruvkaADT2();
 
         System.out.println("1:");
-        GraphADT mst1 = b1.getMst();
+        GraphADT mst1 = b1.getMst(g_map_adj);
         System.out.println("2:");
-        GraphADT mst2 = b2.getMst();
+        GraphADT mst2 = b2.getMst(g_map_succ);
         System.out.println("3:");
-        GraphADT mst3 = b3.getMst();
+        GraphADT mst3 = b3.getMst(g_array_succ);
 
         int total1 = 0;
         int total2 = 0;
@@ -234,7 +193,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
 
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -267,8 +226,8 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
 
         System.out.println("Connected: " + g.connected());
         // create Boruvka instance...
-        BoruvkaADT bor = new BoruvkaADT(g);
-        GraphADT mst = bor.getMst();
+        BoruvkaADT2 bor = new BoruvkaADT2();
+        GraphADT mst = bor.getMst(g);
         System.out.println(mst.toString());
         // define arithmetic operations to calculate the total weight of type Y - in this case Y=Double
         TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
@@ -290,8 +249,9 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         System.out.println("Total Mst Weight: " + total);
     }
 
-    public static void main2(String[] args) {
-        BoruvkaADT.test_implementations(400);
+    public static void main(String[] args) {
+//        GenSaveReadADT.write();
+        BoruvkaADT2.test_implementations(GenSaveReadADT.NUM_NODES);
 //        BoruvkaADT.testArraySucc(400);
     }
 }

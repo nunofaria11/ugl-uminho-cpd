@@ -6,10 +6,13 @@ package GraphADType;
 
 import GraphADType.Support.TArithmeticOperations;
 import EdgeOriented.EdgeEO;
+import GraphADType.Support.UnionFindInterface;
+import GraphADType.Support.UnionFind_ADT;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Graph Abstract Data-Type
@@ -17,7 +20,13 @@ import java.util.HashMap;
  */
 abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
+    public UnionFind_ADT<Node<T>> _union_find;
+
     public GraphADT() {
+    }
+
+    public void initUnionFind(){
+        this._union_find = new UnionFind_ADT<Node<T>>(this.getNodes());
     }
 
     /**
@@ -56,6 +65,12 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     abstract public void addArc(Node<T> n1, Node<T> n2, Y w);
 
     abstract public void addEdge(Node<T> n1, Node<T> n2, Y w);
+
+    public void addAllEdges(Collection<EdgeEO<T,Y>> edges){
+        for(EdgeEO e : edges){
+            addEdge(e.getNode1(), e.getNode2(), (Y) e.getEdge_data());
+        }
+    }
 
     abstract public boolean isArc(Node<T> n1, Node<T> n2);
 

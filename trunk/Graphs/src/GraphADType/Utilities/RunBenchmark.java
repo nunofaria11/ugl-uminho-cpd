@@ -5,6 +5,7 @@
 package GraphADType.Utilities;
 
 import GraphADType.Algorithms.BoruvkaADT;
+import GraphADType.Algorithms.BoruvkaADT2;
 import GraphADType.Algorithms.KruskalADT_UF;
 import GraphADType.Algorithms.PrimADT;
 import GraphADType.GraphADT;
@@ -42,6 +43,15 @@ public class RunBenchmark {
             BoruvkaADT b = new BoruvkaADT(g);
             long begin = System.currentTimeMillis();
             GraphADT mst = b.getMst();
+            long end = System.currentTimeMillis();
+//            System.out.println("boruvka time:\t" + (end - begin));
+//            int total = 0;
+//            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
+            return (end - begin);
+        } else if (alg.equals("boruvka2")) {
+            BoruvkaADT2 b = new BoruvkaADT2();
+            long begin = System.currentTimeMillis();
+            GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("boruvka time:\t" + (end - begin));
 //            int total = 0;
