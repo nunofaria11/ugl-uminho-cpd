@@ -1,0 +1,8 @@
+#summary Explaining Boruvka's minimum spanning tree algorithm
+
+= Boruvka MST =
+
+The implementation of this algorithm uses three main concepts:
+ * *wannabe edges*: a collection of edges that are not yet in the MST and not yet processed by the algorithm
+ * *smallest neighbor map*: a map containing all nodes in the graph has _keys_ and their smallest associated edges has _values_.
+ * *a forest* (UnionFind_ADT): the forest is a group of trees (initially, each node is a tree) used to keep track of the MST structure, the algorithm has found the MST graph when there is only one tree in the forest.
