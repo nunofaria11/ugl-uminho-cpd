@@ -107,7 +107,7 @@ public class GenSaveReadADT {
     }
 
     public static GraphADT readTestBenchGraph(int size) {
-        GraphInput gin = new GraphInput("bench" + size + "_test.ser");
+        GraphInput gin = new GraphInput("bench" + size + "_test_wrange.ser");
         return gin.readGraphADT();
     }
 
@@ -172,9 +172,9 @@ public class GenSaveReadADT {
 //
 //        System.out.println(read_g.toString());
 
-        for (int s = 250; s <= 1200; s += 50) {
-            GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
-        }
+//        for (int s = 200; s <= 400; s += 50) {
+            GenSaveReadADT.write();
+//        }
 
 
 
