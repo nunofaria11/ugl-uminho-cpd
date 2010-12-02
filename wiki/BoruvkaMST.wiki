@@ -4,5 +4,56 @@
 
 The implementation of this algorithm uses three main concepts:
  * *wannabe edges*: a collection of edges that are not yet in the MST and not yet processed by the algorithm
- * *smallest neighbor map*: a map containing all nodes in the graph has _keys_ and their smallest associated edges has _values_.
+ * *smallest neighbor map*: a map containing all nodes in the graph has _keys_ and their smallest associated edges has _values_ (at the beginning of each iteration the edge will be maximum).
  * *a forest* (UnionFind_ADT): the forest is a group of trees (initially, each node is a tree) used to keep track of the MST structure, the algorithm has found the MST graph when there is only one tree in the forest.
+
+Simply put, Boruvka's algorithm, runs through every node in the graph and searches for the minimum edge associated to it - the structure where we store this is `nbors`. However, at first we do not explicitly iterate through all the nodes - we iterate through the available edges (`wannabe` edges). We need to build the `nbors` map at each new iterationeach
+{{{
+        for (int i = g.size(); i != 0; i = nextIteration) {
+            // initialize each node's minEdge with null - which will correspond to the maximum edge
+            for (Node<T> node : allnodes) {
+                nbors.put(node, null);
+            }
+            // edges to add found in this iteration
+            ArrayList<EdgeEO<T, Y>> edges2add = new ArrayList<EdgeEO<T, Y>>();
+            Node<T> l, m;
+            nextIteration = 0;
+            for (EdgeEO<T, Y> e : wannabes) {
+                // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
+                l = (Node<T>) g._union_find.find(e.getNode1());
+                m = (Node<T>) g._union_find.find(e.getNode2());
+                if (l.equals(m)) {
+                    continue;
+                }
+                // if e.getWeight() < nbors.get(l).getWeight()
+                // (weight==null)?(isMax):(notMax)
+                if (e.compareTo(nbors.get(l)) == -1 || nbors.get(l) == null) {
+                    nbors.put(l, e);
+                }
+                // if e.getWeight() < nbors.get(m).getWeight()
+                // (weight==null)?(isMax):(notMax)
+                if (e.compareTo(nbors.get(m)) == -1 || nbors.get(m) == null) {
+                    nbors.put(m, e);
+                }
+                nextIteration++;
+            }
+            // for every vertex check its nearest neighbor
+            for (Node<T> n : allnodes) {
+                if (nbors.get(n) != null) {
+                    EdgeEO<T, Y> nEdge = nbors.get(n);
+                    l = nEdge.getNode1();
+                    m = nEdge.getNode2();
+                    if (!g._union_find.find(l, m)) {
+                        g._union_find.union(l, m);
+                        edges2add.add(nEdge);
+                    }
+                }
+            }
+            // remove wannabe edges that are already in the mst (duplicated ones also)
+            wannabes.removeAll(edges2add);
+            mstEdges.addAll(edges2add);
+        }
+}}}
+
+
+[http://upload.wikimedia.org/wikipedia/commons/a/a8/Prim_Algorithm_0.svg]
