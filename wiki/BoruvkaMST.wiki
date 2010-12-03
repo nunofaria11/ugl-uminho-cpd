@@ -55,7 +55,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
 This implementation may still be altered because it doesn't makes use of too many accesses to the graph data-structure (or graph API) - which is not necessarily bad. The accesses this specific algorithm performs to the structure are:
  * initialize the _wannabe_ edge list: it needs to access the graph data-structure to get all possible edges 
  * initialize the forest: with all the nodes in the graph (`UnionFind` structure is inside the graph structure)
- * for this specific API, the edges contain both the nodes that are linked, but in some libraries it only stores the edge value/data or weight. For those libraries, at each _wannabe iteration_ (inner cycle) the algorithm accesses the graph structure in order to get the nodes and process them in the forest.
+ * for this specific API, the edges contain both the nodes that are linked, but in some libraries it only stores the edge value/data or weight. For those libraries, at each _wannabe iteration_ (inner cycle) the algorithm accesses the graph structure in order to get the source and target nodes and process them in the forest.
  * retrieve all nodes at the end of each outer iteration: however the nodes may only be accessed once in the beginning of the algorithm and stored in a list (`allnodes`).
 
 http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/graph_image.png
