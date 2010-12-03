@@ -91,22 +91,22 @@ public class BenchmarkADT {
     }
 
     public void runKruskalUF(GraphADT g) {
-        KruskalADT_UF krusk = new KruskalADT_UF(g);
+        KruskalADT_UF krusk = new KruskalADT_UF();
         GraphADT mst;
         int total = 0;
         long begin = System.currentTimeMillis();
-        mst = krusk.getMst();
+        mst = krusk.getMst(g);
         long end = System.currentTimeMillis();
         System.out.println("Time kruskal_uf: " + (end - begin) + " ms");
 //        System.out.println("Kruskal_UF MST weight: " + mst.getMstWeight(Constants.intArith, total));
     }
 
     public void runPrim(GraphADT g) {
-        PrimADT prim = new PrimADT(g);
+        PrimADT prim = new PrimADT();
         GraphADT mst;
         int total = 0;
         long begin = System.currentTimeMillis();
-        mst = prim.getMst();
+        mst = prim.getMst(g);
         long end = System.currentTimeMillis();
         System.out.println("Time prim: " + (end - begin) + " ms");
 //        System.out.println("Prim MST weight: " + mst.getMstWeight(Constants.intArith, total));

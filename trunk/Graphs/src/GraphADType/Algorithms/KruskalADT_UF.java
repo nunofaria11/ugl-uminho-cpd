@@ -12,7 +12,6 @@ import GraphADType.GraphMapSucc;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
-import GraphADType.Support.UnionFind_ADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
 import NodeOriented.Node;
@@ -26,19 +25,9 @@ import java.util.PriorityQueue;
  */
 public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
-    private PriorityQueue<EdgeEO<T, Y>> Q;
-    private UnionFind_ADT<Node<T>> uf;
-    private GraphADT g;
-
-    public KruskalADT_UF(GraphADT g) {
-        this.g = g.clone();
-        uf = new UnionFind_ADT<Node<T>>(this.g.getNodes());
-        initQ();
-    }
-
-    public void initQ() {
+    public PriorityQueue<EdgeEO<T, Y>> initQ(GraphADT g) {
         ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
-        Q = new PriorityQueue<EdgeEO<T, Y>>();
+        PriorityQueue<EdgeEO<T, Y>> Q = new PriorityQueue<EdgeEO<T, Y>>();
         for (Node<T> i : new ArrayList<Node<T>>(g.getNodes())) {
             visited.add(i);
             Collection<EdgeEO<T, Y>> edges = g.getNeighborEdges(i);
@@ -50,9 +39,12 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
             }
             Q.addAll(edgesToAdd);
         }
+        return Q;
     }
 
-    public GraphADT getMst() {
+    public GraphADT getMst(GraphADT g) {        
+        PriorityQueue<EdgeEO<T, Y>> Q = initQ(g);
+        g.initUnionFind();        
         //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
         GraphADT mst = g.clone();
         mst.clean();
@@ -62,12 +54,12 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         int edges_added = 0;
         while (edges_processed < g.size() && edges_added < g.order() - 1) {
             EdgeEO minEdge = Q.poll();
-            Node<T> ck1 = uf.find(minEdge.getNode1());
-            Node<T> ck2 = uf.find(minEdge.getNode2());
+            Node<T> ck1 = (Node<T>) g._union_find.find(minEdge.getNode1());
+            Node<T> ck2 = (Node<T>) g._union_find.find(minEdge.getNode2());
             if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
                 mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
                 // A U {(u,v)}
-                uf.union(ck1, ck2);
+                g._union_find.union(ck1, ck2);
                 edges_added++;
             }
             edges_processed++;
@@ -102,14 +94,14 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         g_array_succ = g_map_adj.toGraphArraySucc();
 
         // test boruvka for each implementation
-        KruskalADT_UF b1 = new KruskalADT_UF(g_map_adj);
-        KruskalADT_UF b2 = new KruskalADT_UF(g_map_succ);
+        KruskalADT_UF b1 = new KruskalADT_UF();
+//        KruskalADT_UF b2 = new KruskalADT_UF();
         BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
 
         System.out.println("1:");
-        GraphADT mst1 = b1.getMst();
+        GraphADT mst1 = b1.getMst(g_map_adj);
         System.out.println("2:");
-        GraphADT mst2 = b2.getMst();
+        GraphADT mst2 = b1.getMst(g_map_succ);
         System.out.println("3:");
         GraphADT mst3 = b3.getMst();
 
@@ -122,8 +114,7 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
     }
 
-
-     public static void main2(String[] args) {
+    public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -154,8 +145,8 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
         // create Prim instance...
-        KruskalADT_UF kruskal = new KruskalADT_UF(g);
-        GraphADT mst = kruskal.getMst();
+        KruskalADT_UF kruskal = new KruskalADT_UF();
+        GraphADT mst = kruskal.getMst(g);
         System.out.println(mst.toString());
         // define arithmetic operations to calculate the total weight of type Y
         TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
@@ -176,7 +167,8 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         total = (Double) mst.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
     }
-     public static void main(String[] args) {
-         KruskalADT_UF.test_implementations(300);
-     }
+
+    public static void main2(String[] args) {
+        KruskalADT_UF.test_implementations(300);
+    }
 }

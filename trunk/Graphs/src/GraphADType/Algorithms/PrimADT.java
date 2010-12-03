@@ -25,15 +25,9 @@ import java.util.PriorityQueue;
  */
 public class PrimADT<T, Y extends Comparable<Y>> {
 
-    GraphADT g;
+//    GraphADT g;
     ArrayList<Node<T>> visited;
     PriorityQueue<EdgeEO<T, Y>> Q;
-
-    public PrimADT(GraphADT g) {
-        this.g = g;
-        visited = new ArrayList<Node<T>>();
-        Q = new PriorityQueue<EdgeEO<T, Y>>();
-    }
 
     public void addVisited(Node<T> v) {
         visited.add(v);
@@ -41,8 +35,6 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         // all references to that node in the queue
         ArrayList<EdgeEO> removals = new ArrayList<EdgeEO>();
         for (EdgeEO e : Q) {
-            if(e.getNode2() == null)
-                System.out.println("edge node2 is null!!!");
             if (e.getNode2().equals(v)) {
                 removals.add(e);
             }
@@ -50,7 +42,9 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         Q.removeAll(removals);
     }
 
-    public GraphADT getMst() {
+    public GraphADT getMst(GraphADT g) {
+        visited = new ArrayList<Node<T>>();
+        Q = new PriorityQueue<EdgeEO<T, Y>>();
         GraphADT mst = g.clone();
         mst.clean();
         mst.addNodes(g.order());
@@ -59,7 +53,6 @@ public class PrimADT<T, Y extends Comparable<Y>> {
             addVisited(start);
             //
             Collection<EdgeEO<T, Y>> nbors = g.getNeighborEdges(start);
-            // UPDATE: It was necessary to add another field to the Edge class: 'from'
             ArrayList<EdgeEO<T, Y>> newEdges = new ArrayList<EdgeEO<T, Y>>();
             for (EdgeEO<T, Y> e : nbors) {
                 if (!visited.contains(e.getNode2())) {
@@ -67,7 +60,7 @@ public class PrimADT<T, Y extends Comparable<Y>> {
                 }
             }
             Q.addAll(newEdges);
-            EdgeEO<T, Y> minEdge = Q.remove(); // * The sorting is done in the Edge class by implementing it with the Comparable interface
+            EdgeEO<T, Y> minEdge = Q.remove();
             mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
             start = minEdge.getNode2();
             //
@@ -101,14 +94,14 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         g_array_succ = g_map_adj.toGraphArraySucc();
 
         // test boruvka for each implementation
-        PrimADT b1 = new PrimADT(g_map_adj);
-        PrimADT b2 = new PrimADT(g_map_succ);
+        PrimADT b1 = new PrimADT();
+        PrimADT b2 = new PrimADT();
         BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
 
         System.out.println("1:");
-        GraphADT mst1 = b1.getMst();
+        GraphADT mst1 = b1.getMst(g_map_adj);
         System.out.println("2:");
-        GraphADT mst2 = b2.getMst();
+        GraphADT mst2 = b2.getMst(g_map_succ);
         System.out.println("3:");
         GraphADT mst3 = b3.getMst();
 
@@ -121,7 +114,7 @@ public class PrimADT<T, Y extends Comparable<Y>> {
 
     }
 
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -152,8 +145,8 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
         // create Prim instance...
-        PrimADT prim = new PrimADT(g);
-        GraphADT mst_prim = prim.getMst();
+        PrimADT prim = new PrimADT();
+        GraphADT mst_prim = prim.getMst(g);
         System.out.println(mst_prim.toString());
         // define arithmetic operations to calculate the total weight of type Y
         TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
@@ -175,7 +168,7 @@ public class PrimADT<T, Y extends Comparable<Y>> {
         System.out.println("Total Mst Weight: " + total);
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         PrimADT.test_implementations(300);
     }
 }

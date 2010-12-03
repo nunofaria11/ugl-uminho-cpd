@@ -19,18 +19,11 @@ import java.util.PriorityQueue;
  */
 public class KruskalJung<T, Y extends Comparable<Y>> {
 
-    private PriorityQueue<EdgeJ<Y>> Q;
-    private UnionFind_ADT<T> uf;
-    private UndirectedSparseGraph graph;
-
-    public KruskalJung(UndirectedSparseGraph graph) {
-        this.graph = graph;
-        this.uf = new UnionFind_ADT<T>(this.graph.getVertices());
-        Q = new PriorityQueue<EdgeJ<Y>>(this.graph.getEdges());
-    }
-
-    public UndirectedSparseGraph getMst() {
+    public UndirectedSparseGraph getMst(UndirectedSparseGraph g) {
+        UndirectedSparseGraph graph = g;
+        PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>(graph.getEdges());
         UndirectedSparseGraph<T, EdgeJ<Y>> mst = new UndirectedSparseGraph<T, EdgeJ<Y>>();
+        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.getVertices());
         //
         int edges_processed = 0;
         int edges_added = 0;
@@ -72,8 +65,8 @@ public class KruskalJung<T, Y extends Comparable<Y>> {
         GraphADT g = JungConverter.createSmallGraphADT();
         JungConverter jconv = new JungConverter();
 
-        KruskalJung kruskalJung = new KruskalJung((UndirectedSparseGraph) jconv.ADTtoJung(g));
-        UndirectedSparseGraph mst_jung = kruskalJung.getMst();
+        KruskalJung kruskalJung = new KruskalJung();
+        UndirectedSparseGraph mst_jung = kruskalJung.getMst((UndirectedSparseGraph) jconv.ADTtoJung(g));
         System.out.println(mst_jung);
         System.out.println("MST Jung weight: " + kruskalJung.getMstWeight(mst_jung, Constants.intArith));
     }
