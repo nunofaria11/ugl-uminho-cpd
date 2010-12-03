@@ -12,9 +12,7 @@ import GraphADType.Support.UnionFind_ADT;
 import JungTest.EdgeJ;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 import org.jgrapht.graph.WeightedMultigraph;
 
 /**
@@ -23,40 +21,13 @@ import org.jgrapht.graph.WeightedMultigraph;
  */
 public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
 
-    private ArrayList<EdgeJ> wannabes;
-    private HashMap<T, EdgeJ<Y>> nbors;
-    private UnionFind_ADT<T> uf;
-    private WeightedMultigraph<T, EdgeJ> graph;
-    private final EdgeJ<Y> maxEdge;
-
-    public BoruvkaJgraph(WeightedMultigraph g) {
-        this.graph = g;
-        this.wannabes = new ArrayList<EdgeJ>(g.edgeSet().size());
-        this.nbors = new HashMap<T, EdgeJ<Y>>(g.vertexSet().size());
-        this.uf = new UnionFind_ADT<T>(g.vertexSet());
-        this.maxEdge = getMaxEdge();
-    }
-
-    private EdgeJ<Y> getMaxEdge() {
-        Collection<EdgeJ> edges = graph.edgeSet();
-        Comparator<EdgeJ> max_comparator = new Comparator<EdgeJ>() {
-
-            public int compare(EdgeJ o1, EdgeJ o2) {
-                return o2.compareTo(o1);
-            }
-        };
-        PriorityQueue<EdgeJ> q = new PriorityQueue<EdgeJ>(edges.size(), max_comparator);
-        q.addAll(edges);
-        return q.poll();
-    }
-
     public Y getMstWeight(WeightedMultigraph<T, EdgeJ<Y>> g, TArithmeticOperations<Y> arith) {
         Y w = arith.zero_element();
         Collection<T> allnodes = g.vertexSet();
         Collection<T> vis = new ArrayList<T>();
         for (T n1 : allnodes) {
             vis.add(n1);
-            Collection<T> neighbors = getNeighbors(n1);
+            Collection<T> neighbors = getNeighbors(n1, g);
             for (T n2 : neighbors) {
                 if (!vis.contains(n2) && g.containsEdge(n1, n2)) {
                     w = arith.Add(w, g.getEdge(n1, n2).data);
@@ -66,7 +37,7 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
         return w;
     }
 
-    private ArrayList<T> getNeighbors(T node) {
+    private ArrayList<T> getNeighbors(T node, WeightedMultigraph<T, EdgeJ<Y>> graph) {
         ArrayList<T> neighbors = new ArrayList<T>();
         ArrayList<T> allnodes = new ArrayList<T>(graph.vertexSet());
         allnodes.remove(node);
@@ -78,17 +49,28 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
         return neighbors;
     }
 
-    public WeightedMultigraph getMst() {
+    private void addAllEdges(WeightedMultigraph<T, EdgeJ> mst, ArrayList<EdgeJ> mstEdges, WeightedMultigraph<T, EdgeJ> g) {
+        for (EdgeJ edge : mstEdges) {
+            mst.addEdge(g.getEdgeSource(edge), g.getEdgeTarget(edge));
+        }
+    }
+
+    public WeightedMultigraph getMst(WeightedMultigraph<T, EdgeJ> graph) {
         WeightedMultigraph mst = new WeightedMultigraph(EdgeJ.class);
-        this.wannabes = new ArrayList<EdgeJ>(graph.edgeSet());
-        this.nbors = new HashMap<T, EdgeJ<Y>>(graph.vertexSet().size());
-        int next;
+        ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(graph.edgeSet().size());
+        HashMap<T, EdgeJ<Y>> nbors = new HashMap<T, EdgeJ<Y>>(graph.vertexSet().size());
+        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.vertexSet());
+
+        ArrayList<EdgeJ> mstEdges = new ArrayList<EdgeJ>();
+
+        int nextIteration;
         // do this until there are no more wannabes
-        for (int i = graph.edgeSet().size(); i != 0; i = next) {
+        for (int i = graph.edgeSet().size(); i != 0; i = nextIteration) {
             for (T node : graph.vertexSet()) {
-                nbors.put(node, maxEdge);
+                nbors.put(node, null);
             }
-            next = 0;
+            ArrayList<EdgeJ> edges2add = new ArrayList<EdgeJ>();
+            nextIteration = 0;
             T l, m;
             for (EdgeJ edge : wannabes) {
                 l = uf.find(graph.getEdgeSource(edge));
@@ -97,29 +79,33 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
                     continue;
                 }
                 // if this one is lower than the one in neighbors then add it
-                if (edge.compareTo(nbors.get(l)) == -1) {
+                if (nbors.get(l) == null || edge.compareTo(nbors.get(l)) == -1) {
                     nbors.put(l, edge);
                 }
                 // if this one is also lower than the one in neighbors then add it
-                if (edge.compareTo(nbors.get(m)) == -1) {
+                if (nbors.get(m) == null || edge.compareTo(nbors.get(m)) == -1) {
                     nbors.put(m, edge);
                 }
-                wannabes.set(next, edge);
-                next++;
+                wannabes.set(nextIteration, edge);
+                nextIteration++;
             }
             // for every vertex check its nearest neighbor
             for (T node : graph.vertexSet()) {
                 EdgeJ edge = nbors.get(node);
-                if (!edge.equals(maxEdge)) {
+                if (edge != null) {
                     l = graph.getEdgeSource(edge);
                     m = graph.getEdgeTarget(edge);
                     if (!uf.find(l, m)) { // if they are not the same root
                         uf.union(l, m);
-                        mst.addEdge(edge, l, m);
+//                        mst.addEdge(edge, l, m);
+                        edges2add.add(edge);
                     }
                 }
             }
+            wannabes.removeAll(edges2add);
+            mstEdges.addAll(edges2add);
         }
+        addAllEdges(mst, mstEdges, graph);
         return mst;
     }
 
@@ -130,9 +116,9 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
         JGraphConverter jconv = new JGraphConverter();
         WeightedMultigraph<String, Integer> converted = jconv.ADTtoJGraph(g);
         System.out.println(converted);
-        KruskalJgraph borJgraph = new KruskalJgraph(converted);
+        KruskalJgraph borJgraph = new KruskalJgraph();
 
-        WeightedMultigraph mst_jgraph = borJgraph.getMst();
+        WeightedMultigraph mst_jgraph = borJgraph.getMst(converted);
         System.out.println(mst_jgraph);
         System.out.println("MST JGraph weight: " + borJgraph.getMstWeight(mst_jgraph, Constants.intArith));
 

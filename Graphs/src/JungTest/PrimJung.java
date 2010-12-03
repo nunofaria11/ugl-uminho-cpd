@@ -25,33 +25,20 @@ import org.apache.commons.collections15.Factory;
  */
 public class PrimJung<T, Y extends Comparable<Y>> {
 
-    UndirectedSparseGraph<T, EdgeJ<Y>> graph;
     ArrayList<T> visited;
-    PriorityQueue<EdgeJ<Y>> Q;
+//    PriorityQueue<EdgeJ<Y>> Q;
 
-    public PrimJung(UndirectedSparseGraph<T, EdgeJ<Y>> graph) {
-        this.graph = graph;
+    public PrimJung() {
         this.visited = new ArrayList<T>();
-        this.Q = new PriorityQueue<EdgeJ<Y>>();
-        Q = new PriorityQueue<EdgeJ<Y>>(graph.getEdgeCount(), new Comparator<EdgeJ<Y>>() {
-
-            public int compare(EdgeJ o1, EdgeJ o2) {
-                return o1.compareTo(o2);
-            }
-        });
     }
 
-    public void addVisited(T node) {
+    public void addVisited(T node, UndirectedSparseGraph<T, EdgeJ<Y>> graph, PriorityQueue<EdgeJ<Y>> Q) {
         visited.add(node);
         ArrayList<EdgeJ<Y>> removals = new ArrayList<EdgeJ<Y>>();
         for (EdgeJ e : Q) {
             Pair<T> node_pair = graph.getEndpoints(e);
             T node1 = node_pair.getFirst();
             T node2 = node_pair.getSecond();
-
-            if (node2 == null) {
-                System.out.println("edge node2 is null!!!");
-            }
             if (node2.equals(node)) {
                 removals.add(e);
             }
@@ -62,7 +49,7 @@ public class PrimJung<T, Y extends Comparable<Y>> {
         Q.removeAll(removals);
     }
 
-    public String printEdges(ArrayList<EdgeJ<Y>> edges) {
+    public String printEdges(ArrayList<EdgeJ<Y>> edges, UndirectedSparseGraph<T, EdgeJ<Y>> graph) {
         StringBuilder s = new StringBuilder();
         s.append("[");
         for (EdgeJ edge : edges) {
@@ -72,16 +59,24 @@ public class PrimJung<T, Y extends Comparable<Y>> {
         return s.toString();
     }
 
-    private T getRandomStartNode() {
+    private T getRandomStartNode(UndirectedSparseGraph<T, EdgeJ<Y>> graph) {
         ArrayList<T> nodes = new ArrayList<T>(graph.getVertices());
         return nodes.get(new Random().nextInt(graph.getVertexCount()));
     }
 
-    public UndirectedSparseGraph getMst() {
+    public UndirectedSparseGraph getMst(UndirectedSparseGraph<T, EdgeJ<Y>> g) {
+
+        UndirectedSparseGraph<T, EdgeJ<Y>> graph = g;
         UndirectedSparseGraph<T, EdgeJ<Y>> mst = new UndirectedSparseGraph<T, EdgeJ<Y>>();
-        T start = getRandomStartNode();
+        T start = getRandomStartNode(g);
+        PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>(graph.getEdgeCount(), new Comparator<EdgeJ<Y>>() {
+
+            public int compare(EdgeJ o1, EdgeJ o2) {
+                return o1.compareTo(o2);
+            }
+        });
         while (visited.size() < graph.getVertexCount() - 1) {
-            addVisited(start);
+            addVisited(start, graph, Q);
             ArrayList<T> nbors = new ArrayList<T>();
             nbors.addAll(graph.getNeighbors(start));
             HashMap<EdgeJ<Y>, T> endpoints_edges = new HashMap<EdgeJ<Y>, T>();
@@ -122,8 +117,8 @@ public class PrimJung<T, Y extends Comparable<Y>> {
         GraphADT g = JungConverter.createSmallGraphADT();
         JungConverter jconv = new JungConverter();
 
-        PrimJung primJung = new PrimJung((UndirectedSparseGraph) jconv.ADTtoJung(g));
-        UndirectedSparseGraph mst_jung = primJung.getMst();
+        PrimJung primJung = new PrimJung();
+        UndirectedSparseGraph mst_jung = primJung.getMst((UndirectedSparseGraph) jconv.ADTtoJung(g));
         System.out.println(mst_jung);
         System.out.println("MST Jung weight: " + primJung.getMstWeight(mst_jung, Constants.intArith));
 

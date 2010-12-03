@@ -58,18 +58,18 @@ public class RunBenchmark {
 //            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
             return (end - begin);
         } else if (alg.equals("kruskal")) {
-            KruskalADT_UF b = new KruskalADT_UF(g);
+            KruskalADT_UF b = new KruskalADT_UF();
             long begin = System.currentTimeMillis();
-            GraphADT mst = b.getMst();
+            GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("kruskal time:\t" + (end - begin));
 //            int total = 0;
 //            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
             return (end - begin);
         } else if (alg.equals("prim")) {
-            PrimADT b = new PrimADT(g);
+            PrimADT b = new PrimADT();
             long begin = System.currentTimeMillis();
-            GraphADT mst = b.getMst();
+            GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("prim time:\t" + (end - begin));
 //            int total = 0;

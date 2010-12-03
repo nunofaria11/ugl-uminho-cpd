@@ -15,9 +15,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
 /**
  *
@@ -25,77 +23,64 @@ import java.util.PriorityQueue;
  */
 public class BoruvkaJung<T, Y extends Comparable<Y>> {
 
-    private ArrayList<EdgeJ> wannabes;
-    private HashMap<T, EdgeJ<Y>> nbors;
-    private UnionFind_ADT<T> uf;
-    private UndirectedSparseGraph<T, EdgeJ> graph;
-    private final EdgeJ<Y> maxEdge;
-
-    public BoruvkaJung(UndirectedSparseGraph g) {
-        this.graph = g;
-        this.wannabes = new ArrayList<EdgeJ>(g.getEdgeCount());
-        this.nbors = new HashMap<T, EdgeJ<Y>>(g.getVertexCount());
-        this.uf = new UnionFind_ADT<T>(g.getVertices());
-        this.maxEdge = getMaxEdge();
+    private void addAllEdges(UndirectedSparseGraph mst, ArrayList<EdgeJ> mstEdges, UndirectedSparseGraph g) {
+        for (EdgeJ edge : mstEdges) {
+            mst.addEdge(edge, g.getEndpoints(edge));
+        }
     }
 
-    private EdgeJ<Y> getMaxEdge() {
-        Collection<EdgeJ> edges = graph.getEdges();
-        Comparator<EdgeJ> max_comparator = new Comparator<EdgeJ>() {
+    public UndirectedSparseGraph getMst(UndirectedSparseGraph<T, EdgeJ> g) {
 
-            public int compare(EdgeJ o1, EdgeJ o2) {
-                return o2.compareTo(o1);
-            }
-        };
-        PriorityQueue<EdgeJ> q = new PriorityQueue<EdgeJ>(edges.size(), max_comparator);
-        q.addAll(edges);
-        return q.poll();
-    }
-
-    public UndirectedSparseGraph getMst() {
+        ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(g.getEdges());
+        HashMap<T, EdgeJ<Y>> nbors = new HashMap<T, EdgeJ<Y>>(g.getVertexCount());
+        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(g.getVertices());
         UndirectedSparseGraph mst = new UndirectedSparseGraph();
-        this.wannabes = new ArrayList<EdgeJ>(graph.getEdges());
-        this.nbors = new HashMap<T, EdgeJ<Y>>(graph.getVertexCount());
-        int next;
+        ArrayList<EdgeJ> mstEdges = new ArrayList<EdgeJ>();
+
+        int nextIteration;
         // do this until there are no more wannabes
-        for (int i = graph.getEdgeCount(); i != 0; i = next) {
-            for (T node : graph.getVertices()) {
-                nbors.put(node, maxEdge);
+        for (int i = g.getEdgeCount(); i != 0; i = nextIteration) {
+            for (T node : g.getVertices()) {
+                nbors.put(node, null);
             }
-            next = 0;
+            ArrayList<EdgeJ> edges2add = new ArrayList<EdgeJ>();
+            nextIteration = 0;
             T l, m;
             for (EdgeJ edge : wannabes) {
-                Pair<T> nodePair = graph.getEndpoints(edge);
+                Pair<T> nodePair = g.getEndpoints(edge);
                 l = uf.find(nodePair.getFirst());
                 m = uf.find(nodePair.getSecond());
                 if (l.equals(m)) {
                     continue;
                 }
                 // if this one is lower than the one in neighbors then add it
-                if (edge.compareTo(nbors.get(l)) == -1) {
+                if (nbors.get(l) == null || edge.compareTo(nbors.get(l)) == -1) {
                     nbors.put(l, edge);
                 }
                 // if this one is also lower than the one in neighbors then add it
-                if (edge.compareTo(nbors.get(m)) == -1) {
+                if (nbors.get(m) == null || edge.compareTo(nbors.get(m)) == -1) {
                     nbors.put(m, edge);
                 }
-                wannabes.set(next, edge);
-                next++;
+//                wannabes.set(nextIteration, edge);
+                nextIteration++;
             }
             // for every vertex check its nearest neighbor
-            for (T node : graph.getVertices()) {
+            for (T node : g.getVertices()) {
                 EdgeJ edge = nbors.get(node);
-                if (!edge.equals(maxEdge)) {
-                    Pair<T> node_pair = graph.getEndpoints(edge);
+                if (edge != null) {
+                    Pair<T> node_pair = g.getEndpoints(edge);
                     l = node_pair.getFirst();
                     m = node_pair.getSecond();
                     if (!uf.find(l, m)) { // if they are not the same root
                         uf.union(l, m);
-                        mst.addEdge(edge, l, m);
+                        edges2add.add(edge);
                     }
                 }
             }
+            wannabes.removeAll(edges2add);
+            mstEdges.addAll(edges2add);
         }
+        addAllEdges(mst, mstEdges, g);
         return mst;
     }
 
@@ -118,7 +103,7 @@ public class BoruvkaJung<T, Y extends Comparable<Y>> {
     public static void main(String[] args) {
 //        GraphADT g = JungConverter.createSmallGraphADT();
         // generate random graph
-        GenSaveReadADT.write();
+//        GenSaveReadADT.write();
         GraphInput gin = new GraphInput(GenSaveReadADT.file_name);
         GraphADT g = gin.readGraphADT();
 
@@ -130,8 +115,8 @@ public class BoruvkaJung<T, Y extends Comparable<Y>> {
 
         // ... now with JUNG
         JungConverter jconv = new JungConverter();
-        BoruvkaJung borJung = new BoruvkaJung((UndirectedSparseGraph) jconv.ADTtoJung(g));
-        UndirectedSparseGraph mst_jung = borJung.getMst();
+        BoruvkaJung borJung = new BoruvkaJung();
+        UndirectedSparseGraph mst_jung = borJung.getMst((UndirectedSparseGraph) jconv.ADTtoJung(g));
         System.out.println("MST Jung weight: " + borJung.getMstWeight(mst_jung, Constants.intArith));
     }
 }

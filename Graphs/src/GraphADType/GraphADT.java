@@ -6,13 +6,10 @@ package GraphADType;
 
 import GraphADType.Support.TArithmeticOperations;
 import EdgeOriented.EdgeEO;
-import GraphADType.Support.UnionFindInterface;
 import GraphADType.Support.UnionFind_ADT;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Graph Abstract Data-Type

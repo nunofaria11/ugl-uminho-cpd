@@ -24,17 +24,13 @@ import org.jgrapht.graph.WeightedMultigraph;
 public class PrimJgraph<T, Y extends Comparable<Y>> {
     // EdgeJ is shared between JUNG and JGraph libraries
 
-    WeightedMultigraph<T, EdgeJ<Y>> graph;
     ArrayList<T> visited;
-    PriorityQueue<EdgeJ<Y>> Q;
 
-    public PrimJgraph(WeightedMultigraph<T, EdgeJ<Y>> graph) {
-        this.graph = (WeightedMultigraph<T, EdgeJ<Y>>) graph.clone();
+    public PrimJgraph() {
         this.visited = new ArrayList<T>();
-        this.Q = new PriorityQueue<EdgeJ<Y>>();
     }
 
-    private void addVisited(T node) {
+    private void addVisited(T node, PriorityQueue<EdgeJ<Y>> Q, WeightedMultigraph<T, EdgeJ<Y>> graph) {
         visited.add(node);
         ArrayList<EdgeJ<Y>> removals = new ArrayList<EdgeJ<Y>>();
         for (EdgeJ e : Q) {
@@ -42,9 +38,6 @@ public class PrimJgraph<T, Y extends Comparable<Y>> {
             T node1 = graph.getEdgeSource(e);
             T node2 = graph.getEdgeTarget(e);
 
-            if (node2 == null) {
-                System.out.println("edge node2 is null!!!");
-            }
             if (node2.equals(node)) {
                 removals.add(e);
             }
@@ -55,22 +48,12 @@ public class PrimJgraph<T, Y extends Comparable<Y>> {
         Q.removeAll(removals);
     }
 
-    private T getRandomStartNode() {
+    private T getRandomStartNode(WeightedMultigraph<T, EdgeJ<Y>> graph) {
         ArrayList<T> nodes = new ArrayList<T>(graph.vertexSet());
         return nodes.get(new Random().nextInt(nodes.size()));
     }
 
-    private ArrayList<T> getNeighbors1(T node) {
-        ArrayList<EdgeJ<Y>> alledges = new ArrayList<EdgeJ<Y>>(graph.edgesOf(node));
-        System.out.println("edges of (" + node + "):" + graph.edgesOf(node));
-        ArrayList<T> nbors = new ArrayList<T>();
-        for (EdgeJ edge : alledges) {
-            nbors.add(graph.getEdgeTarget(edge));
-        }
-        return nbors;
-    }
-
-    private ArrayList<T> getNeighbors(T node) {
+    private ArrayList<T> getNeighbors(T node, WeightedMultigraph<T, EdgeJ<Y>> graph) {
         ArrayList<T> nbors = new ArrayList<T>();
         ArrayList<T> allnodes = new ArrayList<T>(graph.vertexSet());
         allnodes.remove(node);
@@ -82,13 +65,15 @@ public class PrimJgraph<T, Y extends Comparable<Y>> {
         return nbors;
     }
 
-    public WeightedMultigraph getMst() {
+    public WeightedMultigraph getMst(WeightedMultigraph<T, EdgeJ<Y>> graph) {
+
+        PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>();
         WeightedMultigraph<T, EdgeJ<Y>> mst = new WeightedMultigraph(EdgeJ.class);
-        T start = getRandomStartNode();
-        while (visited.size() < graph.vertexSet().size() - 1) {            
-            addVisited(start);
+        T start = getRandomStartNode(graph);
+        while (visited.size() < graph.vertexSet().size() - 1) {
+            addVisited(start, Q, graph);
             ArrayList<T> nbors = new ArrayList<T>();
-            nbors.addAll(getNeighbors(start));
+            nbors.addAll(getNeighbors(start, graph));
             HashMap<EdgeJ<Y>, T> endpoints_edges = new HashMap<EdgeJ<Y>, T>();
             for (T n2 : nbors) {
                 if (!visited.contains(n2)) {
@@ -113,7 +98,7 @@ public class PrimJgraph<T, Y extends Comparable<Y>> {
         Collection<T> vis = new ArrayList<T>();
         for (T n1 : allnodes) {
             vis.add(n1);
-            Collection<T> nbors = getNeighbors(n1);
+            Collection<T> nbors = getNeighbors(n1, g);
             for (T n2 : nbors) {
                 if (!vis.contains(n2) && g.containsEdge(n1, n2)) {
                     w = arith.Add(w, g.getEdge(n1, n2).data);
@@ -131,9 +116,9 @@ public class PrimJgraph<T, Y extends Comparable<Y>> {
         JGraphConverter jconv = new JGraphConverter();
         WeightedMultigraph<String, Integer> converted = jconv.ADTtoJGraph(g);
         System.out.println(converted);
-        PrimJgraph primJgraph = new PrimJgraph(converted);
+        PrimJgraph primJgraph = new PrimJgraph();
 
-        WeightedMultigraph mst_jgraph = primJgraph.getMst();
+        WeightedMultigraph mst_jgraph = primJgraph.getMst(converted);
         System.out.println(mst_jgraph);
         System.out.println("MST JGraph weight: " + primJgraph.getMstWeight(mst_jgraph, Constants.intArith));
 

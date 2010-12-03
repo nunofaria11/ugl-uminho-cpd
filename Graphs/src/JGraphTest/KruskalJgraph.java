@@ -21,18 +21,10 @@ import org.jgrapht.graph.WeightedMultigraph;
  */
 public class KruskalJgraph<T, Y extends Comparable<Y>> {
 
-    private PriorityQueue<EdgeJ<Y>> Q;
-    private UnionFind_ADT<T> uf;
-    private WeightedMultigraph<T, EdgeJ<Y>> graph;
-
-    public KruskalJgraph(WeightedMultigraph<T, EdgeJ<Y>> graph) {
-        this.graph = graph;
-        this.uf = new UnionFind_ADT<T>(graph.vertexSet());
-        this.Q = new PriorityQueue<EdgeJ<Y>>(graph.edgeSet());
-    }
-
-    public WeightedMultigraph getMst() {
+    public WeightedMultigraph getMst(WeightedMultigraph<T, EdgeJ<Y>> graph) {
         WeightedMultigraph<T, EdgeJ<Y>> mst = new WeightedMultigraph(EdgeJ.class);
+        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.vertexSet());
+        PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>(graph.edgeSet());
         //
         int edges_processed = 0;
         int edges_added = 0;
@@ -56,7 +48,7 @@ public class KruskalJgraph<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-    private ArrayList<T> getNeighbors(T node) {
+    private ArrayList<T> getNeighbors(T node, WeightedMultigraph<T, EdgeJ<Y>> graph) {
         ArrayList<T> nbors = new ArrayList<T>();
         ArrayList<T> allnodes = new ArrayList<T>(graph.vertexSet());
         allnodes.remove(node);
@@ -74,7 +66,7 @@ public class KruskalJgraph<T, Y extends Comparable<Y>> {
         Collection<T> vis = new ArrayList<T>();
         for (T n1 : allnodes) {
             vis.add(n1);
-            Collection<T> nbors = getNeighbors(n1);
+            Collection<T> nbors = getNeighbors(n1, g);
             for (T n2 : nbors) {
                 if (!vis.contains(n2) && g.containsEdge(n1, n2)) {
                     w = arith.Add(w, g.getEdge(n1, n2).data);
@@ -91,9 +83,9 @@ public class KruskalJgraph<T, Y extends Comparable<Y>> {
         JGraphConverter jconv = new JGraphConverter();
         WeightedMultigraph<String, Integer> converted = jconv.ADTtoJGraph(g);
         System.out.println(converted);
-        KruskalJgraph kruskalJgraph = new KruskalJgraph(converted);
+        KruskalJgraph kruskalJgraph = new KruskalJgraph();
 
-        WeightedMultigraph mst_jgraph = kruskalJgraph.getMst();
+        WeightedMultigraph mst_jgraph = kruskalJgraph.getMst(converted);
         System.out.println(mst_jgraph);
         System.out.println("MST JGraph weight: " + kruskalJgraph.getMstWeight(mst_jgraph, Constants.intArith));
 
