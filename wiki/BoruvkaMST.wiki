@@ -11,46 +11,42 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
 
 {{{
         for (int i = g.size(); i != 0; i = nextIteration) {
-            // initialize each node's minEdge with null - which will correspond to the maximum edge
-            for (Node<T> node : allnodes) {
-                nbors.put(node, null);
-            }
+            nbors = ...// new neighbors map
             // edges to add found in this iteration
-            ArrayList<EdgeEO<T, Y>> edges2add = new ArrayList<EdgeEO<T, Y>>();
-            Node<T> l, m;
+            edges2add = new ArrayList<EdgeEO<T, Y>>();
+            Node source, target;
             nextIteration = 0;
-            for (EdgeEO<T, Y> e : wannabes) {
+            for (EdgeEO<T, Y> edge : wannabes) {
                 // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
-                l = (Node<T>) g._union_find.find(e.getNode1());
-                m = (Node<T>) g._union_find.find(e.getNode2());
-                if (l.equals(m)) {
+                l = union_find.find(edge.getSourceNode());
+                m = union_find.find(edge.getTargetNode());
+                if (source.equals(target)) { // it means the node are already in the same tree in the forest - ignore this edge
                     continue;
                 }
-                // if e.getWeight() < nbors.get(l).getWeight()
-                // (weight==null)?(isMax):(notMax)
-                if (e.compareTo(nbors.get(l)) == -1 || nbors.get(l) == null) {
-                    nbors.put(l, e);
+                // if the weight of the current edge is lower than the one stored for 'l'...
+                if (edge.getWeight() < nbors.get(source).getWeight()) {
+                    nbors.put(source, edge);
                 }
-                // if e.getWeight() < nbors.get(m).getWeight()
-                // (weight==null)?(isMax):(notMax)
-                if (e.compareTo(nbors.get(m)) == -1 || nbors.get(m) == null) {
-                    nbors.put(m, e);
+                if (edge.getWeight() < nbors.get(target).getWeight()) {
+                    nbors.put(target, edge);
                 }
                 nextIteration++;
             }
             // for every vertex check its nearest neighbor
-            for (Node<T> n : allnodes) {
-                if (nbors.get(n) != null) {
-                    EdgeEO<T, Y> nEdge = nbors.get(n);
-                    l = nEdge.getNode1();
-                    m = nEdge.getNode2();
-                    if (!g._union_find.find(l, m)) {
-                        g._union_find.union(l, m);
-                        edges2add.add(nEdge);
+            for (Node<T> node : allnodes) {
+                if (nbors.get(node).getWeight() < MaxEdgeWeight) {
+                    EdgeEO<T, Y> nEdge = nbors.get(node);
+                    source = nEdge.getSourceNode();
+                    target = nEdge.getTargetNode();
+                    // if 'source' and 'target' don't have the same root they are in a different tree...
+                    //if so, rearrange forest and add it this edge to MST
+                    if (!g._union_find.find(source, target)) {
+                        g._union_find.union(source, target); //...rearrange forest
+                        edges2add.add(nEdge);                //...add this edge to MST
                     }
                 }
             }
-            // remove wannabe edges that are already in the mst (duplicated ones also)
+            // remove wannabe edges that are already in the MST
             wannabes.removeAll(edges2add);
             mstEdges.addAll(edges2add);
         }
