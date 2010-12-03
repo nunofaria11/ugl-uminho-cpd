@@ -39,7 +39,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
                     source = nEdge.getSourceNode();
                     target = nEdge.getTargetNode();
                     // if 'source' and 'target' don't have the same root they are in a different tree...
-                    //if so, rearrange forest and add it this edge to MST
+                    // if so, rearrange forest and add this edge to MST
                     if (!g._union_find.find(source, target)) {
                         g._union_find.union(source, target); //...rearrange forest
                         edges2add.add(nEdge);                //...add this edge to MST
