@@ -4,26 +4,22 @@
 
 The Kruskal MST algorithm consists in creating a forest (where initially is made of #nodes single trees). At each step of the algorithm the minimum edge found in a priority queue is added, not following any specific connection order, just adding the minimum found edge. The algorithm consists in:
 {{{
-getMST(){
+getMST() {
    G = ...// graph to consider
    MST = ...// empty MST graph to return
-   Q = initQ(); //initialize ordered edge Queue with all edges in the G
+   Q = initQ(); //initialize ordered edge Queue with all edges in G
    union_find = new UnionFind(G.getAllVertices()); // initialize forest with all nodes in G
-   while(MST.getEdgeCount() < G.getEdgeCount() -1){
-
+   while(MST.getEdgeCount() < G.getEdgeCount() - 1) {
       minEdge = Q.poll();
       // now check if it forms a cycle using the forest structure (union_find)
       node1 = union_find.getRootOf(minEdge.getSourceNode());
       node2 = union_find.getRootOf(minEdge.getTargetNode());
-
       // if nodes are different it means they are not the same root - therefore they are 
       // in different trees
-
       if(node1 != node2){
             MST.addEdge(minEdge);
             // unite and rearrange both trees so that one may be a part of the other tree
-            union_find.Union(node1, node2);
-           
+            union_find.Union(node1, node2);  
       }
    }
    return MST;
