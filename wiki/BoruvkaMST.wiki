@@ -62,7 +62,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
                     node1 = nEdge.getSourceNode();
                     node2 = nEdge.getTargetNode();
                     if (G._union_find.NotSameRoot( node1, node2) ) {
-                        g._union_find.Union(node1, node2);
+                        G._union_find.Union(node1, node2);
                         edges2add.add(nEdge);
                     }
                 }
