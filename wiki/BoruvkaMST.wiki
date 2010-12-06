@@ -72,9 +72,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
             wannabes.removeAll(edges2add);
             mstEdges.addAll(edges2add);
 
-        }
-        // build graph of same type and fill it with the MST info
-        
+        }        
         MST.addAllEdges(mstEdges);
         return MST;
     }
