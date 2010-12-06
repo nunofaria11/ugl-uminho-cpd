@@ -16,12 +16,16 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
         List<Edge> wannabes = ...// get wannabe edges in MST from original graph
         G.initUnionFind();       // build control forest
         // initialize forest (nbors hashmap - each node is initially a root)
+
         HashMap<Node, Edge> nbors = new HashMap<Node, Edge>(G.getNumNodes);
+
         List<Node> allnodes = G.getAllNodes();
+
         // the nextIteration variable controls if any wannabe was processed
         // - if it wasnt, no more wannabes means stop
         // - if wannabes were processed keep on to next iteration
         int nextIteration;
+
         // Repeat until there is only one tree
         for (int i = G.getNumEdges i != 0; i = nextIteration) {
             // initialize each node's minEdge with null - which will correspond to the maximum edge
@@ -32,17 +36,20 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
             List<Edge> edges2add = ...// new empty list of edges to add found in this iteration
             Node node1, node2;
             nextIteration = 0;
-            for (EdgeEO<T, Y> edge : wannabes) {
+            for (Edge edge : wannabes) {
                 // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
                 node1 = G._union_find.getRootOf( edge.getSourceNode() );
                 node2 = G._union_find.getRootOf( edge.getTargetNode() );
+
                 // if they are equal => they are the same root - dont add edge otherwise we would have a cycle
                 if (node1 != node2) {
                     continue;
                 }
+
                 if ( edge.getWeight() < nbors.get(node1).getWeight() ) {
                     nbors.put(node1, edge);
                 }
+
                 if ( edge.getWeight() < nbors.get(node2).getWeight() ) {
                     nbors.put(node2, edge);
                 }
@@ -60,12 +67,13 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
                     }
                 }
             }
+
             // remove wannabe edges that are already in the MST
             wannabes.removeAll(edges2add);
             mstEdges.addAll(edges2add);
+
         }
         // build graph of same type and fill it with the MST info
-        
         
         MST.addAllEdges(mstEdges);
         return MST;
