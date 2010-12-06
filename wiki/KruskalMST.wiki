@@ -15,7 +15,7 @@ getMST() {
       Node node1 = union_find.getRootOf(minEdge.getSourceNode());
       Node node2 = union_find.getRootOf(minEdge.getTargetNode());
       // if nodes are different it means they are not the same root - therefore they are 
-      // in different trees
+      // in different trees, therefore a cycle doesn't exist
       if(node1 != node2){
             MST.addEdge(minEdge);
             // unite and rearrange both trees so that one may be a part of the other tree
