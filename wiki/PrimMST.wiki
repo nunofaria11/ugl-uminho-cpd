@@ -14,7 +14,7 @@ The prim algorithm consists in starting in a given node and, from there, maintai
             Collection<Edge> nbors = G.getNeighborEdges(start);
             List<EdgeEO> newEdges = ...// initialize empty list to store new edges to add
             for (Edge edge : nbors) {
-                if (!visited.contains( e.getTargetNode() ) {
+                if (!visited.contains( edge.getTargetNode() ) {
                     newEdges.add(edge);
                 }
             }
