@@ -29,4 +29,4 @@ The prim algorithm consists in starting in a given node and, from there, maintai
 *NOTE:* the `addVisited` method performs an extra operation which is removing from `Q` all the references to the new visited node being added.
 
 ==Memory access==
-This algorithm accesses the graph structure at each iteration by retrieving all the edges of a node. This may be an important issue; one of the improvements possible to apply here is to order the neighbor edge list returned so that the process of finding the minimum edge is facilitated - simply put, the graph neighbors list would be an Edge queue it self.
+This algorithm accesses the graph structure at each iteration by retrieving all the edges of a node. This may be an important issue; one of the improvements possible to apply here is to order the neighbor edge list returned so that the process of finding the minimum edge is facilitated - simply put, the graph neighbors list would be an Edge queue itself.
