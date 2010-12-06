@@ -24,5 +24,8 @@ getMST() {
    }
    return MST;
 }
-
 }}}
+The direct accesses made to the graph structure `G` are only made at the beginning of the algorithm, when it builds the forest and the edge queue. In fact, this algorithm performs very little direct and continuous access to the graph structure, making use of auxiliary data-structures to operate on the graph data. So the possible improvements, may come from enriching these auxiliary structures, instead of focusing on good memory locality in the graph structure.
+
+
+Inside the cycle, the accessed structure are the queue and the forest, therefore these structures should be inserted in graph structure in order to focus the performance  in the structure.
