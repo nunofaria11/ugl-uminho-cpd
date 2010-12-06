@@ -10,39 +10,53 @@ The implementation of this algorithm uses three main concepts:
 Simply put, Boruvka's algorithm, runs through every node in the graph and searches for the minimum edge associated to it - the structure where we store this is `nbors`. However, at first we do not explicitly iterate through all the nodes - we iterate through the available edges (`wannabe` edges). We need to build the `nbors` map at each new iteration and then we run through every node and (if they are not in the same tree in the forest, in case there are ) the minimum edge associated with it is added.
 
 {{{
-        for (int i = g.size(); i != 0; i = nextIteration) {
-            nbors = ...// new neighbors map
+    public GraphADT getMst(GraphADT G) {
+        Graph MST           = ...// new empty MST graph
+        List<Edge> mstEdges = ...// initialize empty list of mst edges to add
+        List<Edge> wannabes = ...// get wannabe edges in MST from original graph
+        G.initUnionFind();       // build control forest
+        // initialize forest (nbors hashmap - each node is initially a root)
+        HashMap<Node, Edge> nbors = new HashMap<Node, Edge>(G.getNumNodes);
+        List<Node> allnodes = G.getAllNodes();
+        // the nextIteration variable controls if any wannabe was processed
+        // - if it wasnt, no more wannabes means stop
+        // - if wannabes were processed keep on to next iteration
+        int nextIteration;
+        // Repeat until there is only one tree
+        for (int i = G.getNumEdges i != 0; i = nextIteration) {
+            // initialize each node's minEdge with null - which will correspond to the maximum edge
+            for (Node node : allnodes) {
+                nbors.put(node, null);
+            }
             // edges to add found in this iteration
-            edges2add = new ArrayList<EdgeEO<T, Y>>();
-            Node source, target;
+            List<Edge> edges2add = ...// new empty list of edges to add found in this iteration
+            Node node1, node2;
             nextIteration = 0;
             for (EdgeEO<T, Y> edge : wannabes) {
                 // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
-                source = union_find.find(edge.getSourceNode());
-                target = union_find.find(edge.getTargetNode());
-                if (source.equals(target)) { // it means the node are already in the same tree in the forest - ignore this edge
+                node1 = G._union_find.getRootOf( edge.getSourceNode() );
+                node2 = G._union_find.getRootOf( edge.getTargetNode() );
+                // if they are equal => they are the same root - dont add edge otherwise we would have a cycle
+                if (node1 != node2) {
                     continue;
                 }
-                // if the weight of the current edge is lower than the one stored for 'l'...
-                if (edge.getWeight() < nbors.get(source).getWeight()) {
-                    nbors.put(source, edge);
+                if ( edge.getWeight() < nbors.get(node1).getWeight() ) {
+                    nbors.put(node1, edge);
                 }
-                if (edge.getWeight() < nbors.get(target).getWeight()) {
-                    nbors.put(target, edge);
+                if ( edge.getWeight() < nbors.get(node2).getWeight() ) {
+                    nbors.put(node2, edge);
                 }
-                nextIteration++;
+                nextIteration++; // increment - this means edges were processed
             }
             // for every vertex check its nearest neighbor
-            for (Node<T> node : allnodes) {
-                if (nbors.get(node).getWeight() < MaxEdgeWeight) {
-                    EdgeEO<T, Y> nEdge = nbors.get(node);
-                    source = nEdge.getSourceNode();
-                    target = nEdge.getTargetNode();
-                    // if 'source' and 'target' don't have the same root they are in a different tree...
-                    // if so, rearrange forest and add this edge to MST
-                    if (!g._union_find.find(source, target)) {
-                        g._union_find.union(source, target); //...rearrange forest
-                        edges2add.add(nEdge);                //...add this edge to MST
+            for (Node node : allnodes) {
+                if (nbors.get(n) != null) {
+                    Edge nEdge = nbors.get(node);
+                    node1 = nEdge.getSourceNode();
+                    node2 = nEdge.getTargetNode();
+                    if (G._union_find.NotSameRoot( node1, node2) ) {
+                        g._union_find.Union(node1, node2);
+                        edges2add.add(nEdge);
                     }
                 }
             }
@@ -50,6 +64,12 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
             wannabes.removeAll(edges2add);
             mstEdges.addAll(edges2add);
         }
+        // build graph of same type and fill it with the MST info
+        
+        
+        MST.addAllEdges(mstEdges);
+        return MST;
+    }
 }}}
 
 This implementation may still be altered because it doesn't makes use of too many accesses to the graph data-structure (or graph API) - which is not necessarily bad. The accesses this specific algorithm performs to the structure are:
