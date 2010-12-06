@@ -43,7 +43,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
 
                 // if they are equal => they are the same root - dont add edge otherwise we would have a cycle
                 if (node1 != node2) {
-                    continue;
+                    continue; // exits this iteration
                 }
 
                 if ( edge.getWeight() < nbors.get(node1).getWeight() ) {
