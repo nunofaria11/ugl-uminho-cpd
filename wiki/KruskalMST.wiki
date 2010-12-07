@@ -8,7 +8,7 @@ getMST(Graph G) {
    Graph MST  = ...// empty MST graph to return
    Queue Q    = initQ(); //initialize ordered edge Queue with all edges in G
    union_find = new UnionFind(G.getAllVertices()); // initialize forest with all nodes in G
-   while(MST.getEdgeCount() < G.getEdgeCount() - 1) {
+   while(MST.getEdgeCount() < G.getNodeCount() - 1) {
       Edge minEdge = Q.poll();
       // now check if it forms a cycle using the forest structure (union_find)
       Node node1 = union_find.getRootOf(minEdge.getSourceNode());
