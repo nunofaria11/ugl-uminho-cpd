@@ -57,7 +57,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
             }
             // for every vertex check its nearest neighbor
             for (Node node : allnodes) {
-                if (nbors.get(n) != null) {
+                if (nbors.get(node) != null) {
                     Edge nEdge = nbors.get(node);
                     node1 = nEdge.getSourceNode();
                     node2 = nEdge.getTargetNode();
