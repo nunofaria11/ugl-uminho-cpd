@@ -12,7 +12,7 @@ import java.util.Map;
  * Union find structure with abstract data types.
  * @author nuno
  */
-public class UnionFind_ADT<X> {
+public class UnionFind_ADT<X> implements UnionFind<X> {
 
     private Map<X, Integer> sz;
     private Map<X, X> id;
@@ -56,7 +56,4 @@ public class UnionFind_ADT<X> {
     public String toString() {
         return "UnionFind_ADT{" + "sz=" + sz + "id=" + id + '}';
     }
-
-    
-
 }

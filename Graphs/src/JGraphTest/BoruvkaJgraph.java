@@ -51,13 +51,21 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
 
     private void addAllEdges(WeightedMultigraph<T, EdgeJ> mst, ArrayList<EdgeJ> mstEdges, WeightedMultigraph<T, EdgeJ> g) {
         for (EdgeJ edge : mstEdges) {
-            mst.addEdge(g.getEdgeSource(edge), g.getEdgeTarget(edge));
+            T source = g.getEdgeSource(edge);
+            T target = g.getEdgeTarget(edge);
+            if (!mst.containsVertex(source)) {
+                mst.addVertex(source);
+            }
+            if (!mst.containsVertex(target)) {
+                mst.addVertex(target);
+            }
+            mst.addEdge(source, target, edge);
         }
     }
 
     public WeightedMultigraph getMst(WeightedMultigraph<T, EdgeJ> graph) {
         WeightedMultigraph mst = new WeightedMultigraph(EdgeJ.class);
-        ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(graph.edgeSet().size());
+        ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(graph.edgeSet());
         HashMap<T, EdgeJ<Y>> nbors = new HashMap<T, EdgeJ<Y>>(graph.vertexSet().size());
         UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.vertexSet());
 
@@ -86,11 +94,12 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
                 if (nbors.get(m) == null || edge.compareTo(nbors.get(m)) == -1) {
                     nbors.put(m, edge);
                 }
-                wannabes.set(nextIteration, edge);
+//                wannabes.set(nextIteration, edge);
                 nextIteration++;
             }
             // for every vertex check its nearest neighbor
             for (T node : graph.vertexSet()) {
+
                 EdgeJ edge = nbors.get(node);
                 if (edge != null) {
                     l = graph.getEdgeSource(edge);
@@ -116,7 +125,7 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
         JGraphConverter jconv = new JGraphConverter();
         WeightedMultigraph<String, Integer> converted = jconv.ADTtoJGraph(g);
         System.out.println(converted);
-        KruskalJgraph borJgraph = new KruskalJgraph();
+        BoruvkaJgraph borJgraph = new BoruvkaJgraph();
 
         WeightedMultigraph mst_jgraph = borJgraph.getMst(converted);
         System.out.println(mst_jgraph);

@@ -4,6 +4,7 @@
  */
 package GraphADType.Support;
 
+import EdgeOriented.EdgeEO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -17,14 +18,34 @@ public class NTreeADT<X> {
 
     X data;
     NTreeADT parent;
-    ArrayList<NTreeADT> childs;
+    ArrayList<NTreeADT<X>> childs;
     boolean visited;
 
     public NTreeADT(X data) {
         this.data = data;
-        this.childs = new ArrayList<NTreeADT>();
+        this.childs = new ArrayList<NTreeADT<X>>();
         this.parent = null;
         this.visited = false;
+    }
+
+    public ArrayList<NTreeADT<X>> getChilds() {
+        return childs;
+    }
+
+    public X getData() {
+        return data;
+    }
+
+    public NTreeADT getParent() {
+        return parent;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public boolean hasChildren(){
+        return !childs.isEmpty();
     }
 
     public boolean addChild(NTreeADT<X> child) {
@@ -36,6 +57,14 @@ public class NTreeADT<X> {
         NTreeADT child = new NTreeADT(child_data);
         child.parent = this;
         return addChild(child);
+    }
+
+    public boolean addChilds(Collection<X> col) {
+        boolean ret = true;
+        for (X ch : col) {
+            ret &= addChild(ch);
+        }
+        return ret;
     }
 
     // http://www.codeproject.com/KB/java/BFSDFS.aspx
@@ -53,7 +82,7 @@ public class NTreeADT<X> {
         rootNode.visited = true;
         while (!q.isEmpty()) {
             NTreeADT<X> n = q.remove();
-            for(NTreeADT<X> ch : n.childs){
+            for (NTreeADT<X> ch : n.childs) {
                 ch.visited = true;
                 ret.add(ch.data);
                 q.add(ch);
@@ -63,7 +92,6 @@ public class NTreeADT<X> {
         return ret;
     }
 //
-
 
     /**
      * Returns the number of nodes
@@ -80,6 +108,20 @@ public class NTreeADT<X> {
         }
         return t;
 
+    }
+
+    private String toStringChilds() {
+        StringBuilder s = new StringBuilder();
+        for (NTreeADT ch : childs) {
+            s.append(ch.data);
+            s.append(", ");
+        }
+        return s.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "{" + "data=" + data + ", childs=" + toStringChilds() + ", parent=" + ((parent != null) ? (parent.data) : ("null")) + "}";
     }
 
     public static void main(String[] args) {

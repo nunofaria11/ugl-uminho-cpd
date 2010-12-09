@@ -130,7 +130,7 @@ public class GenSaveReadADT {
                 alpha);     // alphabet to consider in node-ids
         GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
         g = (GraphMapAdj<String, Integer>) ggen.generate(g, size);
-        GraphOutput gout = new GraphOutput("bench" + size + "_test_matrix.ser");
+        GraphOutput gout = new GraphOutput("graph_" + size + ".ser");
         gout.saveGraphADT(g);
     }
 
@@ -161,29 +161,8 @@ public class GenSaveReadADT {
     }
 
     public static void main(String[] args) throws IOException {
-//        GenSaveReadADT.write_small();
-////        GraphADT read_g = GenSaveReadADT.read();
-//        GraphInput gin = new GraphInput("small_example_ADT.ser");
-//        GraphADT read_g = gin.readGraphADT();
-//
-////        GraphOutput gdot = new GraphOutput("g" + NUM_NODES + ".dot");
-//        GraphOutput gdot = new GraphOutput("small.dot");
-//        gdot.GraphtoDot(read_g);
-//
-//        System.out.println(read_g.toString());
-
-//        for (int s = 200; s <= 400; s += 50) {
-            GenSaveReadADT.write();
-//        }
-
-
-
-//        GraphInput gin = new GraphInput("bench100_test_wrange.ser");
-//        GraphADT g = gin.readGraphADT();//GenSaveReadADT.readTestBenchGraph(50);
-//        System.out.println(g.toString());
-//        GraphOutput gout = new GraphOutput("bench50_test_wrange.dot");
-//        gout.GraphtoDot(g);
-
-
+        for (int s = 550; s <= 1000; s += 50) {
+            GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
+        }
     }
 }

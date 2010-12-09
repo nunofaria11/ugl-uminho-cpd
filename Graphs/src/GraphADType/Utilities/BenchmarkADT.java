@@ -80,11 +80,11 @@ public class BenchmarkADT {
     }
 
     public void runKruskal(GraphADT g) {
-        KruskalADT krusk = new KruskalADT(g);
+        KruskalADT krusk = new KruskalADT();
         GraphADT mst;
         int total = 0;
         long begin = System.currentTimeMillis();
-        mst = krusk.getMst();
+        mst = krusk.getMst(g);
         long end = System.currentTimeMillis();
         System.out.println("Time kruskal: " + (end - begin) + " ms");
 //        System.out.println("Kruskal MST weight: " + mst.getMstWeight(Constants.intArith, total));
