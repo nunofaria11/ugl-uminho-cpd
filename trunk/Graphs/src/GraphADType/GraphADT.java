@@ -6,10 +6,14 @@ package GraphADType;
 
 import GraphADType.Support.TArithmeticOperations;
 import EdgeOriented.EdgeEO;
+import GraphADType.Support.NTreeADT;
+import GraphADType.Support.UnionFindTree;
 import GraphADType.Support.UnionFind_ADT;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Graph Abstract Data-Type
@@ -22,7 +26,37 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     public GraphADT() {
     }
 
-    public void initUnionFind(){
+    public void buildGraph(UnionFindTree<Node<T>> uf) {
+
+        NTreeADT<Node<T>> mst_tree_start = uf.getMST();
+        clean();
+        addNodes(mst_tree_start.BFSTreeElements().size());
+        // queue for child source nodes
+        Queue<NTreeADT> q = new LinkedList<NTreeADT>();
+
+        q.add(mst_tree_start);
+        while (!q.isEmpty()) {
+            NTreeADT<Node<T>> source = q.poll();
+            if (source.hasChildren()) {
+                q.addAll(source.getChilds());
+            }
+
+            Node<T> sourceNode = source.getData();
+
+            if (!isNode(sourceNode)) {
+                addNode(sourceNode);
+            }
+            for (NTreeADT<Node<T>> target : source.getChilds()) {
+                Node<T> targetNode = target.getData();
+                if (!isNode(targetNode)) {
+                    addNode(targetNode);
+                }
+            }
+        }
+
+    }
+
+    public void initUnionFind() {
         this._union_find = new UnionFind_ADT<Node<T>>(this.getNodes());
     }
 
@@ -63,8 +97,8 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public void addEdge(Node<T> n1, Node<T> n2, Y w);
 
-    public void addAllEdges(Collection<EdgeEO<T,Y>> edges){
-        for(EdgeEO e : edges){
+    public void addAllEdges(Collection<EdgeEO<T, Y>> edges) {
+        for (EdgeEO e : edges) {
             addEdge(e.getNode1(), e.getNode2(), (Y) e.getEdge_data());
         }
     }

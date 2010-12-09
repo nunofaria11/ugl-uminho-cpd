@@ -7,17 +7,11 @@ package GraphADType.Algorithms;
 import EdgeOriented.EdgeEO;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
-import GraphADType.GraphMapSucc;
-import GraphADType.Support.Constants;
-import GraphADType.Support.GenSaveReadADT;
-import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.YRandomizer;
+import GraphADType.Support.UnionFindTree;
 import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
@@ -26,19 +20,9 @@ import java.util.PriorityQueue;
  */
 public class KruskalADT<T, Y extends Comparable<Y>> {
 
-    GraphADT g;
-    PriorityQueue<EdgeEO<T, Y>> Q;
-
-    public KruskalADT(GraphADT g) {
-        this.g = g;
-//        Q = new PriorityQueue<EdgeEO<T, Y>>();
-        initQ();
-
-    }
-
-    public void initQ() {
+    public PriorityQueue<EdgeEO<T, Y>> initQ(GraphADT g) {
         ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
-        Q = new PriorityQueue<EdgeEO<T, Y>>();
+        PriorityQueue<EdgeEO<T, Y>> Q = new PriorityQueue<EdgeEO<T, Y>>();
         for (Node<T> i : new ArrayList<Node<T>>(g.getNodes())) {
             visited.add(i);
             Collection<EdgeEO<T, Y>> edges = g.getNeighborEdges(i);
@@ -50,101 +34,37 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
             }
             Q.addAll(edgesToAdd);
         }
+        return Q;
     }
 
-    public GraphADT getMst() {
-        GraphADT mst = g.clone(); // we clone the graph so that the resulting mst has the same Graph-type than 'g'
+    public GraphADT getMst(GraphADT g) {
+        PriorityQueue<EdgeEO<T, Y>> Q = initQ(g);
+        UnionFindTree<Node<T>> _union_find = new UnionFindTree<Node<T>>(g.getNodes());
+        //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
+        GraphADT mst = g.clone();
         mst.clean();
         mst.addNodes(g.order());
         //
-        Node<T> key = null;
-        int size = 0;
-        Map<Node<T>, GraphADT<T, Y>> trees = new HashMap<Node<T>, GraphADT<T, Y>>();
-        GraphADT<T, Y> graphTmp, graph2;
-        for (Node<T> node : new ArrayList<Node<T>>(g.getNodes())) {
-            graphTmp = mst.clone();
-            graphTmp.clean();
-            graphTmp.addNode(node);
-            trees.put(node, graphTmp);
-            key = node;
-            size++;
-        }
-
-//        System.out.println("Started processing...");
-        EdgeEO<T, Y> edge;
-        while (size > 1 && !Q.isEmpty()) {
-            edge = Q.poll();
-            graphTmp = trees.get(edge.getNode1()).clone();
-            graph2 = trees.get(edge.getNode2()).clone();
-            if (!graph2.equals(graphTmp)) {
-                
-                for (Node<T> node : graph2.getNodes()) {
-                    graphTmp.addNode(node);
-                }
-                for (EdgeEO<T, Y> edge1 : graph2.getEdges()) {
-                    graphTmp.addEdge(edge1.getNode1(), edge1.getNode2(), edge1.getEdge_data());
-                }
-                graphTmp.addEdge(edge.getNode1(), edge.getNode2(), edge.getEdge_data());
-                for (Node<T> node : graph2.getNodes()) {
-                    trees.put(node, graphTmp);
-                }
-                size--;
+        int edges_processed = 0;
+        int edges_added = 0;
+        while (edges_processed < g.size() && edges_added < g.order() - 1) {
+            EdgeEO minEdge = Q.poll();
+            Node<T> ck1 = (Node<T>) _union_find.find(minEdge.getNode1());
+            Node<T> ck2 = (Node<T>) _union_find.find(minEdge.getNode2());
+            if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
+//                mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
+                // A U {(u,v)}
+                _union_find.union(ck1, ck2);
+                edges_added++;
             }
-//            System.out.println("Size: " + size);
+            edges_processed++;
         }
-        return trees.get(key);
         //
+        mst.buildGraph(_union_find);
+        return mst;
     }
 
-    public static void test_implementations(int size) {
-        TArithmeticOperations<String> strArith = Constants.strArith;
-
-        YRandomizer<Integer> iRand = Constants.randInteger;
-
-        ArrayList<String> alpha = new ArrayList<String>();
-        alpha.add("A");
-        alpha.add("B");
-        alpha.add("C");
-        alpha.add("D");
-        alpha.add("E");
-        alpha.add("F");
-        GraphGenADT ggen = new GraphGenADT(0.5, 90, 5, iRand, strArith, alpha);
-        /// copy random data to three different implementations
-        GraphMapAdj<String, Integer> g_map_adj = new GraphMapAdj<String, Integer>(size);
-//        GraphArraySucc<String, Integer> g_array_succ = new GraphArraySucc<String, Integer>(size);
-        GraphMapSucc<String, Integer> g_map_succ = new GraphMapSucc<String, Integer>(size);
-        System.out.println("generating...");
-
-        g_map_adj = (GraphMapAdj<String, Integer>) GenSaveReadADT.readTestBenchGraph(200);
-        System.out.println("converting...");
-        g_map_succ = g_map_adj.toGraphMapSucc();
-//        System.out.println("converting...");
-//        g_array_succ = g_map_adj.toGraphArraySucc();
-
-        // test boruvka for each implementation
-        KruskalADT b1 = new KruskalADT(g_map_adj); // exceeds heap memory
-        KruskalADT b2 = new KruskalADT(g_map_succ);
-//        BoruvkaADT b3 = new BoruvkaADT(g_array_succ);
-
-        System.out.println("1:");
-        GraphADT mst1 = b1.getMst(); // MUITO POUCO EFICIENTE - CAUSA memory heap space exceeded
-
-        System.out.println("2:");
-        GraphADT mst2 = b2.getMst();
-
-//        System.out.println("3:");
-//        GraphADT mst3 = b3.getMst();
-
-        int total1 = 0;
-        int total2 = 0;
-//        int total3 = 0;
-        System.out.println(mst1.getMstWeight(Constants.intArith, total1));
-        System.out.println(mst2.getMstWeight(Constants.intArith, total2));
-//        System.out.println(mst3.getMstWeight(Constants.intArith, total3));
-
-    }
-
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
         Node<String> n0 = new Node<String>("A");
@@ -174,9 +94,9 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n5, 8.1);
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
-        // create Prim instance...
-        KruskalADT kruskal = new KruskalADT(g);
-        GraphADT mst = kruskal.getMst();
+        // create Kruskal instance...
+        KruskalADT kruskal = new KruskalADT();
+        GraphADT mst = kruskal.getMst(g);
         System.out.println(mst.toString());
         // define arithmetic operations to calculate the total weight of type Y
         TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {
@@ -196,9 +116,5 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         Double total = 0.0;
         total = (Double) mst.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
-    }
-
-    public static void main(String[] args) {
-        KruskalADT.test_implementations(100);
     }
 }

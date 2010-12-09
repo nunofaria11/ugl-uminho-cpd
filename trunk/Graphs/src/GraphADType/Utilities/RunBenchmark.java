@@ -14,6 +14,17 @@ import GraphADType.GraphMapAdj;
 import GraphADType.GraphMapSucc;
 import GraphADType.GraphMatrix;
 import GraphIO.GraphInput;
+import JGraphTest.BoruvkaJgraph;
+import JGraphTest.JGraphConverter;
+import JGraphTest.KruskalJgraph;
+import JGraphTest.PrimJgraph;
+import JungTest.BoruvkaJung;
+import JungTest.EdgeJ;
+import JungTest.JungConverter;
+import JungTest.KruskalJung;
+import JungTest.PrimJung;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import org.jgrapht.graph.WeightedMultigraph;
 
 /**
  *
@@ -79,22 +90,82 @@ public class RunBenchmark {
         return -1;
     }
 
+    public static long runLibraries(String lib, String alg, GraphADT adt) {
+
+        if (lib.equals("jung")) {
+            JungConverter jconv = new JungConverter();
+            UndirectedSparseGraph<String, EdgeJ<Integer>> g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
+            g = jconv.ADTtoJung(adt);
+
+            if (alg.equals("boruvka")) {
+                BoruvkaJung bor = new BoruvkaJung();
+                long begin = System.currentTimeMillis();
+                UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("kruskal")) {
+                KruskalJung bor = new KruskalJung();
+                long begin = System.currentTimeMillis();
+                UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("prim")) {
+                PrimJung bor = new PrimJung();
+                long begin = System.currentTimeMillis();
+                UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+        }
+        if (lib.equals("jgraph")) {
+            JGraphConverter jconv = new JGraphConverter();
+            WeightedMultigraph<String, Integer> g = jconv.ADTtoJGraph(adt);
+
+            if (alg.equals("boruvka")) {
+                BoruvkaJgraph bor = new BoruvkaJgraph();
+                long begin = System.currentTimeMillis();
+                WeightedMultigraph<String, Integer> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("kruskal")) {
+                KruskalJgraph bor = new KruskalJgraph();
+                long begin = System.currentTimeMillis();
+                WeightedMultigraph<String, Integer> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("prim")) {
+                PrimJgraph bor = new PrimJgraph();
+                long begin = System.currentTimeMillis();
+                WeightedMultigraph<String, Integer> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                return (end - begin);
+            }
+        }
+        return -1;
+    }
+
     // le e converte o grafo para o tipo determinado
     public static GraphADT readGraph(String filename, String type) {
 //        System.out.println(filename);
         GraphInput gin = new GraphInput(filename);
         GraphADT gg = gin.readGraphADT();
-
         if (type.equals("mapsucc")) {
-//            System.out.println("convert to mapsucc...");
             return ((GraphMapAdj) gg).toGraphMapSucc();
         }
         if (type.equals("arraysucc")) {
-//            System.out.println("convert to arraysucc...");
             return ((GraphMapAdj) gg).toGraphArraySucc();
         }
         if (type.equals("matrix")) {
-//            System.out.println("convert to arraysucc...");
             return ((GraphMapAdj) gg).toGraphMatrix();
         }
         return gg;
@@ -125,16 +196,18 @@ public class RunBenchmark {
 
         // need to get size according to the file name to allocate N nodes in the
         // 'arraysucc' implementation
-        int size = Integer.parseInt(getOnlyNumerics(args[0]));
-//        System.out.println(size);
 
+        int size = Integer.parseInt(getOnlyNumerics(args[0]));
         GraphADT g = RunBenchmark.alloc(args[1], size);
         g = RunBenchmark.readGraph(args[0], args[1]);
-        System.out.print(args[1] + "\t" + args[0] + "\t");
+        System.out.print(args[1] + "\t" + args[0] + "\t" + args[2]+"\t");
         System.out.print(g.order() + "\t");
         System.out.print(g.size() + "\t");
-        System.out.println(RunBenchmark.runAlgorithm(g, args[2]));
-
-
+        
+        if (args[1].equals("jung") || args[1].equals("jgraph")) {
+            System.out.println(runLibraries(args[1], args[2], g));
+        } else {
+            System.out.println(RunBenchmark.runAlgorithm(g, args[2]));
+        }
     }
 }

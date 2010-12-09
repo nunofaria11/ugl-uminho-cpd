@@ -19,17 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * TO DO:
- * 1) "Arranjar" o algoritmo de Boruvka (DONE)
- *  - inserir toda a construção das estruturas auxiliares no método principal
- *  - a maxEdge é agora considerada como null
- *  - reescrever o ciclo que percorre todas as 'wannabes' para não percorrer 
- *    todas as edges desnecessariamente.
  * 
- * 2) Fazer o rearrange das estruturas auxiliares dos algoritmos p/ que se 
- *    insiram nas implementações das estruturas, de modo a que as possíveis
- *    melhorias se baseiem nas implementações.
- *
  * @author nuno
  */
 public class BoruvkaADT2<T, Y extends Comparable<Y>> {

@@ -30,9 +30,9 @@ public class JungConverter {
     public int edges_count = 0;
     public EdgeJHandler handler = new EdgeJHandler();
 
-    public UndirectedGraph<String, EdgeJ<Integer>> ADTtoJung(GraphADT adt) {
+    public UndirectedSparseGraph<String, EdgeJ<Integer>> ADTtoJung(GraphADT adt) {
         ArrayList<EdgeEO<String, Integer>> edges = (ArrayList<EdgeEO<String, Integer>>) adt.getUnduplicatedEdges();
-        UndirectedGraph<String, EdgeJ<Integer>> jung_g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
+        UndirectedSparseGraph<String, EdgeJ<Integer>> jung_g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
         for (EdgeEO edge : edges) {
             Node n1 = edge.getNode1();
             Node n2 = edge.getNode2();
