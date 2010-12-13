@@ -66,6 +66,12 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
 
     @Override
     public void addArc(T n1, T n2, Y w) {
+        if(!isNode(n1)){
+            addNode(n1);
+        }
+        if(!isNode(n2)){
+            addNode(n2);
+        }
         HashMap<T, Y> neighbors = _adj_map.get(n1);
         if (neighbors == null) {
             neighbors = new HashMap<T, Y>();
@@ -77,7 +83,7 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
     @Override
     public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
-        addArc(n2, n1, w);
+//        addArc(n2, n1, w);
     }
 
     public boolean isArc(T n1, T n2) {
@@ -85,9 +91,17 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         return neighbors.keySet().contains(n2);
     }
 
+
+    /**
+     * Gets the associated weight between <i>n1</i> and <i>n2</i> in an
+     * undirected graph
+     * @param n1
+     * @param n2
+     * @return
+     */
     public Y getWeight(T n1, T n2) {
         if (!isArc(n1, n2)) {
-            return null;
+            return _adj_map.get(n2).get(n1);
         }
         return _adj_map.get(n1).get(n2);
     }
@@ -97,8 +111,18 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         return new ArrayList<T>(_adj_map.keySet());
     }
 
+    @Override
     public int order() {
         return _adj_map.keySet().size();
+    }
+
+    @Override
+    public int size() {
+        int t = 0;
+        for (HashMap edges_map : _adj_map.values()) {
+            t += edges_map.values().size();
+        }
+        return t;
     }
 
     public HashMap<T, HashMap<T, Y>> getAdj_map() {
@@ -119,12 +143,36 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         return new GraphMapSucc(_adj_map);
     }
 
+    private Collection<Edge<T, Y>> outgoingEdges(T source) {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        for (T target : _adj_map.get(source).keySet()) {
+            Edge edge = new Edge(source, target, getWeight(source, target));
+            edges.add(edge);
+        }
+        return edges;
+    }
+
+    private Collection<Edge<T, Y>> incomingEdges(T target) {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+
+        for (T source : _adj_map.keySet()) {
+            HashMap map = _adj_map.get(source);
+            if (map.containsKey(target)) {
+                Edge edge = new Edge(source, target, getWeight(source, target));
+                edges.add(edge);
+            }
+        }
+        return edges;
+    }
+
     @Override
     public Collection<Edge<T, Y>> getNeighborEdges(T node) {
         Collection<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
-        for (T n : _adj_map.get(node).keySet()) {
-            edges.add(new Edge<T, Y>(node, n, _adj_map.get(node).get(n)));
-        }
+        edges.addAll(incomingEdges(node));
+        edges.addAll(outgoingEdges(node));
+//        for (T n : _adj_map.get(node).keySet()) {
+//            edges.add(new Edge<T, Y>(node, n, _adj_map.get(node).get(n)));
+//        }
         return edges;
     }
 
@@ -135,7 +183,8 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         for (T node : _adj_map.keySet()) {
             s.append(node.toString());
             s.append(" ::: ");
-            s.append(_adj_map.get(node).toString());
+//            s.append(_adj_map.get(node).toString());
+            s.append(getNeighborEdges(node));
             s.append("\n");
         }
         return s.toString();
@@ -173,6 +222,10 @@ public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
         g.addEdge(n4, n6, 9.10);
         g.addEdge(n5, n6, 11.11);
 
-        System.out.println(g.toString());
+        System.out.println(g.toString()+"\n");
+        
+        System.out.println("out: "+g.outgoingEdges(n1));
+        System.out.println("in: "+g.incomingEdges(n1));
+
     }
 }

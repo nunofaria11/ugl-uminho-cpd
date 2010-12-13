@@ -87,6 +87,17 @@ public class Edge<T, Y extends Comparable<Y>> implements Comparable<Edge<T, Y>>,
     }
 
     @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + (this.node1 != null ? this.node1.hashCode() : 0);
+        hash = 59 * hash + (this.node2 != null ? this.node2.hashCode() : 0);
+        hash = 59 * hash + (this.edge_data != null ? this.edge_data.hashCode() : 0);
+        return hash;
+    }
+
+
+
+        @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Edge)) {
             return false;

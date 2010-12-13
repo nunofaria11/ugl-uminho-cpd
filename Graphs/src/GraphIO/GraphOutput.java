@@ -68,7 +68,7 @@ public class GraphOutput {
 
 
         // write each node and edge as a dot format
-        ArrayList<Edge> edges = (ArrayList<Edge>) g.getUnduplicatedEdges();
+        ArrayList<Edge> edges = (ArrayList<Edge>) g.getEdges();
         for (Edge edge : edges) {
             print_w.write("\t" + edge.getNode1().toString() + " -- " + edge.getNode2().toString());
             print_w.write(" [label=\"" + edge.getEdge_data() + "\", len=" + edge.getEdge_data() + "];\n");

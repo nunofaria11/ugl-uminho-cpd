@@ -14,9 +14,10 @@ import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
-import NodeOriented.Node;
+import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -118,15 +119,8 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
     }
 
     public static void main(String[] args) {
-        GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
+        GraphArraySucc<String, Double> g = new GraphArraySucc<String, Double>(7);
         // create nodes...
-//        Node<String> n0 = new Node<String>("A");
-//        Node<String> n1 = new Node<String>("B");
-//        Node<String> n2 = new Node<String>("C");
-//        Node<String> n3 = new Node<String>("D");
-//        Node<String> n4 = new Node<String>("E");
-//        Node<String> n5 = new Node<String>("F");
-//        Node<String> n6 = new Node<String>("G");
         String n0 = "A";
         String n1 = "B";
         String n2 = "C";
@@ -154,6 +148,11 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n5, 8.1);
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
+        System.out.println("order: " + g.order()+"\tsize: " + g.size());
+
+        ArrayList alledges = new ArrayList(g.getEdges());
+        System.out.println("All edges("+alledges.size()+"): " + alledges);
+
         // create Prim instance...
         KruskalADT_UF kruskal = new KruskalADT_UF();
         GraphADT mst = kruskal.getMst(g);
@@ -180,5 +179,14 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
     public static void main2(String[] args) {
         KruskalADT_UF.test_implementations(300);
+    }
+
+    public static void main_(String[] args){
+        GraphInput gin = new GraphInput("graph_600.ser");
+        GraphADT g = gin.readGraphADT();
+
+        KruskalADT_UF<String, Integer> kruskal = new KruskalADT_UF<String, Integer>();
+        GraphADT mst = kruskal.getMst(g);
+
     }
 }

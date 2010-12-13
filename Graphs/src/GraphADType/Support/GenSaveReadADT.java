@@ -174,7 +174,7 @@ public class GenSaveReadADT {
     }
 
     public static void main(String[] args) throws IOException {
-        for (int s = 50; s <= 200; s += 50) {
+        for (int s = 50; s <= 800; s += 50) {
             GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
         }
     }
