@@ -42,7 +42,7 @@ Simply put, Boruvka's algorithm, runs through every node in the graph and search
                 node2 = G._union_find.getRootOf( edge.getTargetNode() );
 
                 // if they are equal => they are the same root - dont add edge otherwise we would have a cycle
-                if (node1 != node2) {
+                if (node1 == node2) {
                     continue; // exits this iteration
                 }
 
