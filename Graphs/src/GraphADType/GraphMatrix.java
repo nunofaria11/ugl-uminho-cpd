@@ -4,7 +4,7 @@
  */
 package GraphADType;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.Algorithms.BoruvkaADT;
 import NodeOriented.Node;
 import java.io.Serializable;
@@ -22,23 +22,23 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     private static final long serialVersionUID = 4864427781536818158L;
     Object[][] _matrix;
     // auxilary structures to map the node with the index of rows and columns in the matrix
-    HashMap<Node<T>, Integer> _rows;
-    HashMap<Node<T>, Integer> _cols;
+    HashMap<T, Integer> _rows;
+    HashMap<T, Integer> _cols;
     // auxiliary field for aiding in the graph construction
     // this value can't be higher than numNodes
     int _avail_index;
 
     private void _allocate(int N) {
         _matrix = new Object[N][N];
-        _rows = new HashMap<Node<T>, Integer>(N);
-        _cols = new HashMap<Node<T>, Integer>(N);
+        _rows = new HashMap<T, Integer>(N);
+        _cols = new HashMap<T, Integer>(N);
         _avail_index = 0;
     }
 
-    public GraphMatrix(Object[][] _matrix, HashMap<Node<T>, Integer> _rows, HashMap<Node<T>, Integer> _cols, int _avail_index) {
+    public GraphMatrix(Object[][] _matrix, HashMap<T, Integer> _rows, HashMap<T, Integer> _cols, int _avail_index) {
         this._matrix = _matrix.clone();
-        this._rows = (HashMap<Node<T>, Integer>) _rows.clone();
-        this._cols = (HashMap<Node<T>, Integer>) _cols.clone();
+        this._rows = (HashMap<T, Integer>) _rows.clone();
+        this._cols = (HashMap<T, Integer>) _cols.clone();
         this._avail_index = new Integer(_avail_index);
     }
 
@@ -60,7 +60,7 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public boolean addNode(Node node) {
+    public boolean addNode(T node) {
         if (isNode(node)) {
             return false;
         }
@@ -71,7 +71,7 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public boolean isNode(Node node) {
+    public boolean isNode(T node) {
         if (_rows.containsKey(node) && _cols.containsKey(node)) {
             return true;
         }
@@ -79,7 +79,7 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public void addArc(Node n1, Node n2, Comparable w) {
+    public void addArc(T n1, T n2, Y w) {
         if (!isNode(n1)) {
             addNode(n1);
         }
@@ -92,13 +92,13 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public void addEdge(Node n1, Node n2, Comparable w) {
+    public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
         addArc(n2, n1, w);
     }
 
     @Override
-    public boolean isArc(Node n1, Node n2) {
+    public boolean isArc(T n1, T n2) {
         if (!isNode(n1)) {
             return false;
         }
@@ -111,7 +111,7 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Y getWeight(Node n1, Node n2) {
+    public Y getWeight(T n1, T n2) {
         if (!isNode(n1)) {
             return null;
         }
@@ -124,21 +124,21 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Node getRandom() {
-        return (Node<T>) _cols.keySet().toArray()[new Random().nextInt(order())];
+    public T getRandom() {
+        return (T) _cols.keySet().toArray()[new Random().nextInt(order())];
     }
 
     @Override
-    public Collection getNeighborEdges(Node node) {
-        ArrayList<EdgeEO<T, Y>> nbors = new ArrayList<EdgeEO<T, Y>>();
+    public Collection getNeighborEdges(T node) {
+        ArrayList<Edge<T, Y>> nbors = new ArrayList<Edge<T, Y>>();
 
         int index = _rows.get(node);
-        ArrayList<Node<T>> allOtherNodes = (ArrayList<Node<T>>) getNodes();
+        ArrayList<T> allOtherNodes = (ArrayList<T>) getNodes();
         allOtherNodes.remove(node);
-        for (Node node2 : allOtherNodes) {
+        for (T node2 : allOtherNodes) {
             int j = _cols.get(node2);
             if (index != j && _matrix[index][j] != null) {
-                EdgeEO<T, Y> edge = new EdgeEO<T, Y>(node, node2, _matrix[index][j]);
+                Edge<T, Y> edge = new Edge<T, Y>(node, node2, _matrix[index][j]);
                 nbors.add(edge);
             }
         }
@@ -149,8 +149,8 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("GraphMatrix:\n");
-        ArrayList<Node<T>> allNodes = (ArrayList<Node<T>>) getNodes();
-        for (Node i : allNodes) {
+        ArrayList<T> allNodes = (ArrayList<T>) getNodes();
+        for (T i : allNodes) {
             s.append(i).append(" ::: ");
             s.append(getNeighborEdges(i)).append("\n");
         }
@@ -168,12 +168,12 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Collection<Node<T>> getNodes() {
-        return new ArrayList<Node<T>>(_rows.keySet());
+    public Collection<T> getNodes() {
+        return new ArrayList<T>(_rows.keySet());
     }
 
     public static void main(String[] args) {
-        GraphMatrix<String, Integer> g = new GraphMatrix<String, Integer>(7);
+        GraphMatrix<Node<String>, Integer> g = new GraphMatrix<Node<String>, Integer>(7);
 
         Node<String> n0 = new Node<String>("A");
         Node<String> n1 = new Node<String>("B");

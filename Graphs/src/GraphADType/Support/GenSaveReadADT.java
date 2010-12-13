@@ -8,7 +8,6 @@ import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphIO.GraphInput;
 import GraphIO.GraphOutput;
-import NodeOriented.Node;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public class GenSaveReadADT {
 
     public static int NUM_NODES = 200;
     public static double connection_probability = 0.5;
-    public static String file_name = "graphADT_" + NUM_NODES + "nodes.ser";
+    public static String file_name = "graph_" + NUM_NODES + ".ser";
 
     public static void write() {
         TArithmeticOperations<String> strArith = Constants.strArith;
@@ -63,13 +62,20 @@ public class GenSaveReadADT {
 
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);
@@ -134,16 +140,23 @@ public class GenSaveReadADT {
         gout.saveGraphADT(g);
     }
 
-    public static GraphADT createSmallGraphADT(){
+    public static GraphADT createSmallGraphADT() {
         GraphMapAdj<String, Integer> adt_g = new GraphMapAdj<String, Integer>();
         adt_g.addNodes(7);
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         adt_g.addEdge(n0, n1, 7);
         adt_g.addEdge(n0, n3, 5);
         adt_g.addEdge(n1, n2, 8);
@@ -161,7 +174,7 @@ public class GenSaveReadADT {
     }
 
     public static void main(String[] args) throws IOException {
-        for (int s = 550; s <= 1000; s += 50) {
+        for (int s = 50; s <= 200; s += 50) {
             GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
         }
     }

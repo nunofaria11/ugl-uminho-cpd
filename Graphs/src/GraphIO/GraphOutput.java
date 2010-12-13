@@ -4,7 +4,7 @@
  */
 package GraphIO;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphAD.GraphAD;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
@@ -68,10 +68,10 @@ public class GraphOutput {
 
 
         // write each node and edge as a dot format
-        ArrayList<EdgeEO> edges = (ArrayList<EdgeEO>) g.getUnduplicatedEdges();
-        for (EdgeEO edge : edges) {
+        ArrayList<Edge> edges = (ArrayList<Edge>) g.getUnduplicatedEdges();
+        for (Edge edge : edges) {
             print_w.write("\t" + edge.getNode1().toString() + " -- " + edge.getNode2().toString());
-            print_w.write(" [label=\"" + edge.getEdge_data() + "\", len="+edge.getEdge_data()+"];\n");
+            print_w.write(" [label=\"" + edge.getEdge_data() + "\", len=" + edge.getEdge_data() + "];\n");
         }
         //
         print_w.write("}\n");
@@ -81,13 +81,20 @@ public class GraphOutput {
     public static void main(String[] args) throws IOException {
         GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
         // create nodes...
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+        //        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);

@@ -5,15 +5,18 @@
 package GraphADType;
 
 import GraphADType.Support.TArithmeticOperations;
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.Support.NTreeADT;
 import GraphADType.Support.UnionFindTree;
 import GraphADType.Support.UnionFind_ADT;
 import NodeOriented.Node;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Graph Abstract Data-Type
@@ -21,14 +24,58 @@ import java.util.Queue;
  */
 abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
-    public UnionFind_ADT<Node<T>> _union_find;
+    // Forest implementation - see this better, I think this could be a more large concept
+    public UnionFind_ADT<T> _union_find;
+    // Abstract implementation of a worklist
+    public AbstractCollection<Edge<T, Y>> _worklist;
 
     public GraphADT() {
     }
 
-    public void buildGraph(UnionFindTree<Node<T>> uf) {
+    private void addToWorklist(Collection<Edge<T, Y>> col) {
+        _worklist.addAll(col);
+    }
 
-        NTreeADT<Node<T>> mst_tree_start = uf.getMST();
+    public void initWorklist(Class<? extends AbstractCollection> worklist_class) {
+        try {
+            _worklist = worklist_class.newInstance();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GraphADT.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GraphADT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     *
+     * @return Worklist with all edges in graph
+     */
+    public AbstractCollection<Edge<T, Y>> fillWorklist() {
+        addToWorklist(getUnduplicatedEdges());
+        return _worklist;
+    }
+
+    /**
+     * Creates a worklist from the neighbor edges of a node
+     * @param n Node
+     * @return Worklist with neighbor edges of <b>n</b>.
+     */
+    public AbstractCollection<Edge<T, Y>> fillWorklist(T n) {
+        addToWorklist(getNeighborEdges(n));
+        return _worklist;
+    }
+
+    public AbstractCollection<Edge<T, Y>> getWorklist() {
+        return _worklist;
+    }
+
+    public void setWorklist(AbstractCollection<Edge<T, Y>> _worklist) {
+        this._worklist = _worklist;
+    }
+
+    public void buildGraph(UnionFindTree<T> uf) {
+
+        NTreeADT<T> mst_tree_start = uf.getMST();
         clean();
         addNodes(mst_tree_start.BFSTreeElements().size());
         // queue for child source nodes
@@ -36,18 +83,18 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
         q.add(mst_tree_start);
         while (!q.isEmpty()) {
-            NTreeADT<Node<T>> source = q.poll();
+            NTreeADT<T> source = q.poll();
             if (source.hasChildren()) {
                 q.addAll(source.getChilds());
             }
 
-            Node<T> sourceNode = source.getData();
+            T sourceNode = source.getData();
 
             if (!isNode(sourceNode)) {
                 addNode(sourceNode);
             }
-            for (NTreeADT<Node<T>> target : source.getChilds()) {
-                Node<T> targetNode = target.getData();
+            for (NTreeADT<T> target : source.getChilds()) {
+                T targetNode = target.getData();
                 if (!isNode(targetNode)) {
                     addNode(targetNode);
                 }
@@ -57,7 +104,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     }
 
     public void initUnionFind() {
-        this._union_find = new UnionFind_ADT<Node<T>>(this.getNodes());
+        this._union_find = new UnionFind_ADT<T>(this.getNodes());
     }
 
     /**
@@ -71,7 +118,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     public int size() {
         int total = 0;
-        for (Node<T> n : getNodes()) {
+        for (T n : getNodes()) {
             total += getNeighborEdges(n).size();
         }
         return total;
@@ -79,37 +126,37 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     /**
      * Adds single node to graph.
-     * 
+     *
      * @param node Node to add
      * @return boolean Success of node insertion
      */
-    abstract public boolean addNode(Node<T> node);
+    abstract public boolean addNode(T node);
 
     /**
      * Checks if node exists.
      *
      * @param node
-     * @return 
+     * @return
      */
-    abstract public boolean isNode(Node<T> node);
+    abstract public boolean isNode(T node);
 
-    abstract public void addArc(Node<T> n1, Node<T> n2, Y w);
+    abstract public void addArc(T n1, T n2, Y w);
 
-    abstract public void addEdge(Node<T> n1, Node<T> n2, Y w);
+    abstract public void addEdge(T n1, T n2, Y w);
 
-    public void addAllEdges(Collection<EdgeEO<T, Y>> edges) {
-        for (EdgeEO e : edges) {
-            addEdge(e.getNode1(), e.getNode2(), (Y) e.getEdge_data());
+    public void addAllEdges(Collection<Edge<T, Y>> edges) {
+        for (Edge e : edges) {
+            addEdge((T) e.getNode1(), (T) e.getNode2(), (Y) e.getEdge_data());
         }
     }
 
-    abstract public boolean isArc(Node<T> n1, Node<T> n2);
+    abstract public boolean isArc(T n1, T n2);
 
-    abstract public Y getWeight(Node<T> n1, Node<T> n2);
+    abstract public Y getWeight(T n1, T n2);
 
-    abstract public Node<T> getRandom();
+    abstract public T getRandom();
 
-    abstract public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node);
+    abstract public Collection<Edge<T, Y>> getNeighborEdges(T node);
 
     @Override
     abstract public String toString();
@@ -119,14 +166,14 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public void clean();
 
-    abstract public Collection<Node<T>> getNodes();
+    abstract public Collection<T> getNodes();
 
     public Y getMstWeight(TArithmeticOperations<Y> arithmetic, Y total) {
-        Collection<Node<T>> allnodes = getNodes();
-        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
-        for (Node<T> node1 : allnodes) {
+        Collection<T> allnodes = getNodes();
+        ArrayList<T> visited = new ArrayList<T>();
+        for (T node1 : allnodes) {
             visited.add(node1);
-            for (Node<T> node2 : allnodes) {
+            for (T node2 : allnodes) {
                 if (!visited.contains(node2)) {
                     if (getWeight(node1, node2) != null) {
                         total = arithmetic.Add(total, getWeight(node1, node2));
@@ -137,19 +184,19 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         return total;
     }
 
-    public Collection<EdgeEO<T, Y>> getEdges() {
-        Collection<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
-        for (Node<T> node : getNodes()) {
+    public Collection<Edge<T, Y>> getEdges() {
+        Collection<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        for (T node : getNodes()) {
             edges.addAll(getNeighborEdges(node));
         }
         return edges;
     }
 
-    public Collection<EdgeEO<T, Y>> getUnduplicatedEdges() {
-        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
-        ArrayList<EdgeEO<T, Y>> edges2rem = new ArrayList<EdgeEO<T, Y>>();
-        for (EdgeEO<T, Y> edge : new ArrayList<EdgeEO<T, Y>>(getEdges())) {
-            EdgeEO<T, Y> rev_edge = new EdgeEO<T, Y>(edge.getNode2(), edge.getNode1(), edge.getEdge_data());
+    public Collection<Edge<T, Y>> getUnduplicatedEdges() {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        ArrayList<Edge<T, Y>> edges2rem = new ArrayList<Edge<T, Y>>();
+        for (Edge<T, Y> edge : new ArrayList<Edge<T, Y>>(getEdges())) {
+            Edge<T, Y> rev_edge = new Edge<T, Y>(edge.getNode2(), edge.getNode1(), edge.getEdge_data());
             edges.add(edge);
             if (!edges2rem.contains(edge)) {
                 edges2rem.add(rev_edge);
@@ -162,22 +209,21 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     public boolean connected() {
         // just check if all nodes are some other nodes target
-        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) getNodes();
+        ArrayList<T> allnodes = (ArrayList<T>) getNodes();
         // visited array
-        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
-        ArrayList<EdgeEO<T, Y>> alledges = (ArrayList<EdgeEO<T, Y>>) getEdges();
-        for (EdgeEO edge : alledges) {
-            visited.add(edge.getNode2());
+        ArrayList<T> visited = new ArrayList<T>();
+        ArrayList<Edge<T, Y>> alledges = (ArrayList<Edge<T, Y>>) getEdges();
+        for (Edge edge : alledges) {
+            visited.add((T) edge.getNode2());
         }
         return visited.containsAll(allnodes);
     }
 
-    public Collection<Node<T>> insertAllNodes(Collection<T> datalist) {
-        ArrayList<Node<T>> nodes = new ArrayList<Node<T>>();
+    public Collection<T> insertAllNodes(Collection<T> datalist) {
+        ArrayList<T> nodes = new ArrayList<T>();
         for (T data : datalist) {
-            Node<T> new_node = new Node<T>(data);
-            addNode(new_node);
-            nodes.add(new_node);
+            addNode(data);
+            nodes.add(data);
         }
         return nodes;
     }
@@ -185,11 +231,11 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     public GraphMapAdj<T, Y> toGraphMapAdj() {
         GraphMapAdj<T, Y> graph = new GraphMapAdj<T, Y>(order());
 
-        for (Node node : this.getNodes()) {
+        for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (EdgeEO edge : this.getUnduplicatedEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        for (Edge edge : this.getUnduplicatedEdges()) {
+            graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
     }
@@ -197,33 +243,33 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     public GraphArraySucc<T, Y> toGraphArraySucc() {
         GraphArraySucc<T, Y> graph = new GraphArraySucc<T, Y>(order());
 
-        for (Node node : this.getNodes()) {
+        for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (EdgeEO edge : this.getUnduplicatedEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        for (Edge edge : this.getUnduplicatedEdges()) {
+            graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
     }
 
     public GraphMatrix<T, Y> toGraphMatrix() {
         GraphMatrix<T, Y> graph = new GraphMatrix<T, Y>(order());
-        for (Node node : this.getNodes()) {
+        for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (EdgeEO edge : this.getUnduplicatedEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        for (Edge edge : this.getUnduplicatedEdges()) {
+            graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
     }
 
     public GraphMapSucc<T, Y> toGraphMapSucc() {
         GraphMapSucc<T, Y> graph = new GraphMapSucc<T, Y>(order());
-        for (Node<T> node : this.getNodes()) {
+        for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (EdgeEO edge : this.getUnduplicatedEdges()) {
-            graph.addEdge(edge.getNode1(), edge.getNode2(), (Y) edge.getEdge_data());
+        for (Edge edge : this.getUnduplicatedEdges()) {
+            graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
     }

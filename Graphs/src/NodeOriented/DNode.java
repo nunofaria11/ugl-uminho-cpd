@@ -4,7 +4,7 @@
  */
 package NodeOriented;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,38 +14,38 @@ import java.util.List;
  */
 public class DNode<T, Y extends Comparable<Y>> extends Node<T> {
 
-    List<EdgeEO<T, Y>> in;
-    List<EdgeEO<T, Y>> out;
+    List<Edge<T, Y>> in;
+    List<Edge<T, Y>> out;
 
     public DNode(T data) {
         super(data);
-        in = new ArrayList<EdgeEO<T, Y>>();
-        out = new ArrayList<EdgeEO<T, Y>>();
+        in = new ArrayList<Edge<T, Y>>();
+        out = new ArrayList<Edge<T, Y>>();
     }
 
-    public boolean addIn(EdgeEO<T, Y> edge) {
+    public boolean addIn(Edge<T, Y> edge) {
         return in.add(edge);
 
     }
 
-    public boolean addOut(EdgeEO<T, Y> edge) {
+    public boolean addOut(Edge<T, Y> edge) {
         return out.add(edge);
 
     }
 
-    public boolean removeIn(EdgeEO<T, Y> edge) {
+    public boolean removeIn(Edge<T, Y> edge) {
         return in.remove(edge);
     }
 
-    public boolean removeOut(EdgeEO<T, Y> edge) {
+    public boolean removeOut(Edge<T, Y> edge) {
         return out.remove(edge);
     }
 
-    public List<EdgeEO<T, Y>> getInEdges() {
+    public List<Edge<T, Y>> getInEdges() {
         return in;
     }
 
-    public List<EdgeEO<T, Y>> getOutEdges() {
+    public List<Edge<T, Y>> getOutEdges() {
         return out;
     }
 
@@ -54,7 +54,7 @@ public class DNode<T, Y extends Comparable<Y>> extends Node<T> {
      * @param edge
      * @return boolean
      */
-    public boolean hasIn(EdgeEO<T, Y> edge) {
+    public boolean hasIn(Edge<T, Y> edge) {
         return in.contains(edge);
     }
 
@@ -63,13 +63,13 @@ public class DNode<T, Y extends Comparable<Y>> extends Node<T> {
      * @param edge
      * @return boolean
      */
-    public boolean hasOut(EdgeEO<T, Y> edge) {
+    public boolean hasOut(Edge<T, Y> edge) {
         return out.contains(edge);
     }
 
 // hasInNeighbour
     public boolean hasInNeighbor(Node<T> node) {
-        for (EdgeEO edge : in) {
+        for (Edge edge : in) {
             if (edge.contains(node)) {
                 return true;
             }
@@ -79,7 +79,7 @@ public class DNode<T, Y extends Comparable<Y>> extends Node<T> {
 // hasOutNeighbor
 
     public boolean hasOutNeighbor(Node<T> node) {
-        for (EdgeEO edge : out) {
+        for (Edge edge : out) {
             if (edge.contains(node)) {
                 return true;
             }

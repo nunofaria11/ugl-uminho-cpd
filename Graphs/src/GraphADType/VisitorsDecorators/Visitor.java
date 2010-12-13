@@ -4,14 +4,14 @@
  */
 package GraphADType.VisitorsDecorators;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import NodeOriented.Node;
 
 /**
  *
  * @author nuno
  */
-public interface Visitor<N extends Node, E extends EdgeEO> {
+public interface Visitor<N extends Node, E extends Edge> {
 
     /**
      * This is invoked on every vertex in the graph before the start

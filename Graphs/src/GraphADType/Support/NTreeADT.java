@@ -4,7 +4,6 @@
  */
 package GraphADType.Support;
 
-import EdgeOriented.EdgeEO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -44,7 +43,7 @@ public class NTreeADT<X> {
         return visited;
     }
 
-    public boolean hasChildren(){
+    public boolean hasChildren() {
         return !childs.isEmpty();
     }
 

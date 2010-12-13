@@ -186,10 +186,10 @@ public class BenchmarkADT {
 //        System.out.println(map);
 
         GraphArraySucc<String, Integer> g = new GraphArraySucc<String, Integer>(4);
-        Node<String> A = new Node<String>("A");
-        Node<String> B = new Node<String>("B");
-        Node<String> C = new Node<String>("C");
-        Node<String> D = new Node<String>("D");
+        String A = "A";
+        String B = "B";
+        String C = "C";
+        String D = "D";
 
 //        g.addArc(A, B, Integer.SIZE);
 //        g.addArc(B, C, Integer.SIZE);

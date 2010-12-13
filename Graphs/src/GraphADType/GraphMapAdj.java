@@ -4,7 +4,7 @@
  */
 package GraphADType;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import NodeOriented.Node;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,13 +20,13 @@ import java.util.Random;
 public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
     private static final long serialVersionUID = -5003866598946151368L;
-    HashMap<Node<T>, List<EdgeEO<T, Y>>> _adj_map;
+    HashMap<T, List<Edge<T, Y>>> _adj_map;
 
-    private HashMap<Node<T>, List<EdgeEO<T, Y>>> _allocate(int n) {
-        HashMap<Node<T>, List<EdgeEO<T, Y>>> map = new HashMap<Node<T>, List<EdgeEO<T, Y>>>(n);
+    private HashMap<T, List<Edge<T, Y>>> _allocate(int n) {
+        HashMap<T, List<Edge<T, Y>>> map = new HashMap<T, List<Edge<T, Y>>>(n);
         map.clear();
-        for (Node<T> node : map.keySet()) {
-            map.put(node, new ArrayList<EdgeEO<T, Y>>());
+        for (T node : map.keySet()) {
+            map.put(node, new ArrayList<Edge<T, Y>>());
         }
         return map;
     }
@@ -39,21 +39,21 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
         _adj_map = _allocate(0);
     }
 
-    public GraphMapAdj(HashMap<Node<T>, List<EdgeEO<T, Y>>> _adj_map) {
-        this._adj_map = (HashMap<Node<T>, List<EdgeEO<T, Y>>>) _adj_map.clone();
+    public GraphMapAdj(HashMap<T, List<Edge<T, Y>>> _adj_map) {
+        this._adj_map = (HashMap<T, List<Edge<T, Y>>>) _adj_map.clone();
     }
 
     @Override
-    public boolean addNode(Node<T> node) {
+    public boolean addNode(T node) {
         if (isNode(node)) { // is already exists do not add vertex
             return false;
         }
-        _adj_map.put(node, new ArrayList<EdgeEO<T, Y>>());
+        _adj_map.put(node, new ArrayList<Edge<T, Y>>());
         return true;
     }
 
     @Override
-    public boolean isNode(Node<T> node) {
+    public boolean isNode(T node) {
         return _adj_map.keySet().contains(node);
     }
 
@@ -68,26 +68,26 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public void addArc(Node<T> n1, Node<T> n2, Y w) {
-        List<EdgeEO<T, Y>> nbors = _adj_map.get(n1);
+    public void addArc(T n1, T n2, Y w) {
+        List<Edge<T, Y>> nbors = _adj_map.get(n1);
         if (nbors == null) {
-            nbors = new ArrayList<EdgeEO<T, Y>>();
+            nbors = new ArrayList<Edge<T, Y>>();
         }
-        EdgeEO<T, Y> edge = new EdgeEO<T, Y>(n1, n2, (Y) w);
+        Edge<T, Y> edge = new Edge<T, Y>(n1, n2, (Y) w);
         nbors.add(edge);
         _adj_map.put(n1, nbors);
     }
 
     @Override
-    public void addEdge(Node<T> n1, Node<T> n2, Y w) {
+    public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
         addArc(n2, n1, w);
     }
 
     @Override
-    public boolean isArc(Node n1, Node n2) {
-        List<EdgeEO<T, Y>> nbors = _adj_map.get(n1);
-        for (EdgeEO<T, Y> edge : nbors) {
+    public boolean isArc(T n1, T n2) {
+        List<Edge<T, Y>> nbors = _adj_map.get(n1);
+        for (Edge<T, Y> edge : nbors) {
             if (edge.getNode2().equals(n2)) {
                 return true;
             }
@@ -96,9 +96,9 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Y getWeight(Node n1, Node n2) {
-        List<EdgeEO<T, Y>> nbors = _adj_map.get(n1);
-        for (EdgeEO edge : nbors) {
+    public Y getWeight(T n1, T n2) {
+        List<Edge<T, Y>> nbors = _adj_map.get(n1);
+        for (Edge edge : nbors) {
             if (edge.getNode2().equals(n2)) {
                 return (Y) edge.getEdge_data();
             }
@@ -107,16 +107,16 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Collection<Node<T>> getNodes() {
-        return new ArrayList<Node<T>>(_adj_map.keySet());
+    public Collection<T> getNodes() {
+        return new ArrayList<T>(_adj_map.keySet());
     }
 
-    public HashMap<Node<T>, List<EdgeEO<T, Y>>> getAdj_map() {
+    public HashMap<T, List<Edge<T, Y>>> getAdj_map() {
         return _adj_map;
     }
 
-    public Node<T> getRandom() {
-        return (Node<T>) _adj_map.keySet().toArray()[new Random().nextInt(order())];
+    public T getRandom() {
+        return (T) _adj_map.keySet().toArray()[new Random().nextInt(order())];
     }
 
     @Override
@@ -130,7 +130,7 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
-    public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node) {
+    public Collection<Edge<T, Y>> getNeighborEdges(T node) {
         return _adj_map.get(node);
     }
 
@@ -138,7 +138,7 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("MapAdj:\n");
-        for (Node<T> node : _adj_map.keySet()) {
+        for (T node : _adj_map.keySet()) {
             s.append(node.toString());
             s.append(": ");
             s.append(_adj_map.get(node).toString());
@@ -148,7 +148,7 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     public static void main(String[] args) {
-        GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>();
+        GraphMapAdj<Node<String>, Double> g = new GraphMapAdj<Node<String>, Double>();
         g.addNodes(7);
 
 //        Node<Integer> n0 = new Node<Integer>(0);

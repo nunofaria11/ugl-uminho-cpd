@@ -12,34 +12,35 @@ import java.io.Serializable;
  * Edge of node-oriented.
  * @author nuno
  */
-public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, Y>>, Serializable {
+public class Edge<T, Y extends Comparable<Y>> implements Comparable<Edge<T, Y>>, Serializable {
 
-    Node<T> node1;
-    Node<T> node2;
+    private static final long serialVersionUID = -3478682146683094675L;
+    T node1;
+    T node2;
     Y edge_data;
 
-    public EdgeEO(Node<T> node1, Node<T> node2, Y edge_data) {
+    public Edge(T node1, T node2, Y edge_data) {
         this.node1 = node1;
         this.node2 = node2;
         this.edge_data = edge_data;
     }
 
-    public EdgeEO(Object o) {
-        if (o instanceof EdgeEO) {
-            EdgeEO e = (EdgeEO) o;
-            node1 = e.getNode1();
-            node2 = e.getNode2();
+    public Edge(Object o) {
+        if (o instanceof Edge) {
+            Edge e = (Edge) o;
+            node1 = (T) e.getNode1();
+            node2 = (T) e.getNode2();
             edge_data = (Y) e.getEdge_data();
         }
     }
 
-    public EdgeEO() {
-        this.node1 = new Node<T>();
-        this.node2 = new Node<T>();
+    public Edge() {
+        this.node1 = null;
+        this.node2 = null;
         this.edge_data = null;
     }
 
-    public EdgeEO(Node<T> node1, Node<T> node2, Object edge_data) {
+    public Edge(T node1, T node2, Object edge_data) {
         this.node1 = node1;
         this.node2 = node2;
         this.edge_data = (Y) edge_data;
@@ -53,27 +54,27 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
         this.edge_data = edge_data;
     }
 
-    public Node<T> getNode1() {
+    public T getNode1() {
         return node1;
     }
 
-    public void setNode1(Node<T> node1) {
+    public void setNode1(T node1) {
         this.node1 = node1;
     }
 
-    public Node<T> getNode2() {
+    public T getNode2() {
         return node2;
     }
 
-    public void setNode2(Node<T> node2) {
+    public void setNode2(T node2) {
         this.node2 = node2;
     }
 
-    public boolean contains(Node<T> node) {
+    public boolean contains(T node) {
         return node.equals(getNode1()) || node.equals(getNode2());
     }
 
-    public Node<T> getRandom() {
+    public T getRandom() {
         return Math.random() < 0.5 ? getNode1() : getNode2();
     }
 
@@ -87,10 +88,10 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof EdgeEO)) {
+        if (!(obj instanceof Edge)) {
             return false;
         }
-        EdgeEO edge = (EdgeEO) obj;
+        Edge edge = (Edge) obj;
 
         if (edge.node1 == null || edge.node2 == null || edge.edge_data == null) {
             return false;
@@ -107,7 +108,7 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
         return true;
     }
 
-    public int compareTo(EdgeEO<T, Y> that) {
+    public int compareTo(Edge<T, Y> that) {
         if (that == null) {
             return 1;
         }
@@ -132,8 +133,8 @@ public class EdgeEO<T, Y extends Comparable<Y>> implements Comparable<EdgeEO<T, 
         Node<String> n1 = new Node<String>("B");
         Node<String> n2 = new Node<String>("C");
 
-        EdgeEO<String, Double> e1 = new EdgeEO<String, Double>(n0, n1, 10);
-        EdgeEO<String, Double> e2 = null;//new EdgeEO<String, Double>(n0, n2, 20);
+        Edge<String, Double> e1 = new Edge<String, Double>("A", "B", 10);
+        Edge<String, Double> e2 = null;//new EdgeEO<String, Double>(n0, n2, 20);
         System.out.println(e1.compareTo(e2));
     }
 }
