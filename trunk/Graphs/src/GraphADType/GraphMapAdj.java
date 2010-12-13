@@ -68,7 +68,22 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     }
 
     @Override
+    public int size() {
+        int t = 0;
+        for (List edges_map : _adj_map.values()) {
+            t += edges_map.size();
+        }
+        return t;
+    }
+
+    @Override
     public void addArc(T n1, T n2, Y w) {
+        if(!isNode(n1)){
+            addNode(n1);
+        }
+        if(!isNode(n2)){
+            addNode(n2);
+        }
         List<Edge<T, Y>> nbors = _adj_map.get(n1);
         if (nbors == null) {
             nbors = new ArrayList<Edge<T, Y>>();
@@ -81,7 +96,7 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     @Override
     public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
-        addArc(n2, n1, w);
+//        addArc(n2, n1, w);
     }
 
     @Override
@@ -97,6 +112,11 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
 
     @Override
     public Y getWeight(T n1, T n2) {
+        if (!isArc(n1, n2)) {
+            T tmp = n1;
+            n1 = n2;
+            n2 = tmp;
+        }
         List<Edge<T, Y>> nbors = _adj_map.get(n1);
         for (Edge edge : nbors) {
             if (edge.getNode2().equals(n2)) {
@@ -129,9 +149,29 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
         _adj_map = _allocate(0);
     }
 
+    private Collection<Edge<T, Y>> outgoingEdges(T source) {
+        return _adj_map.get(source);
+    }
+
+    private Collection<Edge<T, Y>> incomingEdges(T target) {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        for (T source : _adj_map.keySet()) {
+            List<Edge<T, Y>> edgeList = _adj_map.get(source);
+            for (Edge e : edgeList) {
+                if (e.getNode2().equals(target)) {
+                    edges.add(e);
+                }
+            }
+        }
+        return edges;
+    }
+
     @Override
     public Collection<Edge<T, Y>> getNeighborEdges(T node) {
-        return _adj_map.get(node);
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        edges.addAll(incomingEdges(node));
+        edges.addAll(outgoingEdges(node));
+        return edges;
     }
 
     @Override
@@ -140,8 +180,9 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
         s.append("MapAdj:\n");
         for (T node : _adj_map.keySet()) {
             s.append(node.toString());
-            s.append(": ");
-            s.append(_adj_map.get(node).toString());
+            s.append("::: ");
+//            s.append(_adj_map.get(node).toString());
+            s.append(getNeighborEdges(node));
             s.append("\n");
         }
         return s.toString();

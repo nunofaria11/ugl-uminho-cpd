@@ -9,8 +9,6 @@ import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphADType.Support.GenSaveReadADT;
 import GraphIO.GraphInput;
-import NodeOriented.Node;
-import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import java.util.ArrayList;
 
@@ -31,7 +29,7 @@ public class JungConverter {
     public EdgeJHandler handler = new EdgeJHandler();
 
     public UndirectedSparseGraph<String, EdgeJ<Integer>> ADTtoJung(GraphADT adt) {
-        ArrayList<Edge<String, Integer>> edges = (ArrayList<Edge<String, Integer>>) adt.getUnduplicatedEdges();
+        ArrayList<Edge<String, Integer>> edges = new ArrayList<Edge<String, Integer>>(adt.getEdges());
         UndirectedSparseGraph<String, EdgeJ<Integer>> jung_g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
         for (Edge edge : edges) {
             String n1 = (String) edge.getNode1();
@@ -55,8 +53,7 @@ public class JungConverter {
 
     }
 
-
-    public static GraphADT createSmallGraphADT(){
+    public static GraphADT createSmallGraphADT() {
         GraphMapAdj<String, Integer> adt_g = new GraphMapAdj<String, Integer>();
         adt_g.addNodes(7);
 //        Node<String> n0 = new Node<String>("A");

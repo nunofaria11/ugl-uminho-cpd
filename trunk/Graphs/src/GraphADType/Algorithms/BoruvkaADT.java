@@ -87,7 +87,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
 
         // get wannabe edges in MST
         this.wannabes = new ArrayList<Edge<T, Y>>(g.size());
-        wannabes.addAll(g.getUnduplicatedEdges());
+        wannabes.addAll(g.getEdges());
 
         // initialize forest (nbors hashmap - each node is initially a root)
         this.nbors = new HashMap<T, Edge<T, Y>>(g.order());

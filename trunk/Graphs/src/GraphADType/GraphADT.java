@@ -9,12 +9,16 @@ import EdgeOriented.Edge;
 import GraphADType.Support.NTreeADT;
 import GraphADType.Support.UnionFindTree;
 import GraphADType.Support.UnionFind_ADT;
-import NodeOriented.Node;
 import java.util.AbstractCollection;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +55,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
      * @return Worklist with all edges in graph
      */
     public AbstractCollection<Edge<T, Y>> fillWorklist() {
-        addToWorklist(getUnduplicatedEdges());
+        addToWorklist(getEdges());
         return _worklist;
     }
 
@@ -116,14 +120,15 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public int order();
 
-    public int size() {
-        int total = 0;
-        for (T n : getNodes()) {
-            total += getNeighborEdges(n).size();
-        }
-        return total;
-    }
+    abstract public int size();
 
+//    public int size() {
+//        int total = 0;
+//        for (T n : getNodes()) {
+//            total += getNeighborEdges(n).size();
+//        }
+//        return total;
+//    }
     /**
      * Adds single node to graph.
      *
@@ -148,6 +153,10 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (Edge e : edges) {
             addEdge((T) e.getNode1(), (T) e.getNode2(), (Y) e.getEdge_data());
         }
+    }
+
+    public boolean isEdge(T n1, T n2) {
+        return isArc(n1, n2) || isArc(n2, n1);
     }
 
     abstract public boolean isArc(T n1, T n2);
@@ -184,15 +193,16 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         return total;
     }
 
-    public Collection<Edge<T, Y>> getEdges() {
-        Collection<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+    public Set<Edge<T, Y>> getEdges() {
+//        Collection<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+        HashSet<Edge<T,Y>> edges = new HashSet<Edge<T, Y>>();
         for (T node : getNodes()) {
             edges.addAll(getNeighborEdges(node));
         }
         return edges;
     }
 
-    public Collection<Edge<T, Y>> getUnduplicatedEdges() {
+    /*public Collection<Edge<T, Y>> getEdges() {
         ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
         ArrayList<Edge<T, Y>> edges2rem = new ArrayList<Edge<T, Y>>();
         for (Edge<T, Y> edge : new ArrayList<Edge<T, Y>>(getEdges())) {
@@ -205,7 +215,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
         edges.removeAll(edges2rem);
         return edges;
-    }
+    }*/
 
     public boolean connected() {
         // just check if all nodes are some other nodes target
@@ -234,7 +244,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (Edge edge : this.getUnduplicatedEdges()) {
+        for (Edge edge : this.getEdges()) {
             graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
@@ -246,7 +256,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (Edge edge : this.getUnduplicatedEdges()) {
+        for (Edge edge : this.getEdges()) {
             graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
@@ -257,7 +267,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (Edge edge : this.getUnduplicatedEdges()) {
+        for (Edge edge : this.getEdges()) {
             graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;
@@ -268,7 +278,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }
-        for (Edge edge : this.getUnduplicatedEdges()) {
+        for (Edge edge : this.getEdges()) {
             graph.addEdge((T) edge.getNode1(), (T) edge.getNode2(), (Y) edge.getEdge_data());
         }
         return graph;

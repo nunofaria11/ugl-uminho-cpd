@@ -36,6 +36,11 @@ public class GraphUnionFind<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
+    public int size() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public boolean addNode(T node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

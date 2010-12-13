@@ -13,6 +13,7 @@ import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
 import GraphADType.GraphMapSucc;
 import GraphADType.GraphMatrix;
+import GraphADType.Support.Constants;
 import GraphIO.GraphInput;
 import JGraphTest.BoruvkaJgraph;
 import JGraphTest.JGraphConverter;
@@ -56,8 +57,8 @@ public class RunBenchmark {
             GraphADT mst = b.getMst();
             long end = System.currentTimeMillis();
 //            System.out.println("boruvka time:\t" + (end - begin));
-//            int total = 0;
-//            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
+            int total = 0;
+            System.out.print("mstW:" + mst.getMstWeight(Constants.intArith, total) + "\t");
             return (end - begin);
         } else if (alg.equals("boruvka2")) {
             BoruvkaADT2 b = new BoruvkaADT2();
@@ -65,8 +66,8 @@ public class RunBenchmark {
             GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("boruvka time:\t" + (end - begin));
-//            int total = 0;
-//            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
+            int total = 0;
+            System.out.print("mstW:" + mst.getMstWeight(Constants.intArith, total) + "\t");
             return (end - begin);
         } else if (alg.equals("kruskal")) {
             KruskalADT_UF b = new KruskalADT_UF();
@@ -74,8 +75,8 @@ public class RunBenchmark {
             GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("kruskal time:\t" + (end - begin));
-//            int total = 0;
-//            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
+            int total = 0;
+            System.out.print("mstW:" + mst.getMstWeight(Constants.intArith, total) + "\t");
             return (end - begin);
         } else if (alg.equals("prim")) {
             PrimADT b = new PrimADT();
@@ -83,8 +84,8 @@ public class RunBenchmark {
             GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
 //            System.out.println("prim time:\t" + (end - begin));
-//            int total = 0;
-//            System.out.println("MST weight" + mst.getMstWeight(Constants.intArith, total));
+            int total = 0;
+            System.out.print("mstW:" + mst.getMstWeight(Constants.intArith, total) + "\t");
             return (end - begin);
         }
         return -1;
@@ -102,7 +103,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
             if (alg.equals("kruskal")) {
@@ -110,7 +111,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
             if (alg.equals("prim")) {
@@ -118,7 +119,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 UndirectedSparseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
         }
@@ -131,7 +132,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 WeightedMultigraph<String, Integer> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
             if (alg.equals("kruskal")) {
@@ -139,7 +140,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 WeightedMultigraph<String, Integer> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
             if (alg.equals("prim")) {
@@ -147,7 +148,7 @@ public class RunBenchmark {
                 long begin = System.currentTimeMillis();
                 WeightedMultigraph<String, Integer> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
-//                System.out.print("\tW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
         }
@@ -200,10 +201,10 @@ public class RunBenchmark {
         int size = Integer.parseInt(getOnlyNumerics(args[0]));
         GraphADT g = RunBenchmark.alloc(args[1], size);
         g = RunBenchmark.readGraph(args[0], args[1]);
-        System.out.print(args[1] + "\t" + args[0] + "\t" + args[2]+"\t");
+        System.out.print(args[1] + "\t" + args[2] + "\t");
         System.out.print(g.order() + "\t");
         System.out.print(g.size() + "\t");
-        
+
         if (args[1].equals("jung") || args[1].equals("jgraph")) {
             System.out.println(runLibraries(args[1], args[2], g));
         } else {

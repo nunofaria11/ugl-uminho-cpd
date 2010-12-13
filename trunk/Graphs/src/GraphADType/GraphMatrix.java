@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- *
+ * NOT THE BEST IMPLEMENTATION !!!
  * @author nuno
  */
 public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
@@ -57,6 +57,15 @@ public class GraphMatrix<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     @Override
     public int order() {
         return _avail_index;
+    }
+
+    @Override
+    public int size() {
+        int total = 0;
+        for (T n : getNodes()) {
+            total += getNeighborEdges(n).size();
+        }
+        return total;
     }
 
     @Override
