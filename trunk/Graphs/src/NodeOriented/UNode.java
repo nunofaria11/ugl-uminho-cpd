@@ -3,7 +3,7 @@
  */
 package NodeOriented;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class UNode<T, Y extends Comparable<Y>> extends Node<T> {
 
-    List<EdgeEO<T, Y>> edges;
+    List<Edge<T, Y>> edges;
 
     public UNode(T data) {
         super(data);
-        edges = new ArrayList<EdgeEO<T, Y>>();
+        edges = new ArrayList<Edge<T, Y>>();
     }
 
 //    public UNode(List<EdgeEO<T, Y>> edges) {
@@ -37,7 +37,7 @@ public class UNode<T, Y extends Comparable<Y>> extends Node<T> {
      * @param edge
      * @return boolean successful adding or not
      */
-    public boolean add(EdgeEO<T, Y> edge) {
+    public boolean add(Edge<T, Y> edge) {
         if ((edge.getNode1().equals(this) || edge.getNode2().equals(this))
                 && !edge.getNode1().equals(edge.getNode2())) {
             return edges.add(edge);
@@ -45,16 +45,16 @@ public class UNode<T, Y extends Comparable<Y>> extends Node<T> {
         return false;
     }
 
-    public boolean remove(EdgeEO<T, Y> e) {
+    public boolean remove(Edge<T, Y> e) {
         return edges.remove(e);
     }
 
-    public boolean has(EdgeEO<T, Y> edge) {
+    public boolean has(Edge<T, Y> edge) {
         return edges.contains(edge);
     }
 
     public boolean hasNeighbor(Node<T> node) {
-        for (EdgeEO<T, Y> e : edges) {
+        for (Edge<T, Y> e : edges) {
             if (e.getNode1().equals(node) || e.getNode2().equals(node)) {
                 return true;
             }
@@ -62,7 +62,7 @@ public class UNode<T, Y extends Comparable<Y>> extends Node<T> {
         return false;
     }
 
-    public List<EdgeEO<T, Y>> getEdges() {
+    public List<Edge<T, Y>> getEdges() {
         return edges;
     }
 

@@ -4,7 +4,7 @@
  */
 package GraphADType.Algorithms;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
@@ -25,14 +25,14 @@ import java.util.PriorityQueue;
  */
 public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
-    public PriorityQueue<EdgeEO<T, Y>> initQ(GraphADT g) {
-        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
-        PriorityQueue<EdgeEO<T, Y>> Q = new PriorityQueue<EdgeEO<T, Y>>();
-        for (Node<T> i : new ArrayList<Node<T>>(g.getNodes())) {
+    public PriorityQueue<Edge<T, Y>> initQ(GraphADT g) {
+        ArrayList<T> visited = new ArrayList<T>();
+        PriorityQueue<Edge<T, Y>> Q = new PriorityQueue<Edge<T, Y>>();
+        for (T i : new ArrayList<T>(g.getNodes())) {
             visited.add(i);
-            Collection<EdgeEO<T, Y>> edges = g.getNeighborEdges(i);
-            ArrayList<EdgeEO<T, Y>> edgesToAdd = new ArrayList<EdgeEO<T, Y>>();
-            for (EdgeEO<T, Y> e : edges) {
+            Collection<Edge<T, Y>> edges = g.getNeighborEdges(i);
+            ArrayList<Edge<T, Y>> edgesToAdd = new ArrayList<Edge<T, Y>>();
+            for (Edge<T, Y> e : edges) {
                 if (!visited.contains(e.getNode2())) {
                     edgesToAdd.add(e);
                 }
@@ -42,9 +42,12 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         return Q;
     }
 
-    public GraphADT getMst(GraphADT g) {        
-        PriorityQueue<EdgeEO<T, Y>> Q = initQ(g);
-        g.initUnionFind();        
+    public GraphADT getMst(GraphADT g) {
+//        PriorityQueue<EdgeEO<T, Y>> Q = initQ(g);
+        g.initUnionFind();
+//        g._worklist = new PriorityQueue<EdgeEO<T,Y>>();
+        g.initWorklist(PriorityQueue.class);
+        g.fillWorklist();
         //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
         GraphADT mst = g.clone();
         mst.clean();
@@ -53,9 +56,9 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         int edges_processed = 0;
         int edges_added = 0;
         while (edges_processed < g.size() && edges_added < g.order() - 1) {
-            EdgeEO minEdge = Q.poll();
-            Node<T> ck1 = (Node<T>) g._union_find.find(minEdge.getNode1());
-            Node<T> ck2 = (Node<T>) g._union_find.find(minEdge.getNode2());
+            Edge minEdge = ((PriorityQueue<Edge>) g._worklist).poll();
+            T ck1 = (T) g._union_find.find(minEdge.getNode1());
+            T ck2 = (T) g._union_find.find(minEdge.getNode2());
             if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
                 mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
                 // A U {(u,v)}
@@ -117,13 +120,20 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
     public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);

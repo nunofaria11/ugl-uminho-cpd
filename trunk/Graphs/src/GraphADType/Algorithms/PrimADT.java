@@ -4,7 +4,7 @@
  */
 package GraphADType.Algorithms;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
@@ -14,7 +14,6 @@ import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
-import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -26,15 +25,15 @@ import java.util.PriorityQueue;
 public class PrimADT<T, Y extends Comparable<Y>> {
 
 //    GraphADT g;
-    ArrayList<Node<T>> visited;
-    PriorityQueue<EdgeEO<T, Y>> Q;
+    ArrayList<T> visited;
+    PriorityQueue<Edge<T, Y>> Q;
 
-    public void addVisited(Node<T> v) {
+    public void addVisited(T v) {
         visited.add(v);
         // whenever we add a visited node we have to remove
         // all references to that node in the queue
-        ArrayList<EdgeEO> removals = new ArrayList<EdgeEO>();
-        for (EdgeEO e : Q) {
+        ArrayList<Edge> removals = new ArrayList<Edge>();
+        for (Edge e : Q) {
             if (e.getNode2().equals(v)) {
                 removals.add(e);
             }
@@ -43,24 +42,24 @@ public class PrimADT<T, Y extends Comparable<Y>> {
     }
 
     public GraphADT getMst(GraphADT g) {
-        visited = new ArrayList<Node<T>>();
-        Q = new PriorityQueue<EdgeEO<T, Y>>();
+        visited = new ArrayList<T>();
+        Q = new PriorityQueue<Edge<T, Y>>();
         GraphADT mst = g.clone();
         mst.clean();
         mst.addNodes(g.order());
-        Node<T> start = g.getRandom();
+        T start = (T) g.getRandom();
         while (visited.size() < g.order() - 1) {
             addVisited(start);
             //
-            Collection<EdgeEO<T, Y>> nbors = g.getNeighborEdges(start);
-            ArrayList<EdgeEO<T, Y>> newEdges = new ArrayList<EdgeEO<T, Y>>();
-            for (EdgeEO<T, Y> e : nbors) {
+            Collection<Edge<T, Y>> nbors = g.getNeighborEdges(start);
+            ArrayList<Edge<T, Y>> newEdges = new ArrayList<Edge<T, Y>>();
+            for (Edge<T, Y> e : nbors) {
                 if (!visited.contains(e.getNode2())) {
                     newEdges.add(e);
                 }
             }
             Q.addAll(newEdges);
-            EdgeEO<T, Y> minEdge = Q.remove();
+            Edge<T, Y> minEdge = Q.remove();
             mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
             start = minEdge.getNode2();
             //
@@ -117,13 +116,20 @@ public class PrimADT<T, Y extends Comparable<Y>> {
     public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);

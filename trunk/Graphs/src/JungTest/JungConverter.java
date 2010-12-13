@@ -4,7 +4,7 @@
  */
 package JungTest;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphADType.Support.GenSaveReadADT;
@@ -31,16 +31,16 @@ public class JungConverter {
     public EdgeJHandler handler = new EdgeJHandler();
 
     public UndirectedSparseGraph<String, EdgeJ<Integer>> ADTtoJung(GraphADT adt) {
-        ArrayList<EdgeEO<String, Integer>> edges = (ArrayList<EdgeEO<String, Integer>>) adt.getUnduplicatedEdges();
+        ArrayList<Edge<String, Integer>> edges = (ArrayList<Edge<String, Integer>>) adt.getUnduplicatedEdges();
         UndirectedSparseGraph<String, EdgeJ<Integer>> jung_g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
-        for (EdgeEO edge : edges) {
-            Node n1 = edge.getNode1();
-            Node n2 = edge.getNode2();
+        for (Edge edge : edges) {
+            String n1 = (String) edge.getNode1();
+            String n2 = (String) edge.getNode2();
             Integer data = (Integer) edge.getEdge_data();
             EdgeJ<Integer> edge_jung = new EdgeJ<Integer>(data, handler);
             // check if nodes in this edge have already been added
-            String node1_data = (String) n1.getData();
-            String node2_data = (String) n2.getData();
+            String node1_data = n1;
+            String node2_data = n2;
             if (!jung_g.containsVertex(node1_data)) {
                 jung_g.addVertex(node1_data);
             }
@@ -59,13 +59,20 @@ public class JungConverter {
     public static GraphADT createSmallGraphADT(){
         GraphMapAdj<String, Integer> adt_g = new GraphMapAdj<String, Integer>();
         adt_g.addNodes(7);
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         adt_g.addEdge(n0, n1, 7);
         adt_g.addEdge(n0, n3, 5);
         adt_g.addEdge(n1, n2, 8);

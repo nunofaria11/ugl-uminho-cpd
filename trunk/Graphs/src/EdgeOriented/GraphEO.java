@@ -19,18 +19,18 @@ import java.util.Map;
  */
 public class GraphEO<T, Y extends Comparable<Y>>{
 
-    List<EdgeEO<T, Y>> edges;
+    List<Edge<T, Y>> edges;
 
     public GraphEO() {
-        edges = new ArrayList<EdgeEO<T, Y>>();
+        edges = new ArrayList<Edge<T, Y>>();
     }
 
-    public boolean add(EdgeEO<T, Y> edge) {
+    public boolean add(Edge<T, Y> edge) {
         return edges.add(edge);
     }
 
-    public boolean contains(Node<T> node) {
-        for (EdgeEO e : edges) {
+    public boolean contains(T node) {
+        for (Edge e : edges) {
             if (e.contains(node)) {
                 return true;
             }
@@ -38,7 +38,7 @@ public class GraphEO<T, Y extends Comparable<Y>>{
         return false;
     }
 
-    public EdgeEO<T, Y> getRandom() {
+    public Edge<T, Y> getRandom() {
         return edges.get((int) (Math.random() * edges.size()));
     }
 
@@ -49,14 +49,14 @@ public class GraphEO<T, Y extends Comparable<Y>>{
      * 
      * @return nodes Collection with all the nodes in the graph.
      */
-    public Collection<Node<T>> getNodes() {
-        Map<T, Node<T>> nodes = new HashMap<T, Node<T>>();
-        for (EdgeEO edge : edges) {
-            Node<T> n1 = edge.getNode1();
-            Node<T> n2 = edge.getNode2();
+    public Collection<T> getNodes() {
+        Map<T, T> nodes = new HashMap<T, T>();
+        for (Edge edge : edges) {
+            T n1 = (T) edge.getNode1();
+            T n2 = (T) edge.getNode2();
 
-            nodes.put(n1.getData(), n1);
-            nodes.put(n2.getData(), n2);
+            nodes.put(n1, n1);
+            nodes.put(n2, n2);
         }
         return nodes.values();
     }

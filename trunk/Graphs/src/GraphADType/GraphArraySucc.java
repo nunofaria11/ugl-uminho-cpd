@@ -1,6 +1,6 @@
 package GraphADType;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import NodeOriented.Node;
 
 import GraphADType.Support.Constants;
@@ -18,15 +18,15 @@ import java.util.Random;
 public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
     private static final long serialVersionUID = 6990005528953386502L;
-    HashMap<Node<T>, Integer> _index;
+    HashMap<T, Integer> _index;
     Object[] _succs;
     Object[] _weights;
     int avail_index;
     int total_num_edges;
 
     private void _allocate(int n) {
-        _index = new HashMap<Node<T>, Integer>(n);
-        int max_num_edges = Constants.possibleEdgesNum(n) * 2 /* *2 for double edges*/;
+        _index = new HashMap<T, Integer>(n);
+        int max_num_edges = Constants.possibleEdgesNum(n);/* *2 for double edges*/;
         _succs = new Object[max_num_edges];
         _weights = new Object[max_num_edges];
         avail_index = 0;
@@ -41,15 +41,15 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         _allocate(n);
     }
 
-    public GraphArraySucc(HashMap<Node<T>, Integer> _index, Object[] _succs, Object[] _weights, int avail_index) {
-        this._index = (HashMap<Node<T>, Integer>) _index.clone();
+    public GraphArraySucc(HashMap<T, Integer> _index, Object[] _succs, Object[] _weights, int avail_index) {
+        this._index = (HashMap<T, Integer>) _index.clone();
         this._succs = _succs.clone();
         this._weights = _weights.clone();
         this.avail_index = avail_index;
     }
 
     @Override
-    public boolean addNode(Node<T> node) {
+    public boolean addNode(T node) {
         _index.put(node, -1);
         return true;
     }
@@ -65,12 +65,12 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
-    public boolean isNode(Node<T> node) {
+    public boolean isNode(T node) {
         return _index.keySet().contains(node);
     }
 
     @Override
-    public void addArc(Node<T> n1, Node<T> n2, Y w) {
+    public void addArc(T n1, T n2, Y w) {
         if (avail_index >= _succs.length) {
 //            System.out.println("ALERT!!!: " + avail_index + " > " + _succs.length);
             return;
@@ -110,24 +110,24 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         System.arraycopy(tmp, 0, array, index + 1, tmp.length);
     }
 
-    private void shiftIndexMap(Node<T> node) {
+    private void shiftIndexMap(T node) {
         // get list of nodes to change
-        ArrayList<Node<T>> nodes = new ArrayList<Node<T>>(_index.keySet());
-        ArrayList<Node<T>> nodes2change = new ArrayList<Node<T>>();
+        ArrayList<T> nodes = new ArrayList<T>(_index.keySet());
+        ArrayList<T> nodes2change = new ArrayList<T>();
         nodes.remove(node);
-        for (Node n : nodes) {
+        for (T n : nodes) {
             if (_index.get(n) >= _index.get(node) && !nodes2change.contains(n)) {
                 nodes2change.add(n);
             }
         }
-        for (Node n : nodes2change) {
+        for (T n : nodes2change) {
             int x = _index.get(n);
             _index.put(n, x + 1);
         }
 
     }
 
-    private void shiftNextIndices(Node<T> node) {
+    private void shiftNextIndices(T node) {
         // shift the index hashmap
         shiftIndexMap(node);
         // when shifted the _index map right - also shift all elements from that
@@ -138,13 +138,13 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
-    public void addEdge(Node<T> n1, Node<T> n2, Y w) {
+    public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
         addArc(n2, n1, w);
     }
 
     @Override
-    public boolean isArc(Node<T> n1, Node<T> n2) {
+    public boolean isArc(T n1, T n2) {
         if (!_index.containsKey(n1)) {
             return false;
         }
@@ -155,7 +155,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         Collection<Integer> indices = _index.values();
         indices.remove(index);// indices has beginning indices of every other node
         for (int i = index; i < avail_index && !indices.contains(i); i++) {
-            if (n2.equals((Node<T>) _succs[i])) {
+            if (n2.equals((T) _succs[i])) {
                 return true;
             }
         }
@@ -163,7 +163,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
-    public Y getWeight(Node<T> n1, Node<T> n2) {
+    public Y getWeight(T n1, T n2) {
 //        if (!_index.containsKey(n1)) {
 //            return null;
 //        }
@@ -176,7 +176,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         Collection<Integer> indices = new ArrayList<Integer>(_index.values());
         indices.remove(index);// indices has beginning indices of every other node
         for (int i = index; i < avail_index && !indices.contains(i); i++) {
-            if (n2.equals((Node<T>) _succs[i])) {
+            if (n2.equals((T) _succs[i])) {
                 return (Y) _weights[i];
             }
         }
@@ -184,12 +184,12 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
-    public Collection<Node<T>> getNodes() {
-        return new ArrayList<Node<T>>(_index.keySet());
+    public Collection<T> getNodes() {
+        return new ArrayList<T>(_index.keySet());
     }
 
-    public Node<T> getRandom() {
-        return (Node<T>) _index.keySet().toArray()[new Random().nextInt(order())];
+    public T getRandom() {
+        return (T) _index.keySet().toArray()[new Random().nextInt(order())];
     }
 
     private int getMaxIndex() {
@@ -224,8 +224,8 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     @Override
-    public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node) {
-        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>();
+    public Collection<Edge<T, Y>> getNeighborEdges(T node) {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
         int index = _index.get(node);
         int next_higher_index = getNextHigherIndex(index);
 //        System.out.println("Next Higher Index: " + next_higher_index);
@@ -233,7 +233,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         for (int i = index; i < next_higher_index; i++) {
             if (_succs[i] != null) {
 //                System.out.println("Succ: " + _succs[i]);
-                EdgeEO<T, Y> e = new EdgeEO<T, Y>(node, (Node<T>) _succs[i], (Y) _weights[i]);
+                Edge<T, Y> e = new Edge<T, Y>(node, (T) _succs[i], (Y) _weights[i]);
                 if (e.getNode2() != null && e.getEdge_data() != null) {
                     edges.add(e);
                 }
@@ -246,7 +246,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("ArraySucc:\n");
-        for (Node<T> node : _index.keySet()) {
+        for (T node : _index.keySet()) {
             s.append(node.toString()).append(" ::: ");
             s.append(getNeighborEdges(node));
             s.append("\n");
@@ -266,7 +266,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
         StringBuilder s = new StringBuilder();
         for (Object o : _succs) {
             if (o != null) {
-                s.append(((Node<T>) o).toString()).append(", ");
+                s.append(((T) o).toString()).append(", ");
             }
         }
         return s.toString();
@@ -301,7 +301,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
     }
 
     public static void main(String[] args) {
-        GraphArraySucc<String, Double> g = new GraphArraySucc<String, Double>(7);
+        GraphArraySucc<Node<String>, Double> g = new GraphArraySucc<Node<String>, Double>(7);
 
         Node<String> n0 = new Node<String>("A");
         Node<String> n1 = new Node<String>("B");

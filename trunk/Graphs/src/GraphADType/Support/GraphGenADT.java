@@ -4,11 +4,10 @@
  */
 package GraphADType.Support;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphIO.GraphInput;
-import GraphIO.GraphOutput;
 import NodeOriented.Node;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -147,9 +146,9 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
     }
 
     private GraphADT gnm(GraphADT g, int N) {
-        Random random = new Random(System.currentTimeMillis());
+//        Random random = new Random(System.currentTimeMillis());
 
-        ArrayList<EdgeEO> existingEdges = new ArrayList<EdgeEO>();
+//        ArrayList<Edge> existingEdges = new ArrayList<Edge>();
 
         // choose the minimum edges needed so that the graph may be ?connected?
         int nE = Math.min(
@@ -162,18 +161,18 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         // Randomly selecting a new edge is computationally
         // prohibitive when the number of edges approaches the maximum
         // (due to performance issues).
-        Queue<Node<T>> nodeQ = new LinkedList<Node<T>>();
+        Queue<T> nodeQ = new LinkedList<T>();
         // create all node ids
         ArrayList<T> t_node_ids = (ArrayList<T>) createNodeIds(alphabet, arith, N);
-        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) g.insertAllNodes(t_node_ids);
+        ArrayList<T> allnodes = (ArrayList<T>) g.insertAllNodes(t_node_ids);
         // add all node ids to node queue
         nodeQ.addAll(allnodes);
 
         for (int i = 0; i < nE; i++) {
-            ArrayList<Node<T>> removed = new ArrayList<Node<T>>();
+            ArrayList<T> removed = new ArrayList<T>();
 //            System.out.println("Queue: "+nodeQ);
-            Node source = nodeQ.poll(); // removes source node from queue
-            Node target = nodeQ.peek(); // DOESN'T remove the target node from queue
+            T source = nodeQ.poll(); // removes source node from queue
+            T target = nodeQ.peek(); // DOESN'T remove the target node from queue
             removed.add(source);
 
 //            System.out.println("Source:"+source+"\tTarget:"+target);
@@ -200,17 +199,17 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
         Random random = new Random(System.currentTimeMillis());
         // create nodes ids and insert nodes in graph
         ArrayList<T> t_node_ids = (ArrayList<T>) createNodeIds(alphabet, arith, N);
-        ArrayList<Node<T>> allnodes = (ArrayList<Node<T>>) g.insertAllNodes(t_node_ids);
-        ArrayList<Node<T>> visited = new ArrayList<Node<T>>();
+        ArrayList<T> allnodes = (ArrayList<T>) g.insertAllNodes(t_node_ids);
+        ArrayList<T> visited = new ArrayList<T>();
         // create random egdes while the graph is not connected
         while (!g.connected()) {
             // For each node
-            for (Node<T> i : allnodes) {
+            for (T i : allnodes) {
                 visited.add(i);
                 // For every other node
-                ArrayList<Node<T>> available = new ArrayList<Node<T>>(allnodes);
+                ArrayList<T> available = new ArrayList<T>(allnodes);
                 available.removeAll(visited);
-                for (Node<T> j : available) {
+                for (T j : available) {
                     // If random indicates this edge exists
                     if (random.nextDouble() <= this.prob) {
                         // Create and edge between node i and node j

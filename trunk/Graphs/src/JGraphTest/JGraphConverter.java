@@ -4,7 +4,7 @@
  */
 package JGraphTest;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.Support.GenSaveReadADT;
 import JungTest.EdgeJ;
@@ -26,11 +26,11 @@ public class JGraphConverter {
 
     public WeightedMultigraph ADTtoJGraph(GraphADT g) {
         WeightedMultigraph<String, EdgeJ<Integer>> jgraph = new WeightedMultigraph(EdgeJ.class);
-        ArrayList<EdgeEO<String, Integer>> alledges = new ArrayList<EdgeEO<String, Integer>>(g.getEdges());
+        ArrayList<Edge<String, Integer>> alledges = new ArrayList<Edge<String, Integer>>(g.getEdges());
 
-        for (EdgeEO edge_adt : alledges) {
-            String n1 = (String) edge_adt.getNode1().getData();
-            String n2 = (String) edge_adt.getNode2().getData();
+        for (Edge edge_adt : alledges) {
+            String n1 = (String) edge_adt.getNode1();
+            String n2 = (String) edge_adt.getNode2();
             EdgeJ<Integer> edge_jgraph = new EdgeJ<Integer>((Integer) edge_adt.getEdge_data(), handler);
             if (!jgraph.containsVertex(n1)) {
                 jgraph.addVertex(n1);

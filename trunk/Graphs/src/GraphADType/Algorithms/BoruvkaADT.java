@@ -4,7 +4,7 @@
  */
 package GraphADType.Algorithms;
 
-import EdgeOriented.EdgeEO;
+import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphArraySucc;
 import GraphADType.GraphMapAdj;
@@ -15,7 +15,6 @@ import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.UnionFind_ADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
-import NodeOriented.Node;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -31,36 +30,36 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
      * The wannabe and nbors arrays had to be transformed from arrays to hashmaps
      * in order to being able to associate
      */
-    private ArrayList<EdgeEO<T, Y>> wannabes;
-    private HashMap<Node<T>, EdgeEO<T, Y>> nbors;
-    private UnionFind_ADT<Node<T>> uf;
+    private ArrayList<Edge<T, Y>> wannabes;
+    private HashMap<T, Edge<T, Y>> nbors;
+    private UnionFind_ADT<T> uf;
     private GraphADT g;
     /*
      * The maximum edge had to be calculated according to the maximum edge present
      * in the graph. I couldn't create a generic maximum edge.
      */
-    private final EdgeEO<T, Y> maxEdge;
+    private final Edge<T, Y> maxEdge;
 
     public BoruvkaADT(GraphADT g) {
         this.g = g.clone();
-        this.wannabes = new ArrayList<EdgeEO<T, Y>>(g.size());
-        this.nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
+        this.wannabes = new ArrayList<Edge<T, Y>>(g.size());
+        this.nbors = new HashMap<T, Edge<T, Y>>(g.order());
         this.uf = new UnionFind_ADT(this.g.getNodes());
         // create maximum edge for comparison effects
         this.maxEdge = getMaxEdge();
     }
 
-    private EdgeEO<T, Y> getMaxEdge() {
-        ArrayList<EdgeEO<T, Y>> edges = new ArrayList<EdgeEO<T, Y>>(g.size());
+    private Edge<T, Y> getMaxEdge() {
+        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>(g.size());
         edges.addAll(g.getEdges());
         if (edges.size() < 1) {
             return null;
         }
         // create a priority queue where in non-INcreasing order
         // i.e., the highest element is the head.
-        PriorityQueue<EdgeEO<T, Y>> q = new PriorityQueue<EdgeEO<T, Y>>(edges.size(), new Comparator<EdgeEO<T, Y>>() {
+        PriorityQueue<Edge<T, Y>> q = new PriorityQueue<Edge<T, Y>>(edges.size(), new Comparator<Edge<T, Y>>() {
 
-            public int compare(EdgeEO<T, Y> o1, EdgeEO<T, Y> o2) {
+            public int compare(Edge<T, Y> o1, Edge<T, Y> o2) {
                 return o2.getEdge_data().compareTo(o1.getEdge_data());
             }
         });
@@ -84,29 +83,29 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
      */
     public GraphADT getMst() {
         // mst edges
-        ArrayList<EdgeEO<T, Y>> mstEdges = new ArrayList<EdgeEO<T, Y>>();
+        ArrayList<Edge<T, Y>> mstEdges = new ArrayList<Edge<T, Y>>();
 
         // get wannabe edges in MST
-        this.wannabes = new ArrayList<EdgeEO<T, Y>>(g.size());
+        this.wannabes = new ArrayList<Edge<T, Y>>(g.size());
         wannabes.addAll(g.getUnduplicatedEdges());
 
         // initialize forest (nbors hashmap - each node is initially a root)
-        this.nbors = new HashMap<Node<T>, EdgeEO<T, Y>>(g.order());
-        ArrayList<Node<T>> allnodes = new ArrayList<Node<T>>(g.getNodes());
-        for (Node<T> node : allnodes) {
+        this.nbors = new HashMap<T, Edge<T, Y>>(g.order());
+        ArrayList<T> allnodes = new ArrayList<T>(g.getNodes());
+        for (T node : allnodes) {
             nbors.put(node, maxEdge);
         }
 
         int next;
         // Repeat until there is only one tree
         for (int i = g.size(); i != 0; i = next) {
-            for (Node<T> node : allnodes) {
+            for (T node : allnodes) {
                 nbors.put(node, maxEdge);
             }
-            ArrayList<EdgeEO<T, Y>> edges2add = new ArrayList<EdgeEO<T, Y>>();
-            Node<T> l, m;
+            ArrayList<Edge<T, Y>> edges2add = new ArrayList<Edge<T, Y>>();
+            T l, m;
             next = 0;
-            for (EdgeEO<T, Y> e : wannabes) {
+            for (Edge<T, Y> e : wannabes) {
                 l = uf.find(e.getNode1());
                 m = uf.find(e.getNode2());
                 if (l.equals(m)) {
@@ -126,8 +125,8 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
                 next++;
             }
             // for every vertex check its nearest neighbor
-            for (Node<T> n : allnodes) {
-                EdgeEO<T, Y> nEdge = this.nbors.get(n);
+            for (T n : allnodes) {
+                Edge<T, Y> nEdge = this.nbors.get(n);
                 if (!nEdge.equals(maxEdge)) {
 
                     l = nEdge.getNode1();
@@ -237,13 +236,21 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
     public static void main(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
-        Node<String> n0 = new Node<String>("A");
-        Node<String> n1 = new Node<String>("B");
-        Node<String> n2 = new Node<String>("C");
-        Node<String> n3 = new Node<String>("D");
-        Node<String> n4 = new Node<String>("E");
-        Node<String> n5 = new Node<String>("F");
-        Node<String> n6 = new Node<String>("G");
+//        Node<String> n0 = new Node<String>("A");
+//        Node<String> n1 = new Node<String>("B");
+//        Node<String> n2 = new Node<String>("C");
+//        Node<String> n3 = new Node<String>("D");
+//        Node<String> n4 = new Node<String>("E");
+//        Node<String> n5 = new Node<String>("F");
+//        Node<String> n6 = new Node<String>("G");
+        String n0 ="A";
+        String n1 ="B";
+        String n2 ="C";
+        String n3 ="D";
+        String n4 ="E";
+        String n5 ="F";
+        String n6 ="G";
+
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);

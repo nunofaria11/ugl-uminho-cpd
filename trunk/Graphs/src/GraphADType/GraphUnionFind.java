@@ -4,32 +4,26 @@
  */
 package GraphADType;
 
-import EdgeOriented.EdgeEO;
-import NodeOriented.Node;
+import EdgeOriented.Edge;
+import GraphADType.Support.UnionFindTree;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 /**
  *
  * @author nuno
  */
-public class GraphMapAdj2<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
+public class GraphUnionFind<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
-    private static final long serialVersionUID = -4330765585850038580L;
-    // The edges
-    HashMap<Node<T>, Queue<EdgeEO<T, Y>>> _adj_map;
-
-    private HashMap<Node<T>, Queue<EdgeEO<T, Y>>> _allocate(int n) {
-        HashMap<Node<T>, Queue<EdgeEO<T, Y>>> map = new HashMap<Node<T>, Queue<EdgeEO<T, Y>>>(n);
-        map.clear();
-        for (Node<T> node : map.keySet()) {
-            map.put(node, new PriorityQueue<EdgeEO<T, Y>>());
-        }
-        return map;
-    }
+    private static final long serialVersionUID = 7366196200306982820L;
+    /*
+     * FLAG control for NTreeADT node:
+     *  0 ==> node from the original graph, not in the MST
+     *  1 ==> MST node
+     *  2 ==> original and MST graph node
+     */
+    // tree
+    UnionFindTree _tree;
 
     @Override
     public void addNodes(int n) {
@@ -42,42 +36,42 @@ public class GraphMapAdj2<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
     }
 
     @Override
-    public boolean addNode(Node<T> node) {
+    public boolean addNode(T node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean isNode(Node<T> node) {
+    public boolean isNode(T node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void addArc(Node<T> n1, Node<T> n2, Y w) {
+    public void addArc(T n1, T n2, Y w) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void addEdge(Node<T> n1, Node<T> n2, Y w) {
+    public void addEdge(T n1, T n2, Y w) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean isArc(Node<T> n1, Node<T> n2) {
+    public boolean isArc(T n1, T n2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Y getWeight(Node<T> n1, Node<T> n2) {
+    public Y getWeight(T n1, T n2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Node<T> getRandom() {
+    public T getRandom() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Collection<EdgeEO<T, Y>> getNeighborEdges(Node<T> node) {
+    public Collection<Edge<T, Y>> getNeighborEdges(T node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -97,7 +91,7 @@ public class GraphMapAdj2<T, Y extends Comparable<Y>> extends GraphADT<T, Y> imp
     }
 
     @Override
-    public Collection<Node<T>> getNodes() {
+    public Collection<T> getNodes() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
