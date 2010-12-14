@@ -8,7 +8,7 @@ import GraphADType.GraphADT;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.ForestInteger_ADT;
 import JungTest.EdgeJ;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,7 +67,7 @@ public class BoruvkaJgraph<T, Y extends Comparable<Y>> {
         WeightedMultigraph mst = new WeightedMultigraph(EdgeJ.class);
         ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(graph.edgeSet());
         HashMap<T, EdgeJ<Y>> nbors = new HashMap<T, EdgeJ<Y>>(graph.vertexSet().size());
-        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.vertexSet());
+        ForestInteger_ADT<T> uf = new ForestInteger_ADT<T>(graph.vertexSet());
 
         ArrayList<EdgeJ> mstEdges = new ArrayList<EdgeJ>();
 

@@ -2,14 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package GraphADType.Support;
+
+import java.util.Collection;
 
 /**
  *
  * @author nuno
  */
-public interface UnionFind<X> {
+public interface Forest<X> {
+
+    /**
+     * Fill the forest with a collection
+     * @param col Collection to insert in the UnionFind structure
+     */
+    void fill(Collection<X> col);
 
     /**
      * Finds a root of node <i>x</i>.
@@ -33,4 +40,10 @@ public interface UnionFind<X> {
      */
     void union(X p, X q);
 
+    /**
+     * Checks if the UnionFind structure has already found an MST -
+     * the element with more children is the MST candidate
+     * @return NTreeADT that has the MST, if it is not <b>null</b>
+     */
+    NTreeADT getMST();
 }

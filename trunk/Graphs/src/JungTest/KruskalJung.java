@@ -7,7 +7,7 @@ package JungTest;
 import GraphADType.GraphADT;
 import GraphADType.Support.Constants;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.ForestInteger_ADT;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,7 @@ public class KruskalJung<T, Y extends Comparable<Y>> {
         UndirectedSparseGraph graph = g;
         PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>(graph.getEdges());
         UndirectedSparseGraph<T, EdgeJ<Y>> mst = new UndirectedSparseGraph<T, EdgeJ<Y>>();
-        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.getVertices());
+        ForestInteger_ADT<T> uf = new ForestInteger_ADT<T>(graph.getVertices());
         //
         int edges_processed = 0;
         int edges_added = 0;

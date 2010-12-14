@@ -16,11 +16,15 @@ import org.apache.commons.collections15.map.FastHashMap;
  *      pass the original graph so that we could access the edge info
  * @author nuno
  */
-public class UnionFindTree<X> implements UnionFind<X> {
+public class ForestTree<X> implements Forest<X> {
 
     private HashMap<X, NTreeADT<X>> _tree;
 
-    public UnionFindTree(Collection<X> elements) {
+    public ForestTree() {
+        this._tree = new FastHashMap<X, NTreeADT<X>>();
+    }
+
+    public ForestTree(Collection<X> elements) {
         this._tree = new FastHashMap<X, NTreeADT<X>>(elements.size());
         // at first it adds an empty tree (with no childs) to the structure
         for (X el : elements) {
@@ -64,11 +68,15 @@ public class UnionFindTree<X> implements UnionFind<X> {
         }
     }
 
-    /**
-     * Checks if the UnionFind structure has already found an MST -
-     * the element with more children is the MST candidate
-     * @return NTreeADT that has the MST, if it is not <b>null</b>
-     */
+    public void fill(Collection<X> col) {
+        this._tree = new FastHashMap<X, NTreeADT<X>>(col.size());
+        // at first it adds an empty tree (with no childs) to the structure
+        for (X el : col) {
+            _tree.put(el, new NTreeADT<X>(el));
+        }
+    }
+
+
     public NTreeADT getMST() {
 
         NTreeADT mst_tree = null;
@@ -76,10 +84,10 @@ public class UnionFindTree<X> implements UnionFind<X> {
             if (mst_tree == null) {
                 mst_tree = _tree.get(key);
             }
-                if (_tree.get(key).childs.size() > mst_tree.childs.size()) {
-                    // it meants it is still empty
-                    mst_tree = _tree.get(key);
-                }
+            if (_tree.get(key).childs.size() > mst_tree.childs.size()) {
+                // it meants it is still empty
+                mst_tree = _tree.get(key);
+            }
 
         }
         return mst_tree;
@@ -108,7 +116,7 @@ public class UnionFindTree<X> implements UnionFind<X> {
         nodes.add(C);
         nodes.add(D);
 
-        UnionFind_ADT<Node<String>> uf_adt = new UnionFind_ADT<Node<String>>(nodes);
+        ForestInteger_ADT<Node<String>> uf_adt = new ForestInteger_ADT<Node<String>>(nodes);
         System.out.println(uf_adt.toString());
         uf_adt.union(A, B);
         System.out.println(uf_adt.toString());
@@ -117,7 +125,7 @@ public class UnionFindTree<X> implements UnionFind<X> {
 
         System.out.println();
 
-        UnionFindTree<Node<String>> uf_tree = new UnionFindTree<Node<String>>(nodes);
+        ForestTree<Node<String>> uf_tree = new ForestTree<Node<String>>(nodes);
         System.out.println(uf_tree.toString());
         uf_tree.union(B, D);
         System.out.println(uf_tree.toString());

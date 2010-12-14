@@ -13,6 +13,8 @@ import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
+import GraphADType.Support.ForestTree;
+import GraphADType.Support.ForestInteger_ADT;
 import GraphADType.Support.YRandomizer;
 import GraphIO.GraphInput;
 import java.util.ArrayList;
@@ -42,9 +44,9 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         return Q;
     }
 
-    public GraphADT getMst(GraphADT g) {
+    public GraphADT getMst2(GraphADT g) {
 //        PriorityQueue<EdgeEO<T, Y>> Q = initQ(g);
-        g.initUnionFind();
+        g.initForest(new ForestInteger_ADT());
 //        g._worklist = new PriorityQueue<EdgeEO<T,Y>>();
         g.initWorklist(PriorityQueue.class);
         g.fillWorklist();
@@ -57,12 +59,39 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         int edges_added = 0;
         while (edges_processed < g.size() && edges_added < g.order() - 1) {
             Edge minEdge = ((PriorityQueue<Edge>) g._worklist).poll();
-            T ck1 = (T) g._union_find.find(minEdge.getNode1());
-            T ck2 = (T) g._union_find.find(minEdge.getNode2());
+            T ck1 = (T) g._forest.find(minEdge.getNode1());
+            T ck2 = (T) g._forest.find(minEdge.getNode2());
             if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
                 mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
                 // A U {(u,v)}
-                g._union_find.union(ck1, ck2);
+                g._forest.union(ck1, ck2);
+                edges_added++;
+            }
+            edges_processed++;
+        }
+        //
+        return mst;
+    }
+
+    public GraphADT getMst(GraphADT g) {
+        g.initForest(new ForestTree());
+        g.initWorklist(PriorityQueue.class);
+        g.fillWorklist();
+        //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
+        GraphADT mst = g.clone();
+        mst.clean();
+        mst.addNodes(g.order());
+        //
+        int edges_processed = 0;
+        int edges_added = 0;
+        while (edges_processed < g.size() && edges_added < g.order() - 1) {
+            Edge minEdge = ((PriorityQueue<Edge>) g._worklist).poll();
+            T ck1 = (T) g._forest.find(minEdge.getNode1());
+            T ck2 = (T) g._forest.find(minEdge.getNode2());
+            if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
+                mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
+                // A U {(u,v)}
+                g._forest.union(ck1, ck2);
                 edges_added++;
             }
             edges_processed++;
@@ -147,10 +176,10 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         g.addEdge(n4, n5, 8.1);
         g.addEdge(n4, n6, 9.1);
         g.addEdge(n5, n6, 11.1);
-        System.out.println("order: " + g.order()+"\tsize: " + g.size());
+        System.out.println("order: " + g.order() + "\tsize: " + g.size());
 
         ArrayList alledges = new ArrayList(g.getEdges());
-        System.out.println("All edges("+alledges.size()+"): " + alledges);
+        System.out.println("All edges(" + alledges.size() + "): " + alledges);
 
         // create Prim instance...
         KruskalADT_UF kruskal = new KruskalADT_UF();
@@ -180,13 +209,17 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         KruskalADT_UF.test_implementations(300);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         GraphInput gin = new GraphInput("graph_650.ser");
         GraphADT g = gin.readGraphADT();
 
         KruskalADT_UF<String, Integer> kruskal = new KruskalADT_UF<String, Integer>();
         GraphADT mst = kruskal.getMst(g);
         int t = 0;
-        System.out.println(g.getMstWeight(Constants.intArith, t));
+        System.out.println(mst.getMstWeight(Constants.intArith, t));
+
+        GraphADT mst2 = kruskal.getMst2(g);
+        int t2 = 0;
+        System.out.println(mst2.getMstWeight(Constants.intArith, t2));
     }
 }

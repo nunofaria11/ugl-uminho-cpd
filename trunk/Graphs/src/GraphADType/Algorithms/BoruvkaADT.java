@@ -12,7 +12,7 @@ import GraphADType.GraphMapSucc;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.ForestInteger_ADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
 import GraphIO.GraphInput;
@@ -33,7 +33,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
      */
     private ArrayList<Edge<T, Y>> wannabes;
     private HashMap<T, Edge<T, Y>> nbors;
-    private UnionFind_ADT<T> uf;
+    private ForestInteger_ADT<T> uf;
     private GraphADT g;
     /*
      * The maximum edge had to be calculated according to the maximum edge present
@@ -45,7 +45,7 @@ public class BoruvkaADT<T, Y extends Comparable<Y>> {
         this.g = g.clone();
         this.wannabes = new ArrayList<Edge<T, Y>>(g.size());
         this.nbors = new HashMap<T, Edge<T, Y>>(g.order());
-        this.uf = new UnionFind_ADT(this.g.getNodes());
+        this.uf = new ForestInteger_ADT(this.g.getNodes());
         // create maximum edge for comparison effects
         this.maxEdge = getMaxEdge();
     }

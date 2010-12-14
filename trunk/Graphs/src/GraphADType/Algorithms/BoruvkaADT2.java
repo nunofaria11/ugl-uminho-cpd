@@ -13,6 +13,7 @@ import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
+import GraphADType.Support.ForestTree;
 import GraphADType.Support.YRandomizer;
 import GraphIO.GraphInput;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
         g.initWorklist(ArrayList.class);
         g.fillWorklist();
         // build control forest
-        g.initUnionFind();
+        g.initForest(new ForestTree());
 
         // initialize forest (nbors hashmap - each node is initially a root)
         HashMap<T, Edge<T, Y>> nbors = new HashMap<T, Edge<T, Y>>(g.order());
@@ -56,8 +57,8 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
             nextIteration = 0;
             for (Edge<T, Y> e : (ArrayList<Edge<T, Y>>) g._worklist) {
                 // get both nodes of the edge and then see if they have already found a smaller edge (in 'nbors' map)
-                l = (T) g._union_find.find(e.getNode1());
-                m = (T) g._union_find.find(e.getNode2());
+                l = (T) g._forest.find(e.getNode1());
+                m = (T) g._forest.find(e.getNode2());
                 if (l.equals(m)) {
                     continue;
                 }
@@ -79,8 +80,8 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
                     Edge<T, Y> nEdge = nbors.get(n);
                     l = nEdge.getNode1();
                     m = nEdge.getNode2();
-                    if (!g._union_find.find(l, m)) {
-                        g._union_find.union(l, m);
+                    if (!g._forest.find(l, m)) {
+                        g._forest.union(l, m);
                         edges2add.add(nEdge);
                     }
                 }

@@ -9,7 +9,7 @@ import GraphADType.GraphADT;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.ForestInteger_ADT;
 import GraphIO.GraphInput;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -33,7 +33,7 @@ public class BoruvkaJung<T, Y extends Comparable<Y>> {
 
         ArrayList<EdgeJ> wannabes = new ArrayList<EdgeJ>(g.getEdges());
         HashMap<T, EdgeJ<Y>> nbors = new HashMap<T, EdgeJ<Y>>(g.getVertexCount());
-        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(g.getVertices());
+        ForestInteger_ADT<T> uf = new ForestInteger_ADT<T>(g.getVertices());
         UndirectedSparseGraph mst = new UndirectedSparseGraph();
         ArrayList<EdgeJ> mstEdges = new ArrayList<EdgeJ>();
 
