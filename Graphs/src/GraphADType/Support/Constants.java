@@ -24,7 +24,6 @@ public class Constants {
             return r.nextDouble() * (upper - lower) + lower;
         }
     };
-
     public static YRandomizer<Integer> randInteger = new YRandomizer<Integer>() {
 
         public Integer random(Integer lower, Integer upper) {
@@ -32,20 +31,18 @@ public class Constants {
             return r.nextInt(upper - lower) + lower;
         }
     };
-
     public static YRandomizer<Integer> sleepIntRand = new YRandomizer<Integer>() {
 
-            public Integer random(Integer lower, Integer upper) {
-                Random r = new Random(System.currentTimeMillis());
-                try {
-                    Thread.sleep(1, 2);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GenSaveReadADT.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return r.nextInt(upper - lower) + lower;
+        public Integer random(Integer lower, Integer upper) {
+            Random r = new Random(System.currentTimeMillis());
+            try {
+                Thread.sleep(1, 2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GenSaveReadADT.class.getName()).log(Level.SEVERE, null, ex);
             }
-        };
-
+            return r.nextInt(upper - lower) + lower;
+        }
+    };
     public static TArithmeticOperations<String> strArith = new TArithmeticOperations<String>() {
 
         public String Add(String a, String b) {
@@ -60,21 +57,32 @@ public class Constants {
             return "";
         }
     };
-
     public static TArithmeticOperations<Integer> intArith = new TArithmeticOperations<Integer>() {
 
         public Integer Add(Integer a, Integer b) {
-            return a+b;
+            return a + b;
         }
 
         public Integer Cat(Integer a, Integer b) {
-            return Integer.parseInt(a.toString()+b.toString());
+            return Integer.parseInt(a.toString() + b.toString());
         }
 
         public Integer zero_element() {
             return 0;
         }
+    };
+    public static TArithmeticOperations<Double> doubleArith = new TArithmeticOperations<Double>() {
 
+        public Double Add(Double a, Double b) {
+            return a + b;
+        }
 
+        public Double Cat(Double a, Double b) {
+            return Double.parseDouble(a.toString() + b.toString());
+        }
+
+        public Double zero_element() {
+            return 0.0;
+        }
     };
 }

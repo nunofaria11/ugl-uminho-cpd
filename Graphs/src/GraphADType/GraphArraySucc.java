@@ -106,8 +106,6 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
             _weights[index] = w;
         }
         avail_index++;
-
-
     }
 
     private void shift(Object[] array, int index) {
@@ -383,6 +381,7 @@ public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
 
         System.out.println(g.stateString());
         System.out.println(g.getNeighborEdges("B"));
+
 
 //        double total3 = 0.0;
 /*        TArithmeticOperations<Double> arith = new TArithmeticOperations<Double>() {

@@ -135,7 +135,9 @@ public class GenSaveReadADT {
                 strArith, // interface for node ids creation operations
                 alpha);     // alphabet to consider in node-ids
         GraphMapAdj<String, Integer> g = new GraphMapAdj<String, Integer>();
+        System.out.println("Generating...");
         g = (GraphMapAdj<String, Integer>) ggen.generate(g, size);
+        System.out.println("...done.");
         GraphOutput gout = new GraphOutput("graph_" + size + ".ser");
         gout.saveGraphADT(g);
     }
@@ -174,7 +176,8 @@ public class GenSaveReadADT {
     }
 
     public static void main(String[] args) throws IOException {
-        for (int s = 50; s <= 800; s += 50) {
+        for (int s = 850; s <= 1000; s += 50) {
+            System.out.println("Creating " + s + "...");
             GenSaveReadADT.GenerateAndWriteTestBenchGraph(s);
         }
     }

@@ -41,8 +41,8 @@ public class UnionFindTree<X> implements UnionFind<X> {
     }
 
     public void union(X p, X q) {
-        X i = find(p);
-        X j = find(q);
+        X i = find(p); // get root of i
+        X j = find(q); // get root of j
         if (i.equals(j)) {
             return;
         }
@@ -50,23 +50,17 @@ public class UnionFindTree<X> implements UnionFind<X> {
         NTreeADT jj = _tree.get(j);
         // if ii has more
         if (jj.childs.size() <= ii.childs.size()) {
-//            System.out.println(ii + " has more childs...");
             jj.parent = ii;
             ii.addChild(jj);
             _tree.put(j, jj);
-            Collection<X> childs_of_jj = jj.childs;//jj.BFSTreeElements();
-//            System.out.println("BFS: " + childs_of_jj);
+            Collection<X> childs_of_jj = jj.childs;
             ii.addChilds(childs_of_jj);
-            //
         } else if (ii.childs.size() < jj.childs.size()) {
-//            System.out.println(jj + " has more childs...");
             ii.parent = jj;
             jj.addChild(ii);
             _tree.put(i, ii);
-            Collection<X> childs_of_ii = ii.childs;//ii.BFSTreeElements();
-//            System.out.println("BFS: " + childs_of_ii);
+            Collection<X> childs_of_ii = ii.childs;
             jj.addChilds(childs_of_ii);
-            //
         }
     }
 
