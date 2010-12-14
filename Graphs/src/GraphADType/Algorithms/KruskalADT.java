@@ -9,7 +9,7 @@ import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphADType.Support.Constants;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.UnionFindTree;
+import GraphADType.Support.ForestTree;
 import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +40,7 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
 
     public GraphADT getMst(GraphADT g) {
         PriorityQueue<Edge<T, Y>> Q = initQ(g);
-        UnionFindTree<T> _union_find = new UnionFindTree<T>(g.getNodes());
+        ForestTree<T> _union_find = new ForestTree<T>(g.getNodes());
         //http://penguin.ewu.edu/cscd327/Topic/Graph/Kruskal/Set_Union_Find.html
         GraphADT mst = g.clone();
         mst.clean();

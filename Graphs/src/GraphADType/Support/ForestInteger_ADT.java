@@ -12,12 +12,15 @@ import java.util.Map;
  * Union find structure with abstract data types.
  * @author nuno
  */
-public class UnionFind_ADT<X> implements UnionFind<X> {
+public class ForestInteger_ADT<X> implements Forest<X> {
 
     private Map<X, Integer> sz;
     private Map<X, X> id;
 
-    public UnionFind_ADT(Collection<X> xs) {
+    public ForestInteger_ADT() {
+    }
+
+    public ForestInteger_ADT(Collection<X> xs) {
         id = new HashMap<X, X>(xs.size());
         sz = new HashMap<X, Integer>(xs.size());
         for (X x : xs) {
@@ -50,6 +53,19 @@ public class UnionFind_ADT<X> implements UnionFind<X> {
             id.put(j, i);
             sz.put(i, sz.get(i) + sz.get(j));
         }
+    }
+
+    public void fill(Collection<X> xs) {
+        id = new HashMap<X, X>(xs.size());
+        sz = new HashMap<X, Integer>(xs.size());
+        for (X x : xs) {
+            id.put(x, x);
+            sz.put(x, 1);
+        }
+    }
+
+    public NTreeADT getMST() {
+        throw new UnsupportedOperationException("MST finding only supported in Tree-typed forests.");
     }
 
     @Override

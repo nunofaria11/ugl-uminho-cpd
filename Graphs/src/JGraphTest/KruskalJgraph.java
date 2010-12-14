@@ -8,7 +8,7 @@ import GraphADType.GraphADT;
 import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.TArithmeticOperations;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.ForestInteger_ADT;
 import JungTest.EdgeJ;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,7 @@ public class KruskalJgraph<T, Y extends Comparable<Y>> {
 
     public WeightedMultigraph getMst(WeightedMultigraph<T, EdgeJ<Y>> graph) {
         WeightedMultigraph<T, EdgeJ<Y>> mst = new WeightedMultigraph(EdgeJ.class);
-        UnionFind_ADT<T> uf = new UnionFind_ADT<T>(graph.vertexSet());
+        ForestInteger_ADT<T> uf = new ForestInteger_ADT<T>(graph.vertexSet());
         PriorityQueue<EdgeJ<Y>> Q = new PriorityQueue<EdgeJ<Y>>(graph.edgeSet());
         //
         int edges_processed = 0;

@@ -5,7 +5,7 @@
 package GraphADType;
 
 import EdgeOriented.Edge;
-import GraphADType.Support.UnionFindTree;
+import GraphADType.Support.ForestTree;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -23,7 +23,7 @@ public class GraphUnionFind<T, Y extends Comparable<Y>> extends GraphADT<T, Y> i
      *  2 ==> original and MST graph node
      */
     // tree
-    UnionFindTree _tree;
+    ForestTree _tree;
 
     @Override
     public void addNodes(int n) {

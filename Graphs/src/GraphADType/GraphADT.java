@@ -7,8 +7,8 @@ package GraphADType;
 import GraphADType.Support.TArithmeticOperations;
 import EdgeOriented.Edge;
 import GraphADType.Support.NTreeADT;
-import GraphADType.Support.UnionFindTree;
-import GraphADType.Support.UnionFind_ADT;
+import GraphADType.Support.Forest;
+import GraphADType.Support.ForestInteger_ADT;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,9 +25,7 @@ import java.util.logging.Logger;
  */
 abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
-    // Forest implementation - see this better, I think this could be a more large concept
-    public UnionFind_ADT<T> _union_find;
-    // Abstract implementation of a worklist
+    public Forest<T> _forest;
     public AbstractCollection<Edge<T, Y>> _worklist;
 
     public GraphADT() {
@@ -74,7 +72,15 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
         this._worklist = _worklist;
     }
 
-    public void buildGraph(UnionFindTree<T> uf) {
+    /**
+     * WARNING: MST finding only supported in Tree-typed forests.
+     * @param uf
+     */
+    public void buildGraph(Forest<T> uf) {
+
+        if (uf instanceof ForestInteger_ADT) {
+            throw new UnsupportedOperationException("MST finding only supported in Tree-typed forests; cannot use ForestInteger_ADT.");
+        }
 
         NTreeADT<T> mst_tree_start = uf.getMST();
         clean();
@@ -104,8 +110,9 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     }
 
-    public void initUnionFind() {
-        this._union_find = new UnionFind_ADT<T>(this.getNodes());
+    public void initForest(Forest uf) {
+        this._forest = uf;
+        this._forest.fill(getNodes());
     }
 
     /**
@@ -119,13 +126,6 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     abstract public int size();
 
-//    public int size() {
-//        int total = 0;
-//        for (T n : getNodes()) {
-//            total += getNeighborEdges(n).size();
-//        }
-//        return total;
-//    }
     /**
      * Adds single node to graph.
      *
