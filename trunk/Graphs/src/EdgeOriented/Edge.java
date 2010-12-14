@@ -95,9 +95,7 @@ public class Edge<T, Y extends Comparable<Y>> implements Comparable<Edge<T, Y>>,
         return hash;
     }
 
-
-
-        @Override
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Edge)) {
             return false;

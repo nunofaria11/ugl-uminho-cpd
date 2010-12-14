@@ -17,7 +17,6 @@ import GraphADType.Support.YRandomizer;
 import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -118,7 +117,7 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
 
     }
 
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
         GraphArraySucc<String, Double> g = new GraphArraySucc<String, Double>(7);
         // create nodes...
         String n0 = "A";
@@ -181,12 +180,13 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         KruskalADT_UF.test_implementations(300);
     }
 
-    public static void main_(String[] args){
-        GraphInput gin = new GraphInput("graph_600.ser");
+    public static void main(String[] args){
+        GraphInput gin = new GraphInput("graph_650.ser");
         GraphADT g = gin.readGraphADT();
 
         KruskalADT_UF<String, Integer> kruskal = new KruskalADT_UF<String, Integer>();
         GraphADT mst = kruskal.getMst(g);
-
+        int t = 0;
+        System.out.println(g.getMstWeight(Constants.intArith, t));
     }
 }

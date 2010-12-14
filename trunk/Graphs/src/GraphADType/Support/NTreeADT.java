@@ -4,10 +4,11 @@
  */
 package GraphADType.Support;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * Implementation of n-ary tree for auxiliary purposes.
@@ -17,17 +18,17 @@ public class NTreeADT<X> {
 
     X data;
     NTreeADT parent;
-    ArrayList<NTreeADT<X>> childs;
+    Set<NTreeADT<X>> childs;
     boolean visited;
 
     public NTreeADT(X data) {
         this.data = data;
-        this.childs = new ArrayList<NTreeADT<X>>();
+        this.childs = new HashSet<NTreeADT<X>>();
         this.parent = null;
         this.visited = false;
     }
 
-    public ArrayList<NTreeADT<X>> getChilds() {
+    public Set<NTreeADT<X>> getChilds() {
         return childs;
     }
 
@@ -73,7 +74,7 @@ public class NTreeADT<X> {
      */
     public Collection<X> BFSTreeElements() {
         NTreeADT<X> rootNode = this;
-        Collection<X> ret = new ArrayList<X>();
+        Collection<X> ret = new HashSet<X>();
         //BFS uses Queue data structure
         Queue<NTreeADT<X>> q = new LinkedList<NTreeADT<X>>();
         q.add(rootNode);

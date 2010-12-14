@@ -7,9 +7,10 @@ package GraphADType.Algorithms;
 import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
+import GraphADType.Support.Constants;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.UnionFindTree;
-import NodeOriented.Node;
+import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -64,7 +65,7 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
 //        Node<String> n0 = new Node<String>("A");
@@ -74,13 +75,13 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
 //        Node<String> n4 = new Node<String>("E");
 //        Node<String> n5 = new Node<String>("F");
 //        Node<String> n6 = new Node<String>("G");
-        String n0 ="A";
-        String n1 ="B";
-        String n2 ="C";
-        String n3 ="D";
-        String n4 ="E";
-        String n5 ="F";
-        String n6 ="G";
+        String n0 = "A";
+        String n1 = "B";
+        String n2 = "C";
+        String n3 = "D";
+        String n4 = "E";
+        String n5 = "F";
+        String n6 = "G";
         // add nodes to graph...
         g.addNode(n0);
         g.addNode(n1);
@@ -123,5 +124,15 @@ public class KruskalADT<T, Y extends Comparable<Y>> {
         Double total = 0.0;
         total = (Double) mst.getMstWeight(arith, total);
         System.out.println("Total Mst Weight: " + total);
+    }
+
+    public static void main(String[] args) {
+        GraphInput gin = new GraphInput("graph_650.ser");
+        GraphADT g = gin.readGraphADT();
+
+        KruskalADT<String, Integer> kruskal = new KruskalADT<String, Integer>();
+        GraphADT mst = kruskal.getMst(g);
+        int t = 0;
+        System.out.println(g.getMstWeight(Constants.intArith, t));
     }
 }

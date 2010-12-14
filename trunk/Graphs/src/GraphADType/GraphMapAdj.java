@@ -78,10 +78,10 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
 
     @Override
     public void addArc(T n1, T n2, Y w) {
-        if(!isNode(n1)){
+        if (!isNode(n1)) {
             addNode(n1);
         }
-        if(!isNode(n2)){
+        if (!isNode(n2)) {
             addNode(n2);
         }
         List<Edge<T, Y>> nbors = _adj_map.get(n1);
@@ -96,6 +96,7 @@ public class GraphMapAdj<T, Y extends Comparable<Y>> extends GraphADT<T, Y> impl
     @Override
     public void addEdge(T n1, T n2, Y w) {
         addArc(n1, n2, w);
+        
 //        addArc(n2, n1, w);
     }
 

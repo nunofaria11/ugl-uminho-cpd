@@ -10,15 +10,12 @@ import GraphADType.Support.NTreeADT;
 import GraphADType.Support.UnionFindTree;
 import GraphADType.Support.UnionFind_ADT;
 import java.util.AbstractCollection;
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -194,37 +191,38 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
     }
 
     public Set<Edge<T, Y>> getEdges() {
-//        Collection<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
-        HashSet<Edge<T,Y>> edges = new HashSet<Edge<T, Y>>();
+        HashSet<Edge<T, Y>> edges = new HashSet<Edge<T, Y>>();
         for (T node : getNodes()) {
             edges.addAll(getNeighborEdges(node));
         }
         return edges;
+
     }
 
     /*public Collection<Edge<T, Y>> getEdges() {
-        ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
-        ArrayList<Edge<T, Y>> edges2rem = new ArrayList<Edge<T, Y>>();
-        for (Edge<T, Y> edge : new ArrayList<Edge<T, Y>>(getEdges())) {
-            Edge<T, Y> rev_edge = new Edge<T, Y>(edge.getNode2(), edge.getNode1(), edge.getEdge_data());
-            edges.add(edge);
-            if (!edges2rem.contains(edge)) {
-                edges2rem.add(rev_edge);
-            }
-        }
+    ArrayList<Edge<T, Y>> edges = new ArrayList<Edge<T, Y>>();
+    ArrayList<Edge<T, Y>> edges2rem = new ArrayList<Edge<T, Y>>();
+    for (Edge<T, Y> edge : new ArrayList<Edge<T, Y>>(getEdges())) {
+    Edge<T, Y> rev_edge = new Edge<T, Y>(edge.getNode2(), edge.getNode1(), edge.getEdge_data());
+    edges.add(edge);
+    if (!edges2rem.contains(edge)) {
+    edges2rem.add(rev_edge);
+    }
+    }
 
-        edges.removeAll(edges2rem);
-        return edges;
+    edges.removeAll(edges2rem);
+    return edges;
     }*/
-
     public boolean connected() {
         // just check if all nodes are some other nodes target
         ArrayList<T> allnodes = (ArrayList<T>) getNodes();
         // visited array
         ArrayList<T> visited = new ArrayList<T>();
-        ArrayList<Edge<T, Y>> alledges = (ArrayList<Edge<T, Y>>) getEdges();
+        ArrayList<Edge<T, Y>> alledges = new ArrayList<Edge<T, Y>>(getEdges());
         for (Edge edge : alledges) {
             visited.add((T) edge.getNode2());
+            // also need to add Node1 because it is undirected
+            visited.add((T) edge.getNode1());
         }
         return visited.containsAll(allnodes);
     }
@@ -264,6 +262,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     public GraphMatrix<T, Y> toGraphMatrix() {
         GraphMatrix<T, Y> graph = new GraphMatrix<T, Y>(order());
+
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }
@@ -275,6 +274,7 @@ abstract public class GraphADT<T, Y extends Comparable<Y>> {
 
     public GraphMapSucc<T, Y> toGraphMapSucc() {
         GraphMapSucc<T, Y> graph = new GraphMapSucc<T, Y>(order());
+
         for (T node : this.getNodes()) {
             graph.addNode(node);
         }

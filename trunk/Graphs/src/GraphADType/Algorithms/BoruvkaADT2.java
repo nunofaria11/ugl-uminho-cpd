@@ -14,6 +14,7 @@ import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
+import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -182,7 +183,7 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
 
     }
 
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
 //        Node<String> n0 = new Node<String>("A");
@@ -249,5 +250,13 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
 //        GenSaveReadADT.write();
         BoruvkaADT2.test_implementations(GenSaveReadADT.NUM_NODES);
 //        BoruvkaADT.testArraySucc(400);
+    }
+
+    public static void main(String[] args){
+        GraphInput gin = new GraphInput("../graph_250.ser");
+        GraphADT g = gin.readGraphADT();
+
+        BoruvkaADT2<String, Integer> bor = new BoruvkaADT2<String, Integer>();
+        GraphADT mst = bor.getMst(g);
     }
 }
