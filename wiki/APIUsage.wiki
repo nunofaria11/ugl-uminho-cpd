@@ -41,4 +41,8 @@ There are several inefficiency issues and major bottlenecks in
 
 There are methods in graph structure implementations that are not correctly implemented, for instance, 
  * size() is the same for every structure (it is defined in the abstract class), therefore does not take advantage of the improvements one structure may have
- * getNeighborEdges has the same problem
+ * getNeighborEdges has the same problem of the previous point 
+
+=== Next steps: ===
+ * reorganize classes and introduce flagging interfaces (Directed, Undirected, Weighted, Unweighted, etc.)
+ * improve the method implementations specifically to the graph structure
