@@ -1,6 +1,6 @@
 #summary Some bottlenecks to work on
 
-Here we will try to identify some bottlenecks through benchmarks and profiles.
+Here we will try to identify some bottlenecks through benchmarks and profiles. The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_.
 
 == 1. Benchmarks: Kruskal and Boruvka ==
 
@@ -11,9 +11,6 @@ http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_ru
 Note: Y axis is in logarithmic scale.
 
 == 2. Profiles ==
-
-The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_.
-
 The problem size (#nodes) for the Kruskal and Boruvka algs were 650 nodes, and for Prim it was 350 nodes due to inefficiency.
 === 2.1 Profile Prim ===
 http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_prim.png
@@ -38,5 +35,3 @@ See Boruvka's [http://code.google.com/p/ugl-uminho-cpd/wiki/BoruvkaMST algorithm
 
 == 3. MAIN PROBLEMS ==
 There are several inefficiency issues and major bottlenecks in 
-
-
