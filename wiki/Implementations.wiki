@@ -1,0 +1,11 @@
+#summary Brief explanation of the used implementations
+
+A simple explanation of the used library structures is given here. 
+
+= JUNG structure: UndirectedSparseGraph =
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r116/trunk/Graphs/images/jung_struct.png
+
+= JGraph structure: WeightedMultiGraph =
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r116/trunk/Graphs/images/jgraph_struct.png
