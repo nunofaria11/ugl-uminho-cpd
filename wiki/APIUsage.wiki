@@ -45,4 +45,4 @@ There are methods in graph structure implementations that are not correctly impl
 
 === Next steps: ===
  * reorganize classes and introduce flagging interfaces (Directed, Undirected, Weighted, Unweighted, etc.)
- * improve the method implementations specifically to the graph structure
+ * improve method implementations specifically to the graph structure, to avoid cases like _size_ and _getNeighborEdges_
