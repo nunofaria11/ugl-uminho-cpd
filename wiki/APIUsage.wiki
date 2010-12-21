@@ -38,3 +38,7 @@ There are several inefficiency issues and major bottlenecks in
 || *Prim* || *Kruskal* || *Boruvka* ||
 || addVisited || size() || Edge: equals() ||
 || getNeighborEdges || fillWorklist: PriorityQueue || fillWorklist: ArrayList||
+
+There are methods in graph structure implementations that are not correctly implemented, for instance, 
+ * size() is the same for every structure (it is defined in the abstract class), therefore does not take advantage of the improvements one structure may have
+ * getNeighborEdges has the same problem
