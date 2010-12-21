@@ -35,3 +35,6 @@ See Boruvka's [http://code.google.com/p/ugl-uminho-cpd/wiki/BoruvkaMST algorithm
 
 == 3. MAIN PROBLEMS ==
 There are several inefficiency issues and major bottlenecks in 
+|| *Prim* || *Kruskal* || *Boruvka* ||
+|| addVisited || size() || Edge: equals() ||
+|| getNeighborEdges || fillWorklist: PriorityQueue || fillWorklist: ArrayList||
