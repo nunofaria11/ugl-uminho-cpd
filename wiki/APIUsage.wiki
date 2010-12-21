@@ -44,5 +44,5 @@ There are methods in graph structure implementations that are not correctly impl
  * getNeighborEdges has the same problem of the previous point 
 
 === Next steps: ===
- * reorganize classes and introduce flagging interfaces (Directed, Undirected, Weighted, Unweighted, etc.)
+ * reorganize classes and introduce tagging interfaces (Directed, Undirected, Weighted, Unweighted, etc.)
  * improve method implementations specifically to the graph structure, to avoid cases like _size_ and _getNeighborEdges_
