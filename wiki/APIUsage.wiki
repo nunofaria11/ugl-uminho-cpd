@@ -1,6 +1,6 @@
 #summary Some bottlenecks to work on
 
-Here we will try to identify some bottlenecks through benchmarks and profiles. The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_.
+Here we will try to identify some bottlenecks through benchmarks and profiles. The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_ (for JGraph and JUNG implementations see [http://code.google.com/p/ugl-uminho-cpd/wiki/Implementations this]).
 
 == 1. Benchmarks: Kruskal and Boruvka ==
 
