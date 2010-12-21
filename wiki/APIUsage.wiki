@@ -1,0 +1,42 @@
+#summary Some bottlenecks to work on
+
+Here we will try to identify some bottlenecks through benchmarks and profiles.
+
+== 1. Benchmarks: Kruskal and Boruvka ==
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_kruskal.png
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_boruvka.png
+
+Note: Y axis is in logarithmic scale.
+
+== 2. Profiles ==
+
+The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_.
+
+The problem size (#nodes) for the Kruskal and Boruvka algs were 650 nodes, and for Prim it was 350 nodes due to inefficiency.
+=== 2.1 Profile Prim ===
+http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_prim.png
+
+For this algorithm the _addVisited_ method is the major bottleneck - it adds a node to an array and *updates the working edge queue to remove the _garbage_ edges that point to the visited node*.
+
+See Prim's [http://code.google.com/p/ugl-uminho-cpd/wiki/PrimMST algorithm] or [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/PrimADT.java?r=109 implementation]
+
+=== 2.2 Profile Kruskal ===
+http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_kruskal.png
+
+Here the _size()_ method (_#edges_) is very inefficient because is runs through all the neighbor edge lists of every node and sums all the sizes.
+
+See Kruskal's [http://code.google.com/p/ugl-uminho-cpd/wiki/KruskalMST algorithm] or [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/KruskalADT_UF.java?r=109 implementation]
+
+=== 2.3 Profile Boruvka ===
+http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_boruvka.png
+
+Boruvka's algorithm is based on comparing edge data, and the _equals_ method is the major setback.
+
+See Boruvka's [http://code.google.com/p/ugl-uminho-cpd/wiki/BoruvkaMST algorithm] or [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/BoruvkaADT2.java?r=109 implementation] 
+
+== 3. MAIN PROBLEMS ==
+There are several inefficiency issues and major bottlenecks in 
+
+
