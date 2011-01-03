@@ -73,7 +73,7 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         return mst;
     }
 
-    public GraphADT getMst(GraphADT g) {
+    public GraphADT getMst(GraphADT<T,Y> g) {
         g.initForest(new ForestTree());
         g.initWorklist(PriorityQueue.class);
         g.fillWorklist();
@@ -85,9 +85,9 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         int edges_processed = 0;
         int edges_added = 0;
         while (edges_processed < g.size() && edges_added < g.order() - 1) {
-            Edge minEdge = ((PriorityQueue<Edge>) g._worklist).poll();
-            T ck1 = (T) g._forest.find(minEdge.getNode1());
-            T ck2 = (T) g._forest.find(minEdge.getNode2());
+            Edge<T,Y> minEdge = ((PriorityQueue<Edge<T,Y>>) g._worklist).poll();
+            T ck1 = g._forest.find(minEdge.getNode1());
+            T ck2 = g._forest.find(minEdge.getNode2());
             if (!ck1.equals(ck2)) { // if roots are different it means it doesnt have a cycle
                 mst.addEdge(minEdge.getNode1(), minEdge.getNode2(), minEdge.getEdge_data());
                 // A U {(u,v)}
@@ -218,8 +218,8 @@ public class KruskalADT_UF<T, Y extends Comparable<Y>> {
         int t = 0;
         System.out.println(mst.getMstWeight(Constants.intArith, t));
 
-        GraphADT mst2 = kruskal.getMst2(g);
-        int t2 = 0;
-        System.out.println(mst2.getMstWeight(Constants.intArith, t2));
+//        GraphADT mst2 = kruskal.getMst2(g);
+//        int t2 = 0;
+//        System.out.println(mst2.getMstWeight(Constants.intArith, t2));
     }
 }

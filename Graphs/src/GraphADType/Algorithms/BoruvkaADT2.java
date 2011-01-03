@@ -254,7 +254,9 @@ public class BoruvkaADT2<T, Y extends Comparable<Y>> {
     }
 
     public static void main(String[] args){
-        GraphInput gin = new GraphInput("../graph_250.ser");
+
+
+        GraphInput gin = new GraphInput("graph_650.ser");
         GraphADT g = gin.readGraphADT();
 
         BoruvkaADT2<String, Integer> bor = new BoruvkaADT2<String, Integer>();

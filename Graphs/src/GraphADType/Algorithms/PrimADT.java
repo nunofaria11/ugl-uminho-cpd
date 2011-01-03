@@ -14,6 +14,7 @@ import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.GraphGenADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.YRandomizer;
+import GraphIO.GraphInput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -113,7 +114,7 @@ public class PrimADT<T, Y extends Comparable<Y>> {
 
     }
 
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
         GraphMapAdj<String, Double> g = new GraphMapAdj<String, Double>(7);
         // create nodes...
 //        Node<String> n0 = new Node<String>("A");
@@ -176,5 +177,15 @@ public class PrimADT<T, Y extends Comparable<Y>> {
 
     public static void main2(String[] args) {
         PrimADT.test_implementations(300);
+    }
+
+    public static void main(String[] args) {
+
+
+        GraphInput gin = new GraphInput("graph_350.ser");
+        GraphADT g = gin.readGraphADT();
+
+        PrimADT<String, Integer> prim = new PrimADT<String, Integer>();
+        GraphADT mst = prim.getMst(g);
     }
 }

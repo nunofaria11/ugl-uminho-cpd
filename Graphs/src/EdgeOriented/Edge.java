@@ -97,9 +97,9 @@ public class Edge<T, Y extends Comparable<Y>> implements Comparable<Edge<T, Y>>,
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Edge)) {
-            return false;
-        }
+//        if (!(obj instanceof Edge)) {
+//            return false;
+//        }
         Edge edge = (Edge) obj;
 
         if (edge.node1 == null || edge.node2 == null || edge.edge_data == null) {
