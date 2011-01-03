@@ -4,6 +4,12 @@
  */
 package GraphADType.Utilities;
 
+import GraphADT_2nd_try.ADTConverter;
+import GraphADT_2nd_try.Boruvka2;
+import GraphADT_2nd_try.Kruskal2;
+import GraphADT_2nd_try.Prim2;
+import GraphADT_2nd_try.UndirectedColoredGraph;
+import GraphADT_2nd_try.UndirectedGraph;
 import GraphADType.Algorithms.BoruvkaADT;
 import GraphADType.Algorithms.BoruvkaADT2;
 import GraphADType.Algorithms.KruskalADT_UF;
@@ -74,7 +80,7 @@ public class RunBenchmark {
             long begin = System.currentTimeMillis();
             GraphADT mst = b.getMst(g);
             long end = System.currentTimeMillis();
-//            System.out.println("kruskal time:\t" + (end - begin));
+//            System.out.println("boruvka time:\t" + (end - begin));
             int total = 0;
             System.out.print("mstW:" + mst.getMstWeight(Constants.intArith, total) + "\t");
             return (end - begin);
@@ -152,6 +158,37 @@ public class RunBenchmark {
                 return (end - begin);
             }
         }
+        if (lib.equals("myNewLib")) {
+            ADTConverter jconv = new ADTConverter();
+            UndirectedGraph<String, EdgeJ<Integer>> graph = jconv.ADT2New(adt);
+            //***this conversion should be more versatile
+            UndirectedColoredGraph<String,EdgeJ<Integer>> g = new UndirectedColoredGraph<String, EdgeJ<Integer>>(graph);
+            if (alg.equals("prim")) {
+                Prim2 prim = new Prim2();
+                long begin = System.currentTimeMillis();
+                UndirectedGraph<String, EdgeJ<Integer>> mst = prim.getMst(g);
+                long end = System.currentTimeMillis();
+                System.out.print("\tmstW: " + prim.getMstWeight(mst, Constants.myNewLibArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("kruskal")) {
+                Kruskal2 kruskal = new Kruskal2();
+                long begin = System.currentTimeMillis();
+                UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal.getMst(g);
+                long end = System.currentTimeMillis();
+                System.out.print("\tmstW: " + kruskal.getMstWeight(mst, Constants.myNewLibArith) + "\t");
+                return (end - begin);
+            }
+            if (alg.equals("boruvka")) {
+                Boruvka2 boruvka = new Boruvka2();
+                long begin = System.currentTimeMillis();
+                UndirectedGraph<String, EdgeJ<Integer>> mst = boruvka.getMst(g);
+                long end = System.currentTimeMillis();
+                System.out.print("\tmstW: " + boruvka.getMstWeight(mst, Constants.myNewLibArith) + "\t");
+                return (end - begin);
+            }
+        }
+
         return -1;
     }
 
@@ -205,7 +242,7 @@ public class RunBenchmark {
         System.out.print(g.order() + "\t");
         System.out.print(g.size() + "\t");
 
-        if (args[1].equals("jung") || args[1].equals("jgraph")) {
+        if (args[1].equals("jung") || args[1].equals("jgraph") || args[1].equals("myNewLib")) {
             System.out.println(runLibraries(args[1], args[2], g));
         } else {
             System.out.println(RunBenchmark.runAlgorithm(g, args[2]));
