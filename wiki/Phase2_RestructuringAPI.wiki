@@ -16,5 +16,7 @@
 
 The general structure of the API was redefined after studying the JUNG and JGraph implementations.
  * The most important methods are now implemented *at a lower level* (like the _getEdges_ example)
+
  * *Tagging interfaces* were added to better represent Undirected and Directed graphs (tagging interfaces will also be applied to other matters)
+
  * A controlling mechanism for visited vertices and edges was added: the class _UndirectedColoredGraph_ (extends _UndirectedGraph_) works very well bypassing the need of using an array to control the visited nodes.
