@@ -4,8 +4,12 @@
  */
 package GraphADT_2nd_try;
 
+import GraphADType.Algorithms.BoruvkaADT;
+import GraphADType.GraphADT;
+import GraphADType.Support.Constants;
 import GraphADType.Support.ForestTree;
 import GraphADType.Support.TArithmeticOperations;
+import GraphIO.GraphInput;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
 import java.util.ArrayList;
@@ -87,10 +91,10 @@ public class Boruvka2<V, E extends Comparable<E>> {
 
         for (E edge : mstEdges) {
             Pair<V> endpoints = g.getEndpoints(edge);
-            
+
             mst.addVertex(endpoints.first);
             mst.addVertex(endpoints.second);
-            
+
             mst.addEdge(edge, endpoints.first, endpoints.second);
         }
         return mst;
@@ -111,6 +115,29 @@ public class Boruvka2<V, E extends Comparable<E>> {
     }
 
     public static void main(String[] args) {
+        GraphInput gin = new GraphInput("graph_350.ser");
+        GraphADT g = gin.readGraphADT();
+
+        long end, begin;
+
+        BoruvkaADT<String, Integer> bor1 = new BoruvkaADT<String, Integer>(g);
+        begin = System.currentTimeMillis();
+        GraphADT mst_old = bor1.getMst();
+        end = System.currentTimeMillis();
+        int t = 0;
+        System.out.println("Weight 1: " + mst_old.getMstWeight(Constants.intArith, t) + "\tTime: " + (end - begin) + " ms");
+
+        ADTConverter conv = new ADTConverter();
+        Boruvka2<String, EdgeJ<Integer>> bor2 = new Boruvka2<String, EdgeJ<Integer>>();
+        UndirectedGraph<String, EdgeJ<Integer>> graph = conv.ADT2New(g);
+        begin = System.currentTimeMillis();
+        UndirectedGraph<String, EdgeJ<Integer>> mst = bor2.getMst(graph);
+        end = System.currentTimeMillis();
+        System.out.println("Weight 2: " + bor2.getMstWeight(mst, Constants.myNewLibArith) + "\tTime: " + (end - begin) + " ms");
+
+    }
+
+    public static void main2(String[] args) {
         UndirectedColoredGraph<String, EdgeJ<Integer>> g = new UndirectedColoredGraph<String, EdgeJ<Integer>>();
 
         g.addVertex("A");
