@@ -4,8 +4,12 @@
  */
 package GraphADT_2nd_try;
 
+import GraphADType.Algorithms.KruskalADT_UF;
+import GraphADType.GraphADT;
+import GraphADType.Support.Constants;
 import GraphADType.Support.ForestTree;
 import GraphADType.Support.TArithmeticOperations;
+import GraphIO.GraphInput;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
 import java.util.PriorityQueue;
@@ -65,7 +69,31 @@ public class Kruskal2<V, E extends Comparable<E>> {
         return weight;
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args){
+        GraphInput gin = new GraphInput("graph_650.ser");
+        GraphADT g = gin.readGraphADT();
+
+        long end, begin;
+
+        KruskalADT_UF<String, Integer> kruskal1 = new KruskalADT_UF<String, Integer>();
+        begin = System.currentTimeMillis();
+        GraphADT mst_old = kruskal1.getMst(g);
+        end = System.currentTimeMillis();
+        int t=0;
+        System.out.println("Weight 1: "+mst_old.getMstWeight(Constants.intArith, t)+"\tTime: "+(end-begin)+" ms");
+
+        ADTConverter conv = new ADTConverter();
+        Kruskal2<String, EdgeJ<Integer>> kruskal2 = new Kruskal2<String, EdgeJ<Integer>>();
+        UndirectedGraph<String, EdgeJ<Integer>> graph = conv.ADT2New(g);
+        begin = System.currentTimeMillis();
+        UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal2.getMst(graph);
+        end = System.currentTimeMillis();
+        System.out.println("Weight 2: " + kruskal2.getMstWeight(mst, Constants.myNewLibArith)+"\tTime: "+(end-begin)+" ms");
+
+    }
+
+    public static void main2(String[] args) {
         UndirectedColoredGraph<String, EdgeJ<Integer>> g = new UndirectedColoredGraph<String, EdgeJ<Integer>>();
 
         g.addVertex("A");
