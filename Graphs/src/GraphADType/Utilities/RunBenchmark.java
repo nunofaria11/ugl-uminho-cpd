@@ -8,6 +8,7 @@ import GraphADT_2nd_try.ADTConverter;
 import GraphADT_2nd_try.Boruvka2;
 import GraphADT_2nd_try.Kruskal2;
 import GraphADT_2nd_try.Prim2;
+import GraphADT_2nd_try.Prim2VisitedArray;
 import GraphADT_2nd_try.UndirectedColoredGraph;
 import GraphADT_2nd_try.UndirectedGraph;
 import GraphADType.Algorithms.BoruvkaADT;
@@ -157,6 +158,7 @@ public class RunBenchmark {
                 System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.intArith) + "\t");
                 return (end - begin);
             }
+            
         }
         if (lib.equals("myNewLib")) {
             ADTConverter jconv = new ADTConverter();
@@ -171,6 +173,16 @@ public class RunBenchmark {
                 System.out.print("\tmstW: " + prim.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
             }
+
+            if (alg.equals("prim_visited")) {
+                Prim2VisitedArray bor = new Prim2VisitedArray();
+                long begin = System.currentTimeMillis();
+                UndirectedGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                long end = System.currentTimeMillis();
+                System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.myNewLibArith) + "\t");
+                return (end - begin);
+            }
+
             if (alg.equals("kruskal")) {
                 Kruskal2 kruskal = new Kruskal2();
                 long begin = System.currentTimeMillis();
