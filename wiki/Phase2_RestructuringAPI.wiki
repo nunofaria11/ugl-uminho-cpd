@@ -13,11 +13,14 @@
 = _myNewLib_ implementation =
 The general structure of the API was redefined after studying the JUNG and JGraph implementations.
  * The most important methods are now implemented *at a lower level* (like the _getEdges_ example)
+
  * *Tagging interfaces* were added to better represent Undirected and Directed graphs (tagging interfaces will also be applied to other matters)
+
  * An _experimental_ controlling mechanism for visited vertices and edges was added: the class [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedColoredGraph.java?r=132 UndirectedColoredGraph] (extends [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedGraph.java?r=132 UndirectedGraph]) works very well bypassing the need of using an array to control the visited nodes.
+
  * I think the main improvement made, besides the new structure, was the *decapsulation* of data:
    # the node info is not encapsulated in a specific _Node_ class as before
-   # *and the most important*, the edge info is now treated by the API as a generic _E_. Also, the graph uses two structures: (i) one to store the nodes and map each node an edge (of type _E_), and (ii) another structure to map each edge to the node endpoints - this approach is not so rigid as using only one structure. By using two structure, the searching operation will be much more straight-forward.
+   # *and the most important*, the edge info is now treated by the API as a generic _E_. Also, the graph uses two structures: *(i)* one to store the nodes and map each node an edge (of type _E_), and *(ii)* another structure to map each edge to the node endpoints - this approach is not so rigid as using only one structure. By using two structures, searching in the graph will be much more straight-forward.
 
 =Benchmarks: myNewLib, JUNG and JGraph=
 The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
