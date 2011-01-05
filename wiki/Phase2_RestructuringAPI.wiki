@@ -19,7 +19,7 @@ The general structure of the API was redefined after studying the JUNG and JGrap
  * A controlling mechanism for visited vertices and edges was added: the class _UndirectedColoredGraph_ (extends _UndirectedGraph_) works very well bypassing the need of using an array to control the visited nodes.
 
 =Benchmarks: myNewLib, JUNG and JGraph=
-The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding implementations are better at each _node count_.
+The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
 ==Prim algorithm==
 _Note the logarithmic scale_
 
