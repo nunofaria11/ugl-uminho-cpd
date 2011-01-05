@@ -23,18 +23,12 @@ The reformulated API showed lots of improvement in performance. A second chart w
 ==Prim algorithm==
 _Note the logarithmic scale_
 
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png
-
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png
+|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png ||
 
 ==Kruskal algorithm==
 
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png
-
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png
+|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png ||
 
 ==Boruvka algorithm==
 
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png
-
-http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png
+|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png ||
