@@ -2,7 +2,7 @@
 
 = Initial implementation =
 
- * We had a _GraphADT_ abstract class, and three sub-classes ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java?r=129 MapAdj], [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java?r=129 MapSucc] and [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java?r=129 ArraySucc]) that extended it. 
+ * We had a [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphADT.java?r=129 GraphADT] abstract class, and three sub-classes ([http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java?r=129 MapAdj], [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java?r=129 MapSucc] and [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java?r=129 ArraySucc]) that extended it. 
  * We had implementation problems like:
    # inefficient and overloaded methods: for instance, the _getEdges_ method (that returns all edges in the graph) was based on another method _getNeighborEdges_ called for every node in graph *AND* it was defined in the abstract class therefore not taking advantages the some structure graph implementations may offer.
    # The distinction of an *Undirected* and a *Directed* graph was done naively: for instance, the undirected graph had the repeated edges (like _A->B_ and _B->A_) represented in memory
@@ -16,7 +16,7 @@ The general structure of the API was redefined after studying the JUNG and JGrap
 
  * *Tagging interfaces* were added to better represent Undirected and Directed graphs (tagging interfaces will also be applied to other matters)
 
- * A controlling mechanism for visited vertices and edges was added: the class _UndirectedColoredGraph_ (extends _UndirectedGraph_) works very well bypassing the need of using an array to control the visited nodes.
+ * A controlling mechanism for visited vertices and edges was added: the class [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedColoredGraph.java?r=132 UndirectedColoredGraph] (extends [http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedGraph.java?r=132 UndirectedGraph]) works very well bypassing the need of using an array to control the visited nodes.
 
 =Benchmarks: myNewLib, JUNG and JGraph=
 The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
