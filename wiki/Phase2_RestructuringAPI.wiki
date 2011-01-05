@@ -1,22 +1,40 @@
 #summary Explaining how the API structure has changed
 
-= Before... =
+= Initial implementation =
 
  * We had a _GraphADT_ abstract class, and three sub-classes (MapAdj, MapSucc and ArraySucc) that extended it. 
-
  * We had implementation problems like:
    # inefficient and overloaded methods: for instance, the _getEdges_ method (that returns all edges in the graph) was based on another method _getNeighborEdges_ called for every node in graph *AND* it was defined in the abstract class therefore not taking advantages the some structure graph implementations may offer.
    # The distinction of an *Undirected* and a *Directed* graph was done naively: for instance, the undirected graph had the repeated edges (like _A->B_ and _B->A_) represented in memory
-
  * At a very early stage we has several conceptual problems like:
    # Encapsulating the node data/id in a Node class
    # Encapsulating (thus, *restricting*) the connection info inside the Edge class: source and target nodes were stored inside an edge
 
-= ...Now =
-
+= _myNewLib_ implementation =
 The general structure of the API was redefined after studying the JUNG and JGraph implementations.
  * The most important methods are now implemented *at a lower level* (like the _getEdges_ example)
 
  * *Tagging interfaces* were added to better represent Undirected and Directed graphs (tagging interfaces will also be applied to other matters)
 
  * A controlling mechanism for visited vertices and edges was added: the class _UndirectedColoredGraph_ (extends _UndirectedGraph_) works very well bypassing the need of using an array to control the visited nodes.
+
+=Benchmarks: myNewLib, JUNG and JGraph=
+The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding implementations are better at each _node count_.
+==Prim algorithm==
+_Note the logarithmic scale_
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png
+
+==Kruskal algorithm==
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png
+
+==Boruvka algorithm==
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png
