@@ -6,9 +6,9 @@ package GraphIO;
 
 import EdgeOriented.Edge;
 import GraphAD.GraphAD;
+import GraphADT_2nd_try.BaseGraph;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
-import NodeOriented.Node;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,6 +44,10 @@ public class GraphOutput {
     }
 
     public void saveGraphADT(GraphADT g) throws IOException {
+        out.writeObject(g);
+    }
+
+    public void saveGraph2(BaseGraph g) throws IOException {
         out.writeObject(g);
     }
 

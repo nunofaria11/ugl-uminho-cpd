@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,8 +13,9 @@ import java.util.Iterator;
  *
  * @author nuno
  */
-public class Pair<X> implements Collection<X> {
+public class Pair<X extends Serializable> implements Collection<X>, Serializable {
 
+    private static final long serialVersionUID = 1722492622431126944L;
     X first;
     X second;
 

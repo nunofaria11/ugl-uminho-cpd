@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Collection;
  *
  * @author nuno
  */
-public interface Graph<V, E> extends Hypergraph<V, E> {
+public interface Graph<V extends Serializable, E> extends Hypergraph<V, E> {
 
     Collection<E> getEdges();
 
@@ -43,7 +44,7 @@ public interface Graph<V, E> extends Hypergraph<V, E> {
 
     boolean addEdge(E e, V v1, V v2, EdgeType edge_type);
 
-    boolean removeVertex(V v);
+//    boolean removeVertex(V v);
 
     boolean removeEdge(E v);
 

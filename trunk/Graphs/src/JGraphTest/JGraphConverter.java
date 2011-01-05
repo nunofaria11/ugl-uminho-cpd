@@ -5,6 +5,8 @@
 package JGraphTest;
 
 import EdgeOriented.Edge;
+import GraphADT_2nd_try.BaseGraph;
+import GraphADT_2nd_try.Pair;
 import GraphADType.GraphADT;
 import GraphADType.Support.GenSaveReadADT;
 import JungTest.EdgeJ;
@@ -43,6 +45,29 @@ public class JGraphConverter {
             }
         }
         return jgraph;
+    }
+
+    public WeightedMultigraph BaseGraph2JGraph(BaseGraph g){
+        WeightedMultigraph<String, EdgeJ<Integer>> jgraph = new WeightedMultigraph(EdgeJ.class);
+        ArrayList<EdgeJ<Integer>> alledges = new ArrayList<EdgeJ<Integer>>(g.getEdges());
+
+        for (EdgeJ<Integer> edge_adt : alledges) {
+            Pair<String> pair = g.getEndpoints(edge_adt);
+            String n1 = pair.getFirst();
+            String n2 = pair.getSecond();
+            EdgeJ<Integer> edge_jgraph = new EdgeJ<Integer>(edge_adt.getData(), handler);
+            if (!jgraph.containsVertex(n1)) {
+                jgraph.addVertex(n1);
+            }
+            if (!jgraph.containsVertex(n2)) {
+                jgraph.addVertex(n2);
+            }
+            if (!jgraph.containsEdge(edge_jgraph)) {
+                jgraph.addEdge(n1, n2, edge_jgraph);
+            }
+        }
+        return jgraph;
+
     }
 
     public static void main(String[] args) {

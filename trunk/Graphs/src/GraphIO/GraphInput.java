@@ -5,8 +5,8 @@
 package GraphIO;
 
 import GraphAD.GraphAD;
+import GraphADT_2nd_try.BaseGraph;
 import GraphADType.GraphADT;
-import PerfTest.GenSaveRead;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -64,6 +64,19 @@ public class GraphInput {
     public GraphADT readGraphADT() {
         try {
             return (GraphADT) in.readObject();
+        } catch (IOException ex) {
+            Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error reading file '" + file_name + "': " + ex.toString());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Class doesn't exist in file '" + file_name + "': " + ex.toString());
+        }
+        return null;
+    }
+
+    public BaseGraph readGraph2(){
+        try {
+            return (BaseGraph) in.readObject();
         } catch (IOException ex) {
             Logger.getLogger(GraphInput.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error reading file '" + file_name + "': " + ex.toString());
