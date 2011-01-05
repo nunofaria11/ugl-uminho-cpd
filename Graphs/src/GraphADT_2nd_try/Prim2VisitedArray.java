@@ -7,6 +7,7 @@ package GraphADT_2nd_try;
 import GraphADType.Support.TArithmeticOperations;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -15,7 +16,7 @@ import java.util.PriorityQueue;
  *
  * @author nuno
  */
-public class Prim2VisitedArray<V, E extends Comparable<E>> {
+public class Prim2VisitedArray<V extends Serializable, E extends Comparable<E>> {
 
     ArrayList<V> visited;
 //    PriorityQueue<E> Q;

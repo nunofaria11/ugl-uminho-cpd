@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,8 +17,9 @@ import java.util.Set;
  *
  * @author nuno
  */
-public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E> implements Undirected<V, E> {
+public class UndirectedGraph<V extends Serializable, E extends Comparable<E>> extends BaseGraph<V, E> implements Undirected<V, E>, Serializable {
 
+    private static final long serialVersionUID = -7907127519159221472L;
     // Set so it supports parallel edges
     Map<V, Set<E>> verts;
     // Instead of having the nodes info inside the edges, the nodes are now mapped to an edge
@@ -65,12 +67,6 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
         return this.verts.get(v);
     }
 
-//    public Object findEdge(Object a, Object b) {
-//        return this.findEdge(a, b);
-//    }
-//    public Collection findEdgeSet(Object a, Object b) {
-//        return this.findEdgeSet(a, b);
-//    }
     public boolean addVertex(V v) {
         if (containsVertex(v)) {
             return false;
@@ -79,12 +75,6 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
         return true;
     }
 
-//    public boolean addEdge(Object e, Pair p) {
-//        return this.addEdge(e, p);
-//    }
-//    public boolean addEdge(Object e, Object v1, Object v2) {
-//        return this.addEdge(e, v1, v2);
-//    }
     public boolean addEdge(E e, V v1, V v2, EdgeType edge_type) {
 
         if (containsEdge(e)) {
@@ -92,7 +82,7 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
         }
 
         if (!containsVertex(v1) || !containsVertex(v2)) {
-            System.out.println(v1+"+"+v2);
+            System.out.println(v1 + "+" + v2);
             throw new IllegalArgumentException("Both vertices must exist in graph.");
         }
 
@@ -104,7 +94,7 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
         edges_of_2.add(e);
         verts.put(v2, edges_of_2);
 
-        edges.put(e, new Pair<V>(v1, v2)); 
+        edges.put(e, new Pair<V>(v1, v2));
 
         return true;
     }
@@ -244,7 +234,6 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
     @Override
     public boolean addEdge(E edge, V v1, V v2) {
         return this.addEdge(edge, v1, v2, getDefaultEdgeType());
@@ -259,4 +248,25 @@ public class UndirectedGraph<V, E extends Comparable<E>> extends BaseGraph<V, E>
     public boolean addEdge(E edge, Collection<? extends V> verts) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public boolean connected() {
+        // just check if all nodes are some other nodes target
+        Collection<V> allnodes = getVertices();
+        // visited array
+        ArrayList<V> visited = new ArrayList<V>();
+        ArrayList<E> alledges = new ArrayList<E>(getEdges());
+        for (E edge : alledges) {
+            Pair<V> endpoints = getEndpoints(edge);
+            visited.add(endpoints.first);
+            // needs to visit both vertices because it is an Undirected graph
+            // if it is directed only add one vertice
+            visited.add(endpoints.second);
+        }
+        return visited.containsAll(allnodes);
+    }
+
+//    public boolean removeVertex(V v) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 }

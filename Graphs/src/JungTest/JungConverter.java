@@ -5,6 +5,8 @@
 package JungTest;
 
 import EdgeOriented.Edge;
+import GraphADT_2nd_try.BaseGraph;
+import GraphADT_2nd_try.Pair;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphADType.Support.GenSaveReadADT;
@@ -49,6 +51,30 @@ public class JungConverter {
                 jung_g.addEdge(edge_jung, node1_data, node2_data);
             }
         }
+        return jung_g;
+
+    }
+
+    public UndirectedSparseGraph<String, EdgeJ<Integer>> BaseGraphtoJung(BaseGraph adt) {
+        ArrayList<EdgeJ<Integer>> edges = new ArrayList<EdgeJ<Integer>>(adt.getEdges());
+        UndirectedSparseGraph<String, EdgeJ<Integer>> jung_g = new UndirectedSparseGraph<String, EdgeJ<Integer>>();
+
+        for (EdgeJ<Integer> edge_adt : edges) {
+            Pair<String> pair = adt.getEndpoints(edge_adt);
+            String n1 = pair.getFirst();
+            String n2 = pair.getSecond();
+            EdgeJ<Integer> edge_jgraph = new EdgeJ<Integer>(edge_adt.getData(), handler);
+            if (!jung_g.containsVertex(n1)) {
+                jung_g.addVertex(n1);
+            }
+            if (!jung_g.containsVertex(n2)) {
+                jung_g.addVertex(n2);
+            }
+            if (!jung_g.containsEdge(edge_jgraph)) {
+                jung_g.addEdge(edge_jgraph, n1, n2);
+            }
+        }
+
         return jung_g;
 
     }

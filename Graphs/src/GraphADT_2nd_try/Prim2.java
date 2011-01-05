@@ -7,6 +7,7 @@ package GraphADT_2nd_try;
 import GraphADType.Support.TArithmeticOperations;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -15,7 +16,7 @@ import java.util.PriorityQueue;
  *
  * @author nuno
  */
-public class Prim2<V, E extends Comparable<E>> {
+public class Prim2<V extends Serializable, E extends Comparable<E>> {
     // AQUI FALTA EM VEZ DE USAR AS CLASSES EXTENDIDAS USAR A ABSTRACTA !!!
 
     //MELHORAR A VERSATILIDADE DISTO |

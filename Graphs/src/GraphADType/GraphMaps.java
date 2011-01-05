@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author nuno
  */
-public class GraphMaps<T, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
+public class GraphMaps<T extends Serializable, Y extends Comparable<Y>> extends GraphADT<T, Y> implements Serializable {
 
     private static final long serialVersionUID = 671373748115885087L;
     //

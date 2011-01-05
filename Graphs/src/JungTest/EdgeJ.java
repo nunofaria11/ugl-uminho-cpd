@@ -4,12 +4,15 @@
  */
 package JungTest;
 
+import java.io.Serializable;
+
 /**
  *
  * @author nuno
  */
-public class EdgeJ<Y extends Comparable<Y>> implements Comparable<EdgeJ<Y>> {
+public class EdgeJ<Y extends Comparable<Y>> implements Comparable<EdgeJ<Y>>, Serializable {
 
+    private static final long serialVersionUID = 797963301960447861L;
     public Y data;
     int id;
 
@@ -57,8 +60,6 @@ public class EdgeJ<Y extends Comparable<Y>> implements Comparable<EdgeJ<Y>> {
         }
         return true;
     }
-
-
 
     @Override
     public int hashCode() {

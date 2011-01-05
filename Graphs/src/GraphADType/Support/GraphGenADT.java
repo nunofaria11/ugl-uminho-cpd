@@ -4,11 +4,9 @@
  */
 package GraphADType.Support;
 
-import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
 import GraphIO.GraphInput;
-import NodeOriented.Node;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -224,7 +222,7 @@ public class GraphGenADT<T, Y extends Comparable<Y>> {
 
     /**
      * Auxiliary function to be called by node-id generator function.
-     * @param alpha Alphabet to consider
+     * @par/am alpha Alphabet to consider
      * @param root Structure to store nodes
      * @param N Number of nodes wanted
      * @param level Level in tree in which this recursive function is

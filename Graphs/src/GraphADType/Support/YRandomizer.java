@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package GraphADType.Support;
 
 /**
@@ -18,6 +17,4 @@ public interface YRandomizer<Y extends Comparable<Y>> {
      * @return Random Y value.
      */
     Y random(Y lower, Y upper);
-
-
 }

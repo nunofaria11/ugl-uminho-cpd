@@ -46,7 +46,7 @@ public interface Hypergraph<V, E> {
 
     boolean addEdge(E e, Collection<? extends V> vertices, EdgeType edge_type);
 
-    boolean removeVertex(V v);
+//    boolean removeVertex(V v);
 
     boolean removeEdge(E v);
 

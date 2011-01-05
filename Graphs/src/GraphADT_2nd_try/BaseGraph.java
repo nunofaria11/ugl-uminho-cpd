@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.Collections;
  *
  * @author nuno
  */
-public abstract class BaseGraph<V, E> implements Graph<V, E> {
+public abstract class BaseGraph<V extends Serializable, E> implements Graph<V, E> {
 
     public boolean addEdge(E edge, Collection<? extends V> verts, EdgeType edge_type) {
         if (verts.size() == 2) {
@@ -112,6 +113,11 @@ public abstract class BaseGraph<V, E> implements Graph<V, E> {
                 return edge;
             }
         }
+        for (E edge : getOutEdges(v2)) {
+            if (getOpposite(v2, edge).equals(v1)) {       
+                return edge;
+            }
+        }
         return null;
     }
 
@@ -130,6 +136,8 @@ public abstract class BaseGraph<V, E> implements Graph<V, E> {
     }
 
     abstract public V getRandomNode();
+
+    abstract public boolean connected();
 
     
 }

@@ -21,11 +21,11 @@ public class ForestTree<X> implements Forest<X> {
     private HashMap<X, NTreeADT<X>> _tree;
 
     public ForestTree() {
-        this._tree = new FastHashMap<X, NTreeADT<X>>();
+        this._tree = new HashMap<X, NTreeADT<X>>();
     }
 
     public ForestTree(Collection<X> elements) {
-        this._tree = new FastHashMap<X, NTreeADT<X>>(elements.size());
+        this._tree = new HashMap<X, NTreeADT<X>>(elements.size());
         // at first it adds an empty tree (with no childs) to the structure
         for (X el : elements) {
             _tree.put(el, new NTreeADT<X>(el));

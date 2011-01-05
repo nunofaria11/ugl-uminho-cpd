@@ -12,6 +12,7 @@ import GraphADType.Support.TArithmeticOperations;
 import GraphIO.GraphInput;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,7 +20,7 @@ import java.util.HashMap;
  *
  * @author nuno
  */
-public class Boruvka2<V, E extends Comparable<E>> {
+public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
 
     public UndirectedGraph<V, E> getMst(UndirectedGraph<V, E> g) {
         UndirectedGraph<V, E> mst = new UndirectedGraph<V, E>();

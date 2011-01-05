@@ -4,6 +4,7 @@
  */
 package GraphADType.Support;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,10 +17,10 @@ import java.util.Set;
  */
 public class NTreeADT<X> {
 
-    X data;
-    NTreeADT parent;
-    Set<NTreeADT<X>> childs;
-    boolean visited;
+    public X data;
+    public NTreeADT parent;
+    public Set<NTreeADT<X>> childs;
+    public boolean visited;
 
     public NTreeADT(X data) {
         this.data = data;
@@ -74,7 +75,7 @@ public class NTreeADT<X> {
      */
     public Collection<X> BFSTreeElements() {
         NTreeADT<X> rootNode = this;
-        Collection<X> ret = new HashSet<X>();
+        Collection<X> ret = new ArrayList<X>();
         //BFS uses Queue data structure
         Queue<NTreeADT<X>> q = new LinkedList<NTreeADT<X>>();
         q.add(rootNode);

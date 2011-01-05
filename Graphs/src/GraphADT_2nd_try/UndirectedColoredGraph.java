@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,7 +24,9 @@ import java.util.Map;
  *
  * @author nuno
  */
-public class UndirectedColoredGraph<V, E extends Comparable<E>> extends UndirectedGraph<V, E> implements Visitable<V, E> {
+public class UndirectedColoredGraph<V extends Serializable, E extends Comparable<E>> extends UndirectedGraph<V, E> implements Visitable<V, E> {
+
+    private static final long serialVersionUID = -1850848173131722321L;
 
     enum Color {
 
@@ -39,6 +42,29 @@ public class UndirectedColoredGraph<V, E extends Comparable<E>> extends Undirect
         super();
         vis_verts = new HashMap<V, Color>();
         vis_edges = new HashMap<E, Color>();
+    }
+
+    public UndirectedColoredGraph(BaseGraph<V, E> g) {
+
+        if (g instanceof UndirectedGraph) {
+            UndirectedGraph<V, E> ug = (UndirectedGraph<V, E>) g;
+            Collection<V> ug_verts = ug.getVertices();
+            Collection<E> ug_edges = ug.getEdges();
+            vis_verts = new HashMap<V, Color>();
+            vis_edges = new HashMap<E, Color>();
+            for (V v : ug_verts) {
+                this.addVertex(v);
+//            vis_verts.put(v, Color.NOT_VISITED);
+            }
+            for (E e : ug_edges) {
+                Pair<V> pair = ug.getEndpoints(e);
+                this.addEdge(e, pair.getFirst(), pair.getSecond(), EdgeType.UNDIRECTED);
+//            vis_edges.put(e, Color.NOT_VISITED);
+            }
+        } else {
+            throw new IllegalArgumentException("Graph instance is not Undirected");
+        }
+
     }
 
     /**

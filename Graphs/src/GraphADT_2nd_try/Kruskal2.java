@@ -12,13 +12,14 @@ import GraphADType.Support.TArithmeticOperations;
 import GraphIO.GraphInput;
 import JungTest.EdgeJ;
 import JungTest.EdgeJHandler;
+import java.io.Serializable;
 import java.util.PriorityQueue;
 
 /**
  *
  * @author nuno
  */
-public class Kruskal2<V, E extends Comparable<E>> {
+public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
 
     public UndirectedGraph<V, E> getMst(UndirectedGraph<V, E> g) {
         /*

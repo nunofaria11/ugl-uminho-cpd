@@ -87,21 +87,20 @@ public class Constants {
             return 0.0;
         }
     };
-
     public static TArithmeticOperations<EdgeJ<Integer>> myNewLibArith = new TArithmeticOperations<EdgeJ<Integer>>() {
 
-            EdgeJHandler handler = new EdgeJHandler();
+        EdgeJHandler handler = new EdgeJHandler();
 
-            public EdgeJ<Integer> Add(EdgeJ<Integer> a, EdgeJ<Integer> b) {
-                return new EdgeJ<Integer>(a.data + b.data, handler);
-            }
+        public EdgeJ<Integer> Add(EdgeJ<Integer> a, EdgeJ<Integer> b) {
+            return new EdgeJ<Integer>(a.data + b.data, handler);
+        }
 
-            public EdgeJ<Integer> Cat(EdgeJ<Integer> a, EdgeJ<Integer> b) {
-                return Add(a, b);
-            }
+        public EdgeJ<Integer> Cat(EdgeJ<Integer> a, EdgeJ<Integer> b) {
+            return Add(a, b);
+        }
 
-            public EdgeJ<Integer> zero_element() {
-                return new EdgeJ<Integer>(0, handler);
-            }
-        };
+        public EdgeJ<Integer> zero_element() {
+            return new EdgeJ<Integer>(0, handler);
+        }
+    };
 }
