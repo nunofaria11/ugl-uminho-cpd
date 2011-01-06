@@ -29,7 +29,7 @@ http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/small_
 
 The example representations show how the connection info of _V,,1,,_ is represented on both APIs.
 ==3.1) GraphADT: GraphMapAdj==
-http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/GraphADT.png
+http://ugl-uminho-cpd.googlecode.com/svn-history/r149/trunk/Graphs/images/GraphADT.png
 
 This implementation only uses one structure to store data, therefore searching will be extremely heavy. The user would only have to define the edge type (in this case _Integer_) the graph will be in; the edges are innerly processed, and encapsulated in each edge there both source and target nodes.
 Also, as it was said before, encapsulating the Edge class is not the best option.
