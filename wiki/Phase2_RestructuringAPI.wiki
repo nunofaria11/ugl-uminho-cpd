@@ -24,6 +24,8 @@ The general structure of the API was redefined after studying the JUNG and JGrap
 
 =Benchmarks: myNewLib, JUNG and JGraph=
 The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
+
+There wan no special measuring schemes, except best times out of three executions.
 ==Prim algorithm==
 _Note the logarithmic scale_
 
