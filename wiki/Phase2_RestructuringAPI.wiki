@@ -37,6 +37,8 @@ Also, as it was said before, encapsulating the Edge class is not the best option
 http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/myNewLib.png
 
 In this case, we use two structures, and the searching costs are reduced. Both structures complement each other, and they are based on pointers (red and blue colors).
+
+Another important issue is the abstraction taken in the Edge controls. Now the implementation will only operate with the generic _*E*_, and it is the user who defines the control Edge class.
 =4) Benchmarks: myNewLib, JUNG and JGraph=
 The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
 
