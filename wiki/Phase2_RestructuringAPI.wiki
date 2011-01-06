@@ -22,6 +22,18 @@ The general structure of the API was redefined after studying the JUNG and JGrap
    # the node info is not encapsulated in a specific _Node_ class as before
    # *and the most important*, the edge info is now treated by the API as a generic _E_, instead of innerly processing the edge with the class _Edge_. Also, the graph uses two structures: *(i)* one to store the nodes and map each node to an edge (of type _E_), and *(ii)* another structure to map each edge to the node endpoints - this approach is not so rigid as using only one structure. By using two structures, searching in the graph will be much more straight-forward.
 
+=Conceptual differences=
+Considering the small graph in the image, an example representation on both previous and new API (the implementation of the first one is GraphMapAdj).
+http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/small_graph.png
+
+The example representations show how the connection info of _V,,1,,_ is represented on both APIs.
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/GraphADT.png
+
+http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/myNewLib.png
+
+
+
 =Benchmarks: myNewLib, JUNG and JGraph=
 The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
 
@@ -29,12 +41,12 @@ No special measuring schemes and methodologies were followed, except the best ti
 ==Prim algorithm==
 _Note the logarithmic scale_
 
-|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png ||
+|| [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png] || [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png] ||
 
 ==Kruskal algorithm==
 
-|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png ||
+|| [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png] || [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png] ||
 
 ==Boruvka algorithm==
 
-|| http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png || http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png ||
+|| [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png] || [http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png] ||
