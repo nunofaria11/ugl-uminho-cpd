@@ -7,8 +7,6 @@ package GraphADT_2nd_try;
 import EdgeOriented.Edge;
 import GraphADType.GraphADT;
 import GraphADType.GraphMapAdj;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
 import java.util.ArrayList;
 
 /**

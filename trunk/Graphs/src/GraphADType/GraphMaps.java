@@ -6,8 +6,8 @@ package GraphADType;
 
 import GraphADT_2nd_try.Pair;
 import EdgeOriented.Edge;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
+import GraphADT_2nd_try.EdgeJ;
+import GraphADT_2nd_try.EdgeJHandler;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;

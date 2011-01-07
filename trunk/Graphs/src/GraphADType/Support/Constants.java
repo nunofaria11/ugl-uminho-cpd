@@ -4,8 +4,8 @@
  */
 package GraphADType.Support;
 
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
+import GraphADT_2nd_try.EdgeJ;
+import GraphADT_2nd_try.EdgeJHandler;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;

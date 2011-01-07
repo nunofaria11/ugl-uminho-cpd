@@ -9,7 +9,7 @@ import GraphADType.Support.Constants;
 import GraphADType.Support.GenSaveReadADT;
 import GraphADType.Support.TArithmeticOperations;
 import GraphADType.Support.ForestInteger_ADT;
-import JungTest.EdgeJ;
+import GraphADT_2nd_try.EdgeJ;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;

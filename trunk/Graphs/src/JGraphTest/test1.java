@@ -4,8 +4,8 @@
  */
 package JGraphTest;
 
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
+import GraphADT_2nd_try.EdgeJ;
+import GraphADT_2nd_try.EdgeJHandler;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;

@@ -9,8 +9,8 @@ import GraphADT_2nd_try.BaseGraph;
 import GraphADT_2nd_try.Pair;
 import GraphADType.GraphADT;
 import GraphADType.Support.GenSaveReadADT;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
+import GraphADT_2nd_try.EdgeJ;
+import GraphADT_2nd_try.EdgeJHandler;
 import java.util.ArrayList;
 import org.jgrapht.graph.WeightedMultigraph;
 
