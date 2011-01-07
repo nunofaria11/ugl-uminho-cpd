@@ -4,6 +4,8 @@
  */
 package JungTest;
 
+import GraphADT_2nd_try.EdgeJHandler;
+import GraphADT_2nd_try.EdgeJ;
 import EdgeOriented.Edge;
 import GraphADT_2nd_try.BaseGraph;
 import GraphADT_2nd_try.Pair;

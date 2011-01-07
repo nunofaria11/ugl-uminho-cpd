@@ -27,7 +27,7 @@ import JGraphTest.JGraphConverter;
 import JGraphTest.KruskalJgraph;
 import JGraphTest.PrimJgraph;
 import JungTest.BoruvkaJung;
-import JungTest.EdgeJ;
+import GraphADT_2nd_try.EdgeJ;
 import JungTest.JungConverter;
 import JungTest.KruskalJung;
 import JungTest.PrimJung;

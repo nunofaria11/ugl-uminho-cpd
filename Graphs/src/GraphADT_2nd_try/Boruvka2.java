@@ -10,8 +10,6 @@ import GraphADType.Support.Constants;
 import GraphADType.Support.ForestTree;
 import GraphADType.Support.TArithmeticOperations;
 import GraphIO.GraphInput;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,7 +113,17 @@ public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
         return weight;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
+        GraphInput input = new GraphInput("../graph_1000.g2");
+        UndirectedGraph<String,EdgeJ<Integer>> bgraph = (UndirectedGraph<String,EdgeJ<Integer>>) input.readGraph2();
+
+        Boruvka2 bor2 = new Boruvka2();
+        bor2.getMst(bgraph);
+
+    }
+
+    public static void main1(String[] args) {
         GraphInput gin = new GraphInput("graph_350.ser");
         GraphADT g = gin.readGraphADT();
 

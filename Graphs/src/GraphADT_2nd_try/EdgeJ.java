@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package JungTest;
+package GraphADT_2nd_try;
 
 import java.io.Serializable;
 

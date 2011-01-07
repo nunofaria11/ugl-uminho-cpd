@@ -4,6 +4,7 @@
  */
 package JungTest;
 
+import GraphADT_2nd_try.EdgeJ;
 import GraphADType.Algorithms.BoruvkaADT;
 import GraphADType.GraphADT;
 import GraphADType.Support.Constants;

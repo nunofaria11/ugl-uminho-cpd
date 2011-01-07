@@ -5,8 +5,6 @@
 package GraphADT_2nd_try;
 
 import GraphADType.Support.TArithmeticOperations;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;

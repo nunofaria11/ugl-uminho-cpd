@@ -7,8 +7,6 @@ package GraphADT_2nd_try;
 import GraphADType.Support.TArithmeticOperations;
 import GraphIO.GraphInput;
 import GraphIO.GraphOutput;
-import JungTest.EdgeJ;
-import JungTest.EdgeJHandler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -85,27 +83,27 @@ public class GraphTesting {
     public void createAndWrite(int minSize, int maxSize, int interval) {
         for (int size = minSize; size <= maxSize; size += interval) {
             BaseGraph<String, EdgeJ<Integer>> g = createGraphSize(size);
-            GraphOutput output = new GraphOutput("graph_"+size+".g2");
+            GraphOutput output = new GraphOutput("graph_" + size + ".g2");
             try {
                 output.saveGraph2(g);
             } catch (IOException ex) {
-                System.out.println("Unnable to write: graph_"+size+".g2 \t("+ex.toString()+")");
+                System.out.println("Unnable to write: graph_" + size + ".g2 \t(" + ex.toString() + ")");
             }
         }
 
     }
 
-    public BaseGraph readGraphSize(int size){
-        GraphInput input = new GraphInput("graph_"+size+".g2");
+    public BaseGraph readGraphSize(int size) {
+        GraphInput input = new GraphInput("graph_" + size + ".g2");
         BaseGraph g = input.readGraph2();
         return g;
     }
 
-    public void testReads(int minSize, int maxSize, int interval){
+    public void testReads(int minSize, int maxSize, int interval) {
 
         for (int size = minSize; size <= maxSize; size += interval) {
             BaseGraph g = readGraphSize(size);
-            System.out.println("File: graph_"+size+".g2\tOrder:" + g.getOrder()+"\tSize: " + g.getSize());
+            System.out.println("File: graph_" + size + ".g2\tOrder:" + g.getOrder() + "\tSize: " + g.getSize());
         }
 
     }
