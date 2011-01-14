@@ -168,7 +168,7 @@ public class RunBenchmark {
             if (alg.equals("prim")) {
                 Prim2 prim = new Prim2();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = prim.getMst(g);
+                UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) prim.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + prim.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -177,7 +177,7 @@ public class RunBenchmark {
             if (alg.equals("prim_visited")) {
                 Prim2VisitedArray bor = new Prim2VisitedArray();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) bor.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -186,7 +186,7 @@ public class RunBenchmark {
             if (alg.equals("kruskal")) {
                 Kruskal2 kruskal = new Kruskal2();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal.getMst(g);
+                UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) kruskal.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + kruskal.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -194,7 +194,7 @@ public class RunBenchmark {
             if (alg.equals("boruvka")) {
                 Boruvka2 boruvka = new Boruvka2();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = boruvka.getMst(g);
+                UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) boruvka.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + boruvka.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);

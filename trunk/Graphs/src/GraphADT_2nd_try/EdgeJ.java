@@ -23,7 +23,7 @@ public class EdgeJ<Y extends Comparable<Y>> implements Comparable<EdgeJ<Y>>, Ser
 
     @Override
     public String toString() {
-        return data.toString();
+        return /*"("+id+")"+*/data.toString();
     }
 
     public Y getData() {

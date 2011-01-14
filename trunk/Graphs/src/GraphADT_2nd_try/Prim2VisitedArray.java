@@ -23,7 +23,7 @@ public class Prim2VisitedArray<V extends Serializable, E extends Comparable<E>> 
         this.visited = new ArrayList<V>();
     }
 
-    public void addVisited(V node, UndirectedGraph<V, E> graph, PriorityQueue<E> Q) {
+    public void addVisited(V node, BaseGraph<V, E> graph, PriorityQueue<E> Q) {
         visited.add(node);
         ArrayList<E> removals = new ArrayList<E>();
         for (E e : Q) {
@@ -40,10 +40,10 @@ public class Prim2VisitedArray<V extends Serializable, E extends Comparable<E>> 
         Q.removeAll(removals);
     }
 
-    public UndirectedGraph getMst(UndirectedGraph<V, E> g) {
+    public BaseGraph getMst(BaseGraph<V, E> g) {
 
-        UndirectedGraph<V, E> graph = g;
-        UndirectedGraph<V, E> mst = new UndirectedGraph<V,E>();
+        BaseGraph<V, E> graph = g;
+        BaseGraph<V, E> mst = graph.create();
         V start_node = g.getRandomNode();
         PriorityQueue<E> Q = new PriorityQueue<E>();
         while (visited.size() < graph.getOrder() - 1) {
@@ -82,7 +82,7 @@ public class Prim2VisitedArray<V extends Serializable, E extends Comparable<E>> 
      * @param arith
      * @return MST weight of an already in MST-form graph
      */
-    public E getMstWeight(UndirectedGraph<V, E> graph, TArithmeticOperations<E> arith) {
+    public E getMstWeight(BaseGraph<V, E> graph, TArithmeticOperations<E> arith) {
 
         UndirectedColoredGraph<V, E> g = new UndirectedColoredGraph<V, E>(graph);
 
@@ -125,7 +125,7 @@ public class Prim2VisitedArray<V extends Serializable, E extends Comparable<E>> 
 
         Prim2VisitedArray<String, EdgeJ<Integer>> prim = new Prim2VisitedArray<String, EdgeJ<Integer>>();
 
-        UndirectedGraph<String, EdgeJ<Integer>> mst = prim.getMst(g);
+        UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) prim.getMst(g);
         System.out.println(mst);
         /*
          * MST weight

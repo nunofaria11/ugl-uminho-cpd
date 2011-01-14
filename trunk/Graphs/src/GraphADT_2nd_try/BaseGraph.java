@@ -15,6 +15,13 @@ import java.util.Collections;
  */
 public abstract class BaseGraph<V extends Serializable, E> implements Graph<V, E> {
 
+
+    /**
+     * Returns a new empty instance with the type of the original graph
+     * @return
+     */
+    abstract public BaseGraph<V,E> create();
+
     public boolean addEdge(E edge, Collection<? extends V> verts, EdgeType edge_type) {
         if (verts.size() == 2) {
             return this.addEdge(edge, (verts instanceof Pair) ? ((Pair<V>) verts) : (new Pair<V>(verts)), edge_type);

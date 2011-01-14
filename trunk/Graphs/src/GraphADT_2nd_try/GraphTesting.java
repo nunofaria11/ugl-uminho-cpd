@@ -111,7 +111,7 @@ public class GraphTesting {
     public static void main(String[] args) {
 
         GraphTesting t = new GraphTesting();
-        t.createAndWrite(250, 1000, 50);
+        t.createAndWrite(50, 1000, 50);
 
         t.testReads(50, 1000, 50);
 

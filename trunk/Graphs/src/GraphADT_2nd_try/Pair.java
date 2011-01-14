@@ -149,4 +149,9 @@ public class Pair<X extends Serializable> implements Collection<X>, Serializable
     public void clear() {
         throw new UnsupportedOperationException("A pair cannot be altered.");
     }
+
+    @Override
+    public String toString() {
+        return "<"+first+","+second+">" ;
+    }
 }

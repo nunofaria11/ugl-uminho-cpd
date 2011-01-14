@@ -30,6 +30,11 @@ public class UndirectedGraph<V extends Serializable, E extends Comparable<E>> ex
         edges = new HashMap<E, Pair<V>>();
     }
 
+    @Override
+    public BaseGraph<V, E> create() {
+        return new UndirectedGraph<V, E>();
+    }
+
     public Collection<E> getEdges() {
         return this.edges.keySet();
     }
@@ -265,7 +270,6 @@ public class UndirectedGraph<V extends Serializable, E extends Comparable<E>> ex
         }
         return visited.containsAll(allnodes);
     }
-
 //    public boolean removeVertex(V v) {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
