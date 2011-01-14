@@ -19,7 +19,7 @@ import java.util.PriorityQueue;
  */
 public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
 
-    public UndirectedGraph<V, E> getMst(UndirectedGraph<V, E> g) {
+    public BaseGraph<V, E> getMst(BaseGraph<V, E> g) {
         /*
          * EDGE QUEUE:  init with all edges of the graph, no need to control
          *              repeated edges because there are no repeated edges
@@ -30,7 +30,7 @@ public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
         /*
          * New MST graph to return
          */
-        UndirectedGraph<V, E> mst = new UndirectedGraph<V, E>();
+        BaseGraph<V, E> mst = g.create();
 
         /*
          * Initialize forest tree with all vertices: each vertex will be inserted
@@ -54,7 +54,7 @@ public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
         return mst;
     }
 
-    public E getMstWeight(UndirectedGraph<V, E> graph, TArithmeticOperations<E> arith) {
+    public E getMstWeight(BaseGraph<V, E> graph, TArithmeticOperations<E> arith) {
         UndirectedColoredGraph<V, E> g = new UndirectedColoredGraph<V, E>(graph);
         E weight = arith.zero_element();
         for (V vertex : g.getVertices()) {
@@ -69,7 +69,7 @@ public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
     }
 
 
-    public static void main(String[] args){
+    public static void main2(String[] args){
 
         GraphInput input = new GraphInput("../graph_1000.g2");
         UndirectedGraph bgraph = (UndirectedGraph) input.readGraph2();
@@ -96,13 +96,13 @@ public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
         Kruskal2<String, EdgeJ<Integer>> kruskal2 = new Kruskal2<String, EdgeJ<Integer>>();
         UndirectedGraph<String, EdgeJ<Integer>> graph = conv.ADT2New(g);
         begin = System.currentTimeMillis();
-        UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal2.getMst(graph);
+        UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) kruskal2.getMst(graph);
         end = System.currentTimeMillis();
         System.out.println("Weight 2: " + kruskal2.getMstWeight(mst, Constants.myNewLibArith)+"\tTime: "+(end-begin)+" ms");
 
     }
 
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
         UndirectedColoredGraph<String, EdgeJ<Integer>> g = new UndirectedColoredGraph<String, EdgeJ<Integer>>();
 
         g.addVertex("A");
@@ -129,7 +129,7 @@ public class Kruskal2<V extends Serializable, E extends Comparable<E>> {
 
         Kruskal2<String, EdgeJ<Integer>> kruskal = new Kruskal2<String, EdgeJ<Integer>>();
 
-        UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal.getMst(g);
+        UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) kruskal.getMst(g);
         System.out.println(mst);
         /*
          * MST weight

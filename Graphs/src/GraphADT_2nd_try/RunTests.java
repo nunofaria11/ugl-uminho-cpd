@@ -85,14 +85,22 @@ public class RunTests {
             }
 
         }
-        if (lib.equals("myNewLib")) {
-         
-            UndirectedColoredGraph<String, EdgeJ<Integer>> g = new UndirectedColoredGraph<String, EdgeJ<Integer>>(graph);
+        if (lib.equals("regular") || lib.equals("indexed")) {
+
+            BaseGraph g = convertType(lib, alg, graph);
             if (alg.equals("prim")) {
                 Prim2 prim = new Prim2();
-                long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = prim.getMst(g);
-                long end = System.currentTimeMillis();
+                long begin, end;
+                BaseGraph<String, EdgeJ<Integer>> mst;
+                if (lib.equals("regular")) {
+                    begin = System.currentTimeMillis();
+                    mst = prim.getMst((UndirectedColoredGraph) g);
+                    end = System.currentTimeMillis();
+                } else { // if "indexed"
+                    begin = System.currentTimeMillis();
+                    mst = prim.getMst_IndexedColored((UndirectedIndexedColoredGraph) g);
+                    end = System.currentTimeMillis();
+                }
                 System.out.print("\tmstW: " + prim.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
             }
@@ -100,7 +108,7 @@ public class RunTests {
             if (alg.equals("prim_visited")) {
                 Prim2VisitedArray bor = new Prim2VisitedArray();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
+                BaseGraph<String, EdgeJ<Integer>> mst = bor.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + bor.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -109,7 +117,7 @@ public class RunTests {
             if (alg.equals("kruskal")) {
                 Kruskal2 kruskal = new Kruskal2();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = kruskal.getMst(g);
+                BaseGraph<String, EdgeJ<Integer>> mst = kruskal.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + kruskal.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -117,7 +125,7 @@ public class RunTests {
             if (alg.equals("boruvka")) {
                 Boruvka2 boruvka = new Boruvka2();
                 long begin = System.currentTimeMillis();
-                UndirectedGraph<String, EdgeJ<Integer>> mst = boruvka.getMst(g);
+                BaseGraph<String, EdgeJ<Integer>> mst = boruvka.getMst(g);
                 long end = System.currentTimeMillis();
                 System.out.print("\tmstW: " + boruvka.getMstWeight(mst, Constants.myNewLibArith) + "\t");
                 return (end - begin);
@@ -125,7 +133,7 @@ public class RunTests {
         }
         return -1;
     }
-    
+
     public static String getOnlyNumerics(String str) {
         if (str == null) {
             return null;
@@ -139,6 +147,24 @@ public class RunTests {
             }
         }
         return strBuff.toString();
+    }
+
+    public static BaseGraph convertType(String type, String alg, BaseGraph bg) {
+
+        if (type.equals("indexed")) {
+            if (alg.equals("prim_visited")) {
+                return new UndirectedIndexedGraph(bg);
+            }
+            return new UndirectedIndexedColoredGraph(bg);
+
+        }
+        if (type.equals("regular")) {
+            if (alg.equals("prim_visited")) {
+                return bg;
+            }
+            return new UndirectedColoredGraph(bg);
+        }
+        return null;
     }
 
     public static void main(String[] args) {

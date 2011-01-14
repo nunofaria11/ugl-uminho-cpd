@@ -20,8 +20,8 @@ import java.util.HashMap;
  */
 public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
 
-    public UndirectedGraph<V, E> getMst(UndirectedGraph<V, E> g) {
-        UndirectedGraph<V, E> mst = new UndirectedGraph<V, E>();
+    public BaseGraph<V, E> getMst(BaseGraph<V, E> g) {
+        BaseGraph<V, E> mst = g.create();
 
         /*
          * Wannabe edges
@@ -99,7 +99,7 @@ public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
         return mst;
     }
 
-    public E getMstWeight(UndirectedGraph<V, E> graph, TArithmeticOperations<E> arith) {
+    public E getMstWeight(BaseGraph<V, E> graph, TArithmeticOperations<E> arith) {
         UndirectedColoredGraph<V, E> g = new UndirectedColoredGraph<V, E>(graph);
         E weight = arith.zero_element();
         for (V vertex : g.getVertices()) {
@@ -113,18 +113,24 @@ public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
         return weight;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        GraphInput input = new GraphInput("../graph_1000.g2");
-        UndirectedGraph<String,EdgeJ<Integer>> bgraph = (UndirectedGraph<String,EdgeJ<Integer>>) input.readGraph2();
+        GraphInput input = new GraphInput("../graph_50.g2");
+        BaseGraph<String, EdgeJ<Integer>> bgraph = (BaseGraph<String, EdgeJ<Integer>>) input.readGraph2();
+
+        BaseGraph<String, EdgeJ<Integer>> uig = RunTests.convertType("indexed", "boruvka", bgraph);
+                //new UndirectedIndexedGraph<String, EdgeJ<Integer>>(bgraph);
 
         Boruvka2 bor2 = new Boruvka2();
-        bor2.getMst(bgraph);
+        BaseGraph<String, EdgeJ<Integer>> mst = bor2.getMst(uig);
 
+        System.out.println(uig);
+        System.out.println(mst);
+        System.out.println("mst Weight: " + bor2.getMstWeight(mst, Constants.myNewLibArith));
     }
 
-    public static void main1(String[] args) {
-        GraphInput gin = new GraphInput("graph_350.ser");
+    public static void main_oldADT(String[] args) {
+        GraphInput gin = new GraphInput("../graph_350.g2");
         GraphADT g = gin.readGraphADT();
 
         long end, begin;
@@ -138,9 +144,9 @@ public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
 
         ADTConverter conv = new ADTConverter();
         Boruvka2<String, EdgeJ<Integer>> bor2 = new Boruvka2<String, EdgeJ<Integer>>();
-        UndirectedGraph<String, EdgeJ<Integer>> graph = conv.ADT2New(g);
+        BaseGraph<String, EdgeJ<Integer>> graph = conv.ADT2New(g);
         begin = System.currentTimeMillis();
-        UndirectedGraph<String, EdgeJ<Integer>> mst = bor2.getMst(graph);
+        BaseGraph<String, EdgeJ<Integer>> mst = (BaseGraph<String, EdgeJ<Integer>>) bor2.getMst(graph);
         end = System.currentTimeMillis();
         System.out.println("Weight 2: " + bor2.getMstWeight(mst, Constants.myNewLibArith) + "\tTime: " + (end - begin) + " ms");
 
@@ -173,7 +179,7 @@ public class Boruvka2<V extends Serializable, E extends Comparable<E>> {
 
         Boruvka2<String, EdgeJ<Integer>> boruvka = new Boruvka2<String, EdgeJ<Integer>>();
 
-        UndirectedGraph<String, EdgeJ<Integer>> mst = boruvka.getMst(g);
+        BaseGraph<String, EdgeJ<Integer>> mst = (BaseGraph<String, EdgeJ<Integer>>) boruvka.getMst(g);
         System.out.println(mst);
         /*
          * MST weight

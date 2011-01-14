@@ -19,9 +19,9 @@ public class Prim2<V extends Serializable, E extends Comparable<E>> {
 
     //MELHORAR A VERSATILIDADE DISTO |
     //                               V
-    public UndirectedGraph<V, E> getMst(UndirectedColoredGraph<V, E> g) {
+    public BaseGraph<V, E> getMst(UndirectedColoredGraph<V, E> g) {
         // create new instance of undirected graph
-        UndirectedGraph<V, E> mst = new UndirectedGraph<V, E>();
+        BaseGraph<V, E> mst = g.create();
         // edge queue
         PriorityQueue<E> queue = new PriorityQueue<E>();
         V start_node = g.getRandomNode();
@@ -57,6 +57,44 @@ public class Prim2<V extends Serializable, E extends Comparable<E>> {
         return mst;
     }
 
+    public BaseGraph<V, E> getMst_IndexedColored(UndirectedIndexedColoredGraph<V, E> g) {
+        // create new instance of undirected graph
+        BaseGraph<V, E> mst = g.create();
+        // edge queue
+        PriorityQueue<E> queue = new PriorityQueue<E>();
+        V start_node = g.getRandomNode();
+        while (mst.getSize() < g.getOrder() - 1) {
+            g.visitVertex(start_node);      // ***
+            for (E edge : queue) {
+                if (g.isIncident(start_node, edge)) {
+                    if (g.visitedVertex(g.getOpposite(start_node, edge))) {
+                        g.visitEdge(edge);
+                    }
+                }
+            }
+            Collection<E> nbors = g.getInEdges(start_node);
+            ArrayList<E> edgesToAdd = new ArrayList<E>();
+            for (E edge : nbors) {
+                if (!g.visitedEdge(edge)) {
+                    edgesToAdd.add(edge);
+                }
+            }
+            queue.addAll(edgesToAdd);
+            E minEdge = queue.remove();
+            while (g.visitedEdge(minEdge)) {
+                minEdge = queue.remove();
+            }
+            Pair<V> pair = g.getEndpoints(minEdge);
+
+            mst.addVertex(pair.first);
+            mst.addVertex(pair.second);
+            mst.addEdge(minEdge, g.getEndpoints(minEdge));
+            g.visitEdge(minEdge);
+            start_node = (g.visitedVertex(pair.first)) ? (pair.second) : (pair.first);
+        }
+        return mst;
+    }
+
     /**
      * This method works well because the operations are based on the interface.
      * Even if an edge is not a primary Class like "Integer", the arithmetic
@@ -69,7 +107,7 @@ public class Prim2<V extends Serializable, E extends Comparable<E>> {
      * @param arith
      * @return MST weight of an already in MST-form graph
      */
-    public E getMstWeight(UndirectedGraph<V, E> graph, TArithmeticOperations<E> arith) {
+    public E getMstWeight(BaseGraph<V, E> graph, TArithmeticOperations<E> arith) {
 
         UndirectedColoredGraph<V, E> g = new UndirectedColoredGraph<V, E>(graph);
 
@@ -112,7 +150,7 @@ public class Prim2<V extends Serializable, E extends Comparable<E>> {
 
         Prim2<String, EdgeJ<Integer>> prim = new Prim2<String, EdgeJ<Integer>>();
 
-        UndirectedGraph<String, EdgeJ<Integer>> mst = prim.getMst(g);
+        UndirectedGraph<String, EdgeJ<Integer>> mst = (UndirectedGraph<String, EdgeJ<Integer>>) prim.getMst(g);
         System.out.println(mst);
         /*
          * MST weight

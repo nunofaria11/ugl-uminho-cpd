@@ -4,6 +4,7 @@
  */
 package GraphADT_2nd_try;
 
+import GraphIO.GraphInput;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,20 +12,10 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * Undirected graph implementation with colors to check 
- * for visited VERTICES only. It is directed at eliminating
- * the use of auxiliary structures such as visited vertex
- * or edge arrays.
- *
- * For this implementation check only visitable vertices.
- *
- * However, the edges will also be visited to control the
- * cycles that may happen, i.e., to mark as NOT_VISITABLE
- * the target vertices the edges point to (see Prim algorithm).
  *
  * @author nuno
  */
-public class UndirectedColoredGraph<V extends Serializable, E extends Comparable<E>> extends UndirectedGraph<V, E> implements Visitable<V, E> {
+public class UndirectedIndexedColoredGraph<V extends Serializable, E extends Comparable<E>> extends UndirectedIndexedGraph<V, E> implements Visitable<V, E> {
 
     private static final long serialVersionUID = -1850848173131722321L;
 
@@ -38,15 +29,15 @@ public class UndirectedColoredGraph<V extends Serializable, E extends Comparable
     Map<V, Color> vis_verts;
     Map<E, Color> vis_edges;
 
-    public UndirectedColoredGraph() {
+    public UndirectedIndexedColoredGraph() {
         super();
         vis_verts = new HashMap<V, Color>();
         vis_edges = new HashMap<E, Color>();
     }
 
-    public UndirectedColoredGraph(BaseGraph<V, E> g) {
+    public UndirectedIndexedColoredGraph(BaseGraph<V, E> g) {
 
-//        if (g instanceof UndirectedGraph || g instanceof UndirectedIndexedArray) {
+//        if (g instanceof UndirectedGraph || g instanceof UndirectedIndexedGraph) {
 //        BaseGraph<V, E> ug = g.create();
         Collection<V> ug_verts = g.getVertices();
         Collection<E> ug_edges = g.getEdges();
@@ -72,7 +63,7 @@ public class UndirectedColoredGraph<V extends Serializable, E extends Comparable
      * graph.
      * @param ug UndirectedGraph
      */
-    public UndirectedColoredGraph(UndirectedGraph<V, E> ug) {
+    public UndirectedIndexedColoredGraph(UndirectedGraph<V, E> ug) {
         Collection<V> ug_verts = ug.getVertices();
         Collection<E> ug_edges = ug.getEdges();
         vis_verts = new HashMap<V, Color>();
@@ -110,19 +101,6 @@ public class UndirectedColoredGraph<V extends Serializable, E extends Comparable
         }
 
         vis_edges.put(edge, Color.VISITED);
-        // now mark the target vertices of the edge as NOT_VISITABLE if they are not already marked as VISITED
-//        Pair<V> pair = getEndpoints(edge);
-//        V first = pair.first;
-//        V second = pair.second;
-//
-//        if (!visitedVertex(first)) {
-//            vis_verts.put(first, Color.NOT_VISITABLE);
-//            System.out.println("making "+first+" NOT_VISITABLE");
-//        }
-//        if (!visitedVertex(second)) {
-//            vis_verts.put(second, Color.NOT_VISITABLE);
-//            System.out.println("making "+second+" NOT_VISITABLE");
-//        }
         return true;
     }
 
@@ -139,7 +117,7 @@ public class UndirectedColoredGraph<V extends Serializable, E extends Comparable
         if (containsVertex(v)) {
             return false;
         }
-        verts.put(v, new HashSet<E>());
+        indices.put(v, new Pair<Integer>(avail_index, avail_index));
         vis_verts.put(v, Color.NOT_VISITED);
         return true;
     }
@@ -156,5 +134,45 @@ public class UndirectedColoredGraph<V extends Serializable, E extends Comparable
 
     public static boolean implementsInterface(Object object, Class interf) {
         return interf.isInstance(object);
+    }
+
+    @Override
+    public String toString() {
+        return "Colored " + super.toString();
+    }
+
+    public static void main2(String[] args) {
+        UndirectedIndexedGraph<String, EdgeJ<Integer>> g = new UndirectedIndexedGraph<String, EdgeJ<Integer>>();
+        g.addVertex("A");
+        g.addVertex("B");
+        g.addVertex("C");
+        g.addVertex("D");
+        g.addVertex("E");
+        g.addVertex("F");
+        g.addVertex("G");
+        EdgeJHandler handler = new EdgeJHandler();
+        g.addEdge(new EdgeJ<Integer>(7, handler), "A", "B");
+        g.addEdge(new EdgeJ<Integer>(8, handler), "B", "C");
+        g.addEdge(new EdgeJ<Integer>(5, handler), "A", "D");
+        g.addEdge(new EdgeJ<Integer>(9, handler), "B", "D");
+        g.addEdge(new EdgeJ<Integer>(5, handler), "C", "E");
+        g.addEdge(new EdgeJ<Integer>(6, handler), "D", "F");
+        g.addEdge(new EdgeJ<Integer>(7, handler), "B", "E");
+        g.addEdge(new EdgeJ<Integer>(8, handler), "E", "F");
+        g.addEdge(new EdgeJ<Integer>(15, handler), "D", "E");
+        g.addEdge(new EdgeJ<Integer>(11, handler), "F", "G");
+        g.addEdge(new EdgeJ<Integer>(9, handler), "E", "G");
+        UndirectedIndexedColoredGraph<String, EdgeJ<Integer>> gc = new UndirectedIndexedColoredGraph<String, EdgeJ<Integer>>(g);
+        System.out.println(gc);
+    }
+
+    public static void main(String[] args) {
+
+        GraphInput gin = new GraphInput("../graph_50.g2");
+
+        UndirectedIndexedGraph<String, EdgeJ<Integer>> g =
+                new UndirectedIndexedGraph<String, EdgeJ<Integer>>(gin.readGraph2());
+
+        System.out.println(g);
     }
 }
