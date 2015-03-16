@@ -1,0 +1,36 @@
+The [GraphArraySucc](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java) implementation uses a compressed-row concept to store the edges in the graph. So far, this is the most _tricky_ implementation.
+The concept here is to store the graph connection info in two main structures:
+  * **targets**: one that stores the target nodes of each source node (the targets of each source node must be next to each other in the _target array_) - it has _#edges_ positions (`targets[NUM_EDGES]`).
+  * **index**: another one that has NUM\_NODES elements, and it stores the indices of the starting positions where the target nodes are stored in the _targets_ array.
+
+```
+public class GraphArraySucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y>{
+    // ...
+    HashMap<Node<T>, Integer> _index;
+    Object[] _succs;
+    Object[] _weights;
+    // ...
+}
+```
+
+Three structures are used:
+  * `HashMap<Node<T>, Integer> _index`: has #Nodes elements; stores each starting index of the targets array.
+  * `Object[] _succs`: has #Edges elements; stores each target node for every source node.
+  * `Object[] _weights`: same logic than the previous one, except it stores the **weight of the edge** instead of the target node.
+
+### Disadvantages ###
+This implementation works well for static graphs, that are built in an ordered fashion:
+```
+foreach newNode in nodesToAdd {
+   foreach neighbor in neighborsOfNewNode {
+      addNeighbor(neighbor)
+   }
+}
+```
+
+However, for graphs that are built over time, like an MST is built as an algorithm runs, or even when building a random graph, the order in which the neighbors of a given node are added are not for sure added all following each other. Therefore, the target nodes (of a given source node **A**) in the _targets array_ will not be contiguous, unless we perform a shift operation in the position of node **A**, stored in the _index_ map, in order to make the targets of **A** contiguous in _targets_.
+
+This will obviously result in a major overhead when building a new graph, and even though the graph building processing isn't directly linked to running an algorithm, like in an MST calculation, where we need to create a new graph as the algorithm evolves, the shifting process kills the potential performance and good memory locality achieved.
+
+### Possible solution? ###
+Try to implement a threading mechanism that performs the shift operation on a separate thread.

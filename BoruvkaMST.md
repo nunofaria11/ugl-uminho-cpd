@@ -1,0 +1,39 @@
+# Boruvka MST #
+
+The implementation of this algorithm uses three main concepts:
+  * **wannabe edges**: a collection of edges that are not yet in the MST and not yet processed by the algorithm
+  * **smallest neighbor map**: a map containing all nodes in the graph has _keys_ and their smallest associated edges has _values_ (at the beginning of each iteration the edge will be maximum).
+  * **a forest** ([UnionFind](http://code.google.com/p/ugl-uminho-cpd/wiki/Control_UnionFind)): the forest is a group of trees (initially, each node is a tree) used to keep track of the MST structure, the algorithm has found the MST graph when there is only one tree in the forest.
+
+Simply put, Boruvka's algorithm, runs through every node in the graph and searches for the minimum edge associated to it - the structure where we store this is `nbors`. However, at first we do not explicitly iterate through all the nodes - we iterate through the available edges (`wannabe` edges). We need to build the `nbors` map at each new iteration and then we run through every node and (if they are not in the same tree in the forest, in case there are ) the minimum edge associated with it is added.
+
+```
+List wannabes = all edges in G
+Forest forest = init forest with all nodes
+Map nbors = <AllNodes, EmptyMinimumEdges>
+while(exists disjoint nodes in forest){
+  nbors = reinitialize map
+  Node node1, node2;
+  for each edge in wannabes {
+    node1 = forest: getRootOf edge.sourceNode
+    node2 = forest: getRootOf edge.targetNode
+    if (node1 == node2) {
+      exit this iteration;
+    }
+    if ( edge.weight < nbors[node1].weight ) {
+      nbors[node1] = edge
+    }
+    if ( edge.weight < nbors[node2].weight ) {
+      nbors[node2] = edge
+    }
+  }
+  add the resulting minimum edges to Forest
+  remove MST edges from wannabes
+}        
+```
+
+This implementation may still be altered because it doesn't makes use of too many accesses to the graph data-structure (or graph API) - which is not necessarily bad. The accesses this specific algorithm performs to the structure are:
+  * initialize the _wannabe_ edge list: it needs to access the graph data-structure to get all possible edges
+  * initialize the forest: with all the nodes in the graph (`UnionFind` structure is inside the graph structure)
+  * for this specific API, the edges contain both the nodes that are linked, but in some libraries it only stores the edge value/data or weight. For those libraries, at each _wannabe iteration_ (inner cycle) the algorithm accesses the graph structure in order to get the source and target nodes and process them in the forest.
+  * retrieve all nodes at the end of each outer iteration: however the nodes may only be accessed once in the beginning of the algorithm and stored in a list (`allnodes`).

@@ -1,0 +1,47 @@
+Here we will try to identify some bottlenecks through benchmarks and profiles. The implementation used for the GraphADT profiles is _MapAdj_, as for JGraph is _WeightedMultigraph_ and for JUNG is _UndirectedSparseGraph_ (for JGraph and JUNG implementations see [this](http://code.google.com/p/ugl-uminho-cpd/wiki/Implementations)).
+
+## 1. Benchmarks: Kruskal and Boruvka ##
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_kruskal.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_kruskal.png)
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_boruvka.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r108/trunk/Graphs/images/3rd_run_boruvka.png)
+
+Note: Y axis is in logarithmic scale.
+
+## 2. Profiles ##
+The problem size (#nodes) for the Kruskal and Boruvka algs were 650 nodes, and for Prim it was 350 nodes due to inefficiency.
+### 2.1 Profile Prim ###
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_prim.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_prim.png)
+
+For this algorithm the _addVisited_ method is the major bottleneck - it adds a node to an array and **updates the working edge queue to remove the _garbage_ edges that point to the visited node**.
+
+See Prim's [algorithm](http://code.google.com/p/ugl-uminho-cpd/wiki/PrimMST) or [implementation](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/PrimADT.java?r=109)
+
+### 2.2 Profile Kruskal ###
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_kruskal.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_kruskal.png)
+
+Here the _size()_ method (_#edges_) is very inefficient because is runs through all the neighbor edge lists of every node and sums all the sizes.
+
+See Kruskal's [algorithm](http://code.google.com/p/ugl-uminho-cpd/wiki/KruskalMST) or [implementation](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/KruskalADT_UF.java?r=109)
+
+### 2.3 Profile Boruvka ###
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_boruvka.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r109/trunk/Graphs/images/profile_boruvka.png)
+
+Boruvka's algorithm is based on comparing edge data, and the _equals_ method is the major setback.
+
+See Boruvka's [algorithm](http://code.google.com/p/ugl-uminho-cpd/wiki/BoruvkaMST) or [implementation](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/Algorithms/BoruvkaADT2.java?r=109)
+
+## 3. MAIN PROBLEMS ##
+There are several inefficiency issues and major bottlenecks in
+| **Prim** | **Kruskal** | **Boruvka** |
+|:---------|:------------|:------------|
+| addVisited | size() | Edge: equals() |
+| getNeighborEdges | fillWorklist: PriorityQueue | fillWorklist: ArrayList|
+
+There are methods in graph structure implementations that are not correctly implemented, for instance,
+  * size() is the same for every structure (it is defined in the abstract class), therefore does not take advantage of the improvements one structure may have
+  * getNeighborEdges has the same problem of the previous point
+
+### Next steps: ###
+  * reorganize classes and introduce tagging interfaces (Directed, Undirected, Weighted, Unweighted, etc.)
+  * improve method implementations specifically to the graph structure, to avoid cases like _size_ and _getNeighborEdges_

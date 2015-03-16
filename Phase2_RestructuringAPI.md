@@ -1,0 +1,58 @@
+# 1) Initial implementation #
+
+  * We had a [GraphADT](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphADT.java?r=129) abstract class, and three sub-classes ([MapAdj](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapAdj.java?r=129), [MapSucc](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java?r=129) and [ArraySucc](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphArraySucc.java?r=129)) that extended it.
+  * We had implementation problems like:
+    1. inefficient and overloaded methods: for instance, the _getEdges_ method (that returns all edges in the graph) was based on another method _getNeighborEdges_ called for every node in graph **AND** it was defined in the abstract class therefore not taking advantages the some structure graph implementations may offer.
+    1. The distinction of an **Undirected** and a **Directed** graph was done naively: for instance, the undirected graph had the repeated edges (like _A->B_ and _B->A_) represented in memory
+  * At a very early stage we has several conceptual problems like:
+    1. Encapsulating the node data/id in a Node class
+    1. Encapsulating (thus, **restricting**) the connection info inside the Edge class: source and target nodes were stored inside an edge
+
+# 2) _myNewLib_ implementation #
+The general structure of the API was redefined after studying the JUNG and JGraph implementations.
+  * The most important methods are now implemented **at a lower level** (like the _getEdges_ example)
+
+  * **Tagging interfaces** were added to better represent Undirected and Directed graphs (tagging interfaces will also be applied to other matters)
+
+  * An _experimental_ controlling mechanism for visited vertices and edges was added: the class [UndirectedColoredGraph](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedColoredGraph.java?r=132) (extends [UndirectedGraph](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADT_2nd_try/UndirectedGraph.java?r=132)) works very well bypassing the need of using an array to control the visited nodes.
+
+  * I think the main improvement made, besides the new structure, was the **decapsulation** of data:
+    1. the node info is not encapsulated in a specific _Node_ class as before
+    1. **and the most important**, the edge info is now treated by the API as a generic _E_, instead of innerly processing the edge with the class _Edge_. Also, the graph uses two structures: **(i)** one to store the nodes and map each node to an edge (of type _E_), and **(ii)** another structure to map each edge to the node endpoints - this approach is not so rigid as using only one structure. By using two structures, searching in the graph will be much more straight-forward.
+
+# 3) Conceptual differences #
+Considering the small graph in the image, an example representation on both previous and new API (the implementation of the first one is GraphMapAdj).
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/small_graph.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/small_graph.png)
+
+The example representations show how the connection info of _V<sub>1</sub>_ is represented on both APIs.
+## 3.1) GraphADT: GraphMapAdj ##
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r149/trunk/Graphs/images/GraphADT.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r149/trunk/Graphs/images/GraphADT.png)
+
+This implementation only uses one structure to store data, therefore searching will be extremely heavy. The user would only have to define the edge type (in this case _Integer_) the graph will be in; the edges are innerly processed, and encapsulated in each edge there both source and target nodes.
+Also, as it was said before, encapsulating the Edge class is not the best option.
+## 3.2) myNewLib ##
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/myNewLib.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r145/trunk/Graphs/images/myNewLib.png)
+
+In this case, we use two structures, and the searching costs are reduced. Both structures complement each other, and they are based on pointers (red and blue colors).
+
+Another important issue is the abstraction taken in the Edge controls. Now the implementation will only operate with the generic _**E**_, and it is the user who defines the control Edge class.
+# 4) Benchmarks: myNewLib, JUNG and JGraph #
+The reformulated API showed lots of improvement in performance. A second chart with lines was added for better understanding which implementation is best at each _node count_.
+
+No special measuring schemes and methodologies were followed, except the best times out of three executions.
+## 4.1) Prim algorithm ##
+_Note the logarithmic scale_
+
+| ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib.png) | ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/prim_myNewLib_lines.png) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+## 4.2) Kruskal algorithm ##
+
+| ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib.png) | ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/kruskal_myNewLib_lines.png) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+## 4.3) Boruvka algorithm ##
+
+| ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib.png) | ![http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png](http://ugl-uminho-cpd.googlecode.com/svn-history/r129/trunk/Graphs/images/boruvka_myNewLib_lines.png) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

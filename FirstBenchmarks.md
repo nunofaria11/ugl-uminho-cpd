@@ -1,0 +1,17 @@
+# First Benchmarks #
+The benchmarks were performed for each implementation ([MapSucc](http://code.google.com/p/ugl-uminho-cpd/wiki/GraphMapSucc), [MapAdj](http://code.google.com/p/ugl-uminho-cpd/wiki/GraphMapAdj) and [ArraySucc](http://code.google.com/p/ugl-uminho-cpd/wiki/GraphArraySucc)) for the following algorithms.
+## Prim ##
+![http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_prim.png](http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_prim.png)
+## Kruskal ##
+![http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_kruskal.png](http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_kruskal.png)
+## Boruvka ##
+![http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_boruvka.png](http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_boruvka.png)
+
+## Benchmarks to add soon... ##
+
+  * Test the implementations for several connection density ratio (more or less edges) for the same number of nodes.
+  * Test with different weight ranges (a graph with a weight range of [5, 90] may be more efficient than another with [5, 9] since the decisions are made faster).
+  * New structure implementations
+
+### Results table ###
+![http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_results.png](http://ugl-uminho-cpd.googlecode.com/svn/trunk/Graphs/images/run1_results.png)

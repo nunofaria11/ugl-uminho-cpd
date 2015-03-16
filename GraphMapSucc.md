@@ -1,0 +1,12 @@
+This [GraphMapSucc](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/GraphADType/GraphMapSucc.java) implementation was an attempt to reduce the memory overhead of storing the specific structure that has the edge info ([EdgeEO](http://code.google.com/p/ugl-uminho-cpd/source/browse/trunk/Graphs/src/EdgeOriented/EdgeEO.java))
+
+```
+public class GraphMapSucc<T, Y extends Comparable<Y>> extends GraphADT<T, Y>{
+   // ...
+   HashMap<Node<T>, HashMap<Node<T>, Y>> _adj_map;
+   // ...
+}
+```
+
+The weight or distance factor has type **Y**.
+The main advantage that should come from this implementation is the fast verification of a possible existing edge - where the source and target node are keys in both `HashMaps`. However this implementation does note support directed graphs, in the case scenario a node **A** can not have more that one edge **pointing** to another node **B**, since the keys in `HashMaps` are unique.

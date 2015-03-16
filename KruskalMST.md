@@ -1,0 +1,28 @@
+# Kruskal MST #
+
+The Kruskal MST algorithm consists in creating a forest (where initially is made of #nodes single trees). At each step of the algorithm the minimum edge found in a priority queue is added, not following any specific connection order, just adding the minimum found edge. The algorithm consists in:
+```
+getMST(Graph G) {
+   Graph MST  = ...// empty MST graph to return
+   Queue Q    = initQ(); //initialize ordered edge Queue with all edges in G
+   union_find = new UnionFind(G.getAllVertices()); // initialize forest with all nodes in G
+   while(MST.getEdgeCount() < G.getNodeCount() - 1) {
+      Edge minEdge = Q.poll();
+      // now check if it forms a cycle using the forest structure (union_find)
+      Node node1 = union_find.getRootOf(minEdge.getSourceNode());
+      Node node2 = union_find.getRootOf(minEdge.getTargetNode());
+      // if nodes are different it means they are not the same root - therefore they are 
+      // in different trees, therefore a cycle doesn't exist
+      if(node1 != node2){
+            MST.addEdge(minEdge);
+            // unite and rearrange both trees so that one may be a part of the other tree
+            union_find.Union(node1, node2);  
+      }
+   }
+   return MST;
+}
+```
+## Memory access ##
+The direct accesses made to the graph structure `G` are only made at the beginning of the algorithm, when it builds the forest and the edge queue. In fact, this algorithm performs very little direct and continuous access to the graph structure, making use of auxiliary data-structures to operate on the graph data. So the possible improvements, may come from enriching these auxiliary structures, instead of focusing on good memory locality in the graph structure.
+
+One alternative to this fact is focusing these auxiliary data-structures and somehow make them an integral part of the graph-structure.

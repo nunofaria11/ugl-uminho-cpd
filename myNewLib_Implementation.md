@@ -1,0 +1,19 @@
+Implementations used for used libraries and _myNewLib_ implementation. In JUNG and JGraph, the grey classes are the ones used.
+
+# JGraph implementation #
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/jgraph_ClassDiagram.jpg](http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/jgraph_ClassDiagram.jpg)
+
+---
+
+> # JUNG implementation #
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/jung_ClassDiagram.jpg](http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/jung_ClassDiagram.jpg)
+
+---
+
+> # myNewLib implementation #
+
+![http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/myNewLib_ClassDiagram.jpg](http://ugl-uminho-cpd.googlecode.com/svn-history/r140/trunk/Graphs/images/myNewLib_ClassDiagram.jpg)
+
+---

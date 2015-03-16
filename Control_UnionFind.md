@@ -1,0 +1,10 @@
+The UnionFind structure is basically a control forest  composed of _#Node_ trees, each tree has initially only one element - one tree per node of the graph. **Its objective is** to provide a way to control the structure of the disjoint set of trees that can be altered while an algorithm executes.
+
+In an MST example, when an MST algorithm finishes, one tree of the forest will have the MST
+structure.
+
+It provides two useful operations:
+  * **Find**: this operation has two variants. The first finds the root element of another given element; **_y_ = find(_x_)**, means _x_ is in the same tree has _y_ and _y_ is its root. The second variant checks if two elements are in the same tree; for the earlier example, **find(_x_, _y_) = _TRUE_**
+  * **Union**: combines/merges two sets of trees into the same tree.
+
+Control forests like these are useful for algorithms that partition the graph, like in Boruvka's algorithm, that starts associating the minimal edges it finds, originating in several disjoint trees; the algorithm uses this forest to control the sub-trees and to link them with the minimum edges connecting the sub-trees.

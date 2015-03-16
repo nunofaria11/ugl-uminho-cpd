@@ -1,0 +1,30 @@
+# Prim MST #
+The prim algorithm consists in starting in a given node and, from there, maintaining an edge queue with all the available edges found so far. At each iteration the algorithm adds the next (unconnected to the MST) target node of the chosen edge (minimum edge). The queue is updated with the neighbor edges of the new added node (also the edges that point to nodes already visited are removed) and the iteration goes on until all nodes have been visited.
+
+```
+    getMst(Graph G) {
+        List visited = ...// initialize visited nodes array
+        Queue Q      = ...// new empty edge queue
+        Graph MST    = ...// new empty MST graph
+        Node start   = ...// get random start node
+        while (visited.size() < G.getNumNodes() - 1) {
+            addVisited(start); // ***
+            Collection<Edge> nbors = G.getNeighborEdges(start);
+            List<EdgeEO> newEdges = ...// initialize empty list to store new edges to add
+            for (Edge edge : nbors) {
+                if (!visited.contains( edge.getTargetNode() ) {
+                    newEdges.add(edge);
+                }
+            }
+            Q.addAll(newEdges);
+            Edge minEdge = Q.poll();
+            MST.addEdge(minEdge);
+            start = minEdge.getTargetNode();
+        }
+        return MST;
+    }
+```
+**NOTE:** the `addVisited` method performs an extra operation which is removing from `Q` all the references to the new visited node being added.
+
+## Memory access ##
+This algorithm accesses the graph structure at each iteration by retrieving all the edges of a node. This may be an important issue; one of the improvements possible to apply here is to order the neighbor edge list returned so that the process of finding the minimum edge is facilitated - simply put, the graph neighbors list would be an Edge queue itself.
